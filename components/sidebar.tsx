@@ -54,8 +54,8 @@ export function Sidebar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const NavItem = ({ item, isBottom = false }) => (
-    <Tooltip delayDuration={0} data-oid="r-d.80t">
-      <TooltipTrigger asChild data-oid="qhoes5p">
+    <Tooltip delayDuration={0}>
+      <TooltipTrigger asChild>
         <Link
           href={item.href}
           className={cn(
@@ -65,22 +65,14 @@ export function Sidebar() {
               : "text-muted-foreground hover:bg-secondary hover:text-secondary-foreground",
             isCollapsed && "justify-center px-2",
           )}
-          data-oid="stizutr"
         >
-          <item.icon
-            className={cn("h-4 w-4", !isCollapsed && "mr-3")}
-            data-oid="x.bwt92"
-          />
+          <item.icon className={cn("h-4 w-4", !isCollapsed && "mr-3")} />
 
-          {!isCollapsed && <span data-oid="jrasraa">{item.name}</span>}
+          {!isCollapsed && <span>{item.name}</span>}
         </Link>
       </TooltipTrigger>
       {isCollapsed && (
-        <TooltipContent
-          side="right"
-          className="flex items-center gap-4"
-          data-oid="_-pkgm6"
-        >
+        <TooltipContent side="right" className="flex items-center gap-4">
           {item.name}
         </TooltipContent>
       )}
@@ -88,15 +80,14 @@ export function Sidebar() {
   );
 
   return (
-    <TooltipProvider data-oid="m.n1reh">
+    <TooltipProvider>
       <>
         <button
           className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-background rounded-md shadow-md"
           onClick={() => setIsMobileOpen(!isMobileOpen)}
           aria-label="Toggle sidebar"
-          data-oid="9d8:-8v"
         >
-          <Menu className="h-6 w-6" data-oid="20eohh0" />
+          <Menu className="h-6 w-6" />
         </button>
         <div
           className={cn(
@@ -106,25 +97,17 @@ export function Sidebar() {
               ? "translate-x-0"
               : "-translate-x-full lg:translate-x-0",
           )}
-          data-oid="zd_v9wg"
         >
-          <div className="border-b border-border" data-oid=".wxjhvm">
+          <div className="border-b border-border">
             <div
               className={cn(
                 "flex h-16 items-center gap-2 px-4",
                 isCollapsed && "justify-center px-2",
               )}
-              data-oid="6y7clhn"
             >
               {!isCollapsed && (
-                <Link
-                  href="/"
-                  className="flex items-center font-semibold"
-                  data-oid="veu:xe_"
-                >
-                  <span className="text-lg" data-oid="mtpwu:f">
-                    Flowers&Saints
-                  </span>
+                <Link href="/" className="flex items-center font-semibold">
+                  <span className="text-lg">Flowers&Saints</span>
                 </Link>
               )}
               <Button
@@ -132,38 +115,31 @@ export function Sidebar() {
                 size="sm"
                 className={cn("ml-auto h-8 w-8", isCollapsed && "ml-0")}
                 onClick={() => setIsCollapsed(!isCollapsed)}
-                data-oid="n6jxz6p"
               >
                 <ChevronLeft
                   className={cn(
                     "h-4 w-4 transition-transform",
                     isCollapsed && "rotate-180",
                   )}
-                  data-oid="-f0:anl"
                 />
 
-                <span className="sr-only" data-oid="vrjpgd3">
+                <span className="sr-only">
                   {isCollapsed ? "Expand" : "Collapse"} Sidebar
                 </span>
               </Button>
             </div>
           </div>
-          <div className="flex-1 overflow-auto" data-oid="1kc:-xb">
-            <nav className="flex-1 space-y-1 px-2 py-4" data-oid="kb9zcfg">
+          <div className="flex-1 overflow-auto">
+            <nav className="flex-1 space-y-1 px-2 py-4">
               {navigation.map((item) => (
-                <NavItem key={item.name} item={item} data-oid="e:k5fx2" />
+                <NavItem key={item.name} item={item} />
               ))}
             </nav>
           </div>
-          <div className="border-t border-border p-2" data-oid="3.a:pu0">
-            <nav className="space-y-1" data-oid="hn3-gbn">
+          <div className="border-t border-border p-2">
+            <nav className="space-y-1">
               {bottomNavigation.map((item) => (
-                <NavItem
-                  key={item.name}
-                  item={item}
-                  isBottom
-                  data-oid="ntnx0vk"
-                />
+                <NavItem key={item.name} item={item} isBottom />
               ))}
             </nav>
           </div>

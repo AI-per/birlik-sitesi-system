@@ -61,79 +61,54 @@ export function Notifications() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="relative" data-oid="d_h_oaq">
+    <div className="relative">
       <Button
         variant="ghost"
         size="icon"
         className="relative"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Notifications"
-        data-oid="p2vmns_"
       >
-        <Bell className="h-5 w-5" data-oid="yoqb7js" />
-        <span
-          className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"
-          data-oid="4h_:026"
-        />
+        <Bell className="h-5 w-5" />
+        <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full" />
       </Button>
       {isOpen && (
-        <Card className="absolute right-0 mt-2 w-96 z-50" data-oid="qqs_yrm">
-          <CardHeader
-            className="flex flex-row items-center justify-between space-y-0 pb-2"
-            data-oid="691w1w5"
-          >
-            <CardTitle className="text-sm font-medium" data-oid="q4sd-vt">
-              Notifications
-            </CardTitle>
+        <Card className="absolute right-0 mt-2 w-96 z-50">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Notifications</CardTitle>
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setIsOpen(false)}
               aria-label="Close notifications"
-              data-oid="8v3:78i"
             >
-              <X className="h-4 w-4" data-oid="nv2-m_i" />
+              <X className="h-4 w-4" />
             </Button>
           </CardHeader>
-          <CardContent data-oid="kq0rayh">
-            <ScrollArea className="h-[400px] pr-4" data-oid="wjzv32v">
+          <CardContent>
+            <ScrollArea className="h-[400px] pr-4">
               {notifications.map((notification) => (
                 <Card
                   key={notification.id}
                   className="mb-4 last:mb-0 border shadow-sm"
-                  data-oid="m:fg39r"
                 >
-                  <CardContent className="p-4" data-oid="4pa1:fq">
-                    <div
-                      className="flex items-start space-x-4"
-                      data-oid="ons8met"
-                    >
+                  <CardContent className="p-4">
+                    <div className="flex items-start space-x-4">
                       <div
                         className={`${notification.color} p-2 rounded-full bg-opacity-10`}
-                        data-oid="yt2jpie"
                       >
                         <notification.icon
                           className={`h-5 w-5 ${notification.color}`}
-                          data-oid="hjhuyyu"
                         />
                       </div>
-                      <div className="flex-1 space-y-1" data-oid="0_mi-3:">
-                        <p
-                          className="text-sm font-medium leading-none"
-                          data-oid="4zuhd3t"
-                        >
+                      <div className="flex-1 space-y-1">
+                        <p className="text-sm font-medium leading-none">
                           {notification.title}
                         </p>
-                        <p
-                          className="text-sm text-muted-foreground"
-                          data-oid="pabi20g"
-                        >
+                        <p className="text-sm text-muted-foreground">
                           {notification.message}
                         </p>
-                        <p
-                          className="text-xs text-muted-foreground"
-                          data-oid="4tm2-yy"
-                        >
+                        <p className="text-xs text-muted-foreground">
                           {notification.date}
                         </p>
                       </div>

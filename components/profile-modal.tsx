@@ -69,32 +69,29 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose} data-oid="o9:gy5o">
-      <DialogContent className="sm:max-w-[600px]" data-oid="dvoc3yy">
-        <DialogHeader data-oid="nablzi4">
-          <DialogTitle data-oid="9kqj:ho">Profile</DialogTitle>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[600px]">
+        <DialogHeader>
+          <DialogTitle>Profile</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4" data-oid="0pqi0g0">
-          <div className="flex items-center gap-4" data-oid="e:3pj.2">
-            <Avatar className="h-20 w-20" data-oid="6yi86kj">
+        <div className="grid gap-4 py-4">
+          <div className="flex items-center gap-4">
+            <Avatar className="h-20 w-20">
               <AvatarImage
                 src="https://github.com/shadcn.png"
                 alt={userProfile.name}
-                data-oid="8j-h0xr"
               />
 
-              <AvatarFallback data-oid=":-hydam">
+              <AvatarFallback>
                 {userProfile.name
                   .split(" ")
                   .map((n) => n[0])
                   .join("")}
               </AvatarFallback>
             </Avatar>
-            <div data-oid="j1b9plk">
-              <h2 className="text-2xl font-bold" data-oid="tkkmtn3">
-                {userProfile.name}
-              </h2>
-              <p className="text-sm text-muted-foreground" data-oid="6mq0q.v">
+            <div>
+              <h2 className="text-2xl font-bold">{userProfile.name}</h2>
+              <p className="text-sm text-muted-foreground">
                 {userProfile.email}
               </p>
             </div>
@@ -103,128 +100,93 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
               size="icon"
               className="ml-auto"
               onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
-              data-oid="lvc53y1"
             >
               {isEditing ? (
-                <Save className="h-4 w-4" data-oid=":w9a8n8" />
+                <Save className="h-4 w-4" />
               ) : (
-                <Edit2 className="h-4 w-4" data-oid="02-4ua5" />
+                <Edit2 className="h-4 w-4" />
               )}
             </Button>
           </div>
-          <div className="grid gap-4" data-oid="xs.ey65">
-            <div className="grid grid-cols-2 gap-4" data-oid="do0ijhj">
-              <div data-oid="5ux57t1">
-                <Label htmlFor="name" data-oid=".-h95y:">
-                  Name
-                </Label>
+          <div className="grid gap-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="name">Name</Label>
                 <Input
                   id="name"
                   value={userProfile.name}
                   readOnly={!isEditing}
                   onChange={(e) => handleInputChange("name", e.target.value)}
-                  data-oid="yhvjuwa"
                 />
               </div>
-              <div data-oid="ku_9qc3">
-                <Label htmlFor="email" data-oid="sw6zly2">
-                  Email
-                </Label>
+              <div>
+                <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
                   value={userProfile.email}
                   readOnly={!isEditing}
                   onChange={(e) => handleInputChange("email", e.target.value)}
-                  data-oid="6iebfd1"
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4" data-oid="p0r47xa">
-              <div data-oid="_c.zyx0">
-                <Label htmlFor="company" data-oid=".q:ecgr">
-                  Company
-                </Label>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="company">Company</Label>
                 <Input
                   id="company"
                   value={userProfile.company}
                   readOnly={!isEditing}
                   onChange={(e) => handleInputChange("company", e.target.value)}
-                  data-oid="yft0ry8"
                 />
               </div>
-              <div data-oid="4cov.oa">
-                <Label htmlFor="phone" data-oid="bbgn_so">
-                  Phone
-                </Label>
+              <div>
+                <Label htmlFor="phone">Phone</Label>
                 <Input
                   id="phone"
                   value={userProfile.phone}
                   readOnly={!isEditing}
                   onChange={(e) => handleInputChange("phone", e.target.value)}
-                  data-oid="6ppyz40"
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4" data-oid="az1tg1j">
-              <div data-oid="c00m:-g">
-                <Label htmlFor="accountNumber" data-oid="l4fc:by">
-                  Account Number
-                </Label>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="accountNumber">Account Number</Label>
                 <Input
                   id="accountNumber"
                   value={userProfile.accountNumber}
                   readOnly
-                  data-oid="-lefbip"
                 />
               </div>
-              <div data-oid="yiv1myz">
-                <Label htmlFor="bankName" data-oid="z53gzoz">
-                  Bank Name
-                </Label>
-                <Input
-                  id="bankName"
-                  value={userProfile.bankName}
-                  readOnly
-                  data-oid="0re62to"
-                />
+              <div>
+                <Label htmlFor="bankName">Bank Name</Label>
+                <Input id="bankName" value={userProfile.bankName} readOnly />
               </div>
             </div>
           </div>
-          <Card data-oid=":xrf:c1">
-            <CardHeader data-oid=":83_52k">
-              <CardTitle data-oid="-2v_fn_">Cards</CardTitle>
+          <Card>
+            <CardHeader>
+              <CardTitle>Cards</CardTitle>
             </CardHeader>
-            <CardContent data-oid="du7_ohb">
-              <div className="space-y-4" data-oid="wv0ef38">
+            <CardContent>
+              <div className="space-y-4">
                 {userProfile.cards.map((card, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-4"
-                    data-oid="hvr8cqm"
-                  >
-                    <CreditCard className="h-6 w-6" data-oid="_aug1ct" />
-                    <div data-oid="k8cvnxf">
-                      <p className="font-medium" data-oid="_..f:xv">
-                        {card.type}
-                      </p>
-                      <p
-                        className="text-sm text-muted-foreground"
-                        data-oid=".phws0c"
-                      >
+                  <div key={index} className="flex items-center gap-4">
+                    <CreditCard className="h-6 w-6" />
+                    <div>
+                      <p className="font-medium">{card.type}</p>
+                      <p className="text-sm text-muted-foreground">
                         {card.number}
                       </p>
                     </div>
-                    <p className="ml-auto text-sm" data-oid="gezlubv">
-                      Expires: {card.expiry}
-                    </p>
+                    <p className="ml-auto text-sm">Expires: {card.expiry}</p>
                     {isEditing && (
                       <Button
                         variant="destructive"
                         size="icon"
                         onClick={() => handleRemoveCard(index)}
-                        data-oid="z9:qnvy"
                       >
-                        <Trash2 className="h-4 w-4" data-oid="fbtqq84" />
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     )}
                   </div>

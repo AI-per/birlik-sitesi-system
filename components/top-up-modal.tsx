@@ -37,28 +37,23 @@ export function TopUpModal({ isOpen, onClose, onTopUp }) {
     switch (currentStep) {
       case 0:
         return (
-          <div className="space-y-4" data-oid="-4k:9z0">
-            <Label htmlFor="amount" data-oid="jvfxq5.">
-              Top-up Amount
-            </Label>
+          <div className="space-y-4">
+            <Label htmlFor="amount">Top-up Amount</Label>
             <Input
               id="amount"
               type="number"
               placeholder="Enter amount"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              data-oid="z_zlvbe"
             />
           </div>
         );
 
       case 1:
         return (
-          <div className="space-y-4" data-oid="lnbchs5">
-            <div className="space-y-2" data-oid="srrhddg">
-              <Label htmlFor="cardNumber" data-oid="hq:8nui">
-                Card Number
-              </Label>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="cardNumber">Card Number</Label>
               <Input
                 id="cardNumber"
                 placeholder="1234 5678 9012 3456"
@@ -66,14 +61,11 @@ export function TopUpModal({ isOpen, onClose, onTopUp }) {
                 onChange={(e) =>
                   setCardDetails({ ...cardDetails, number: e.target.value })
                 }
-                data-oid="ak9cner"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4" data-oid="h5z_b51">
-              <div className="space-y-2" data-oid="tqjb5wu">
-                <Label htmlFor="expiry" data-oid="5.rvnwj">
-                  Expiry Date
-                </Label>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="expiry">Expiry Date</Label>
                 <Input
                   id="expiry"
                   placeholder="MM/YY"
@@ -81,13 +73,10 @@ export function TopUpModal({ isOpen, onClose, onTopUp }) {
                   onChange={(e) =>
                     setCardDetails({ ...cardDetails, expiry: e.target.value })
                   }
-                  data-oid="hx7uo:t"
                 />
               </div>
-              <div className="space-y-2" data-oid="t17rbfk">
-                <Label htmlFor="cvv" data-oid="k1fmnsa">
-                  CVV
-                </Label>
+              <div className="space-y-2">
+                <Label htmlFor="cvv">CVV</Label>
                 <Input
                   id="cvv"
                   placeholder="123"
@@ -95,7 +84,6 @@ export function TopUpModal({ isOpen, onClose, onTopUp }) {
                   onChange={(e) =>
                     setCardDetails({ ...cardDetails, cvv: e.target.value })
                   }
-                  data-oid="5p__1xl"
                 />
               </div>
             </div>
@@ -104,31 +92,25 @@ export function TopUpModal({ isOpen, onClose, onTopUp }) {
 
       case 2:
         return (
-          <div className="space-y-4" data-oid="tgzpdf:">
-            <p className="text-sm text-muted-foreground" data-oid="wxspqkp">
+          <div className="space-y-4">
+            <p className="text-sm text-muted-foreground">
               Enter the OTP sent to your registered mobile number
             </p>
             <Input
               placeholder="Enter OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              data-oid="p_m1:fg"
             />
           </div>
         );
 
       case 3:
         return (
-          <div className="text-center space-y-4" data-oid="pn4nicq">
-            <CheckCircle2
-              className="mx-auto h-12 w-12 text-green-500"
-              data-oid="-w-ljav"
-            />
+          <div className="text-center space-y-4">
+            <CheckCircle2 className="mx-auto h-12 w-12 text-green-500" />
 
-            <p className="text-lg font-medium" data-oid="ol3:db0">
-              Top-up Successful
-            </p>
-            <p className="text-sm text-muted-foreground" data-oid="9_xnjd9">
+            <p className="text-lg font-medium">Top-up Successful</p>
+            <p className="text-sm text-muted-foreground">
               ${amount} has been added to your account.
             </p>
           </div>
@@ -137,28 +119,23 @@ export function TopUpModal({ isOpen, onClose, onTopUp }) {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose} data-oid="z02y3vh">
-      <DialogContent className="sm:max-w-[425px]" data-oid=".rrosz4">
-        <DialogHeader data-oid=":oa2c2h">
-          <DialogTitle data-oid="nca:ex1">{steps[currentStep]}</DialogTitle>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>{steps[currentStep]}</DialogTitle>
         </DialogHeader>
-        <div className="mt-4 space-y-4" data-oid="unrb:mp">
+        <div className="mt-4 space-y-4">
           {renderStepContent()}
-          <div className="flex justify-between" data-oid="yncikpl">
+          <div className="flex justify-between">
             {currentStep > 0 && currentStep < steps.length - 1 && (
               <Button
                 variant="outline"
                 onClick={() => setCurrentStep(currentStep - 1)}
-                data-oid="ng7yb-a"
               >
                 Back
               </Button>
             )}
-            <Button
-              onClick={handleContinue}
-              className="ml-auto"
-              data-oid="xnql:14"
-            >
+            <Button onClick={handleContinue} className="ml-auto">
               {currentStep === steps.length - 1 ? "Close" : "Continue"}
             </Button>
           </div>

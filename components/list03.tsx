@@ -47,101 +47,56 @@ const statusColors = {
 
 export function List03() {
   return (
-    <div
-      className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"
-      data-oid="86tvv3p"
-    >
-      <div
-        className="flex items-center justify-between mb-4"
-        data-oid="g:a5aga"
-      >
-        <h2
-          className="text-lg font-semibold text-gray-900 dark:text-white flex items-center"
-          data-oid="r7-httd"
-        >
-          <Calendar className="h-5 w-5 mr-2" data-oid="nlvjnzs" />
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+          <Calendar className="h-5 w-5 mr-2" />
           Upcoming Events
         </h2>
       </div>
-      <div className="space-x-4 overflow-x-auto flex pb-4" data-oid="xx:v.bq">
+      <div className="space-x-4 overflow-x-auto flex pb-4">
         {events.map((event) => (
           <div
             key={event.id}
             className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 w-72 flex-shrink-0"
-            data-oid="kfe-llk"
           >
-            <div
-              className="flex items-center justify-between mb-4"
-              data-oid=".ye.rh5"
-            >
-              <div
-                className="p-2 bg-gray-200 dark:bg-gray-600 rounded-full"
-                data-oid="hnk03.u"
-              >
-                <event.icon
-                  className="h-5 w-5 text-gray-700 dark:text-gray-300"
-                  data-oid="-h-tiy2"
-                />
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2 bg-gray-200 dark:bg-gray-600 rounded-full">
+                <event.icon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
               </div>
               <span
                 className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[event.status]}`}
-                data-oid="ycdqw:7"
               >
                 {event.status}
               </span>
             </div>
-            <h3
-              className="text-sm font-medium text-gray-900 dark:text-white mb-1"
-              data-oid="lg.j1pt"
-            >
+            <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-1">
               {event.title}
             </h3>
-            <p
-              className="text-xs text-gray-500 dark:text-gray-400 mb-3"
-              data-oid="k4bxj1x"
-            >
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
               {event.subtitle}
             </p>
-            <div
-              className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-1.5 mb-3"
-              data-oid="t31gdih"
-            >
+            <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-1.5 mb-3">
               <div
                 className="bg-blue-600 h-1.5 rounded-full"
                 style={{ width: `${event.progress}%` }}
-                data-oid="qtjgtvl"
               ></div>
             </div>
-            <div
-              className="flex items-center justify-between mb-3"
-              data-oid="fr58.bb"
-            >
-              <span
-                className="text-sm font-medium text-gray-900 dark:text-white"
-                data-oid="64_x2jw"
-              >
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm font-medium text-gray-900 dark:text-white">
                 ${event.target.toLocaleString()}
-                <span
-                  className="text-xs text-gray-500 dark:text-gray-400 ml-1"
-                  data-oid="fbz2tqu"
-                >
+                <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
                   target
                 </span>
               </span>
-              <span
-                className="flex items-center text-xs text-gray-500 dark:text-gray-400"
-                data-oid="19mnq:9"
-              >
-                <Calendar className="h-3 w-3 mr-1" data-oid="q-95z0a" />
+              <span className="flex items-center text-xs text-gray-500 dark:text-gray-400">
+                <Calendar className="h-3 w-3 mr-1" />
                 {event.date}
               </span>
             </div>
-            <button
-              className="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors flex items-center justify-center"
-              data-oid=".mygame"
-            >
+            <button className="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors flex items-center justify-center">
               View Details
-              <ArrowRight className="h-4 w-4 ml-2" data-oid="j:u7mrj" />
+              <ArrowRight className="h-4 w-4 ml-2" />
             </button>
           </div>
         ))}

@@ -37,28 +37,23 @@ export function DeleteBlockDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} data-oid="5o.bgg2">
-      <DialogContent className="sm:max-w-[425px]" data-oid="9r44tm1">
-        <DialogHeader data-oid="62y7_a3">
-          <DialogTitle data-oid="prjry2a">Blok Sil</DialogTitle>
-          <DialogDescription data-oid="56tw7mc">
-            <strong data-oid="9muf4-2">{block.name}</strong> bloğunu silmek
-            istediğinizden emin misiniz? Bu işlem geri alınamaz.
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Blok Sil</DialogTitle>
+          <DialogDescription>
+            <strong>{block.name}</strong> bloğunu silmek istediğinizden emin
+            misiniz? Bu işlem geri alınamaz.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter data-oid="evchsj8">
-          <Button
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-            data-oid="xfet:xp"
-          >
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             İptal
           </Button>
           <Button
             variant="destructive"
             onClick={handleDelete}
             disabled={isLoading}
-            data-oid="-3lrp4a"
           >
             {isLoading ? "Siliniyor..." : "Sil"}
           </Button>

@@ -47,72 +47,47 @@ const statusColors = {
 
 export function BusinessMetrics() {
   return (
-    <div className="space-y-4" data-oid="b.5gvvk">
-      <div className="flex items-center justify-between" data-oid="na3f-sp">
-        <h2 className="text-lg font-semibold" data-oid="nbc2r68">
-          Business Metrics
-        </h2>
-        <Button variant="outline" size="sm" data-oid="isq2490">
-          View Details{" "}
-          <ArrowRight className="ml-2 h-4 w-4" data-oid="-46y6mh" />
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-semibold">Business Metrics</h2>
+        <Button variant="outline" size="sm">
+          View Details <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </div>
-      <div
-        className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
-        data-oid="jtkfy-g"
-      >
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {metrics.map((metric) => (
-          <Card key={metric.id} data-oid="sel0otf">
-            <CardHeader
-              className="flex flex-row items-center justify-between space-y-0 pb-2"
-              data-oid="9p7-n:k"
-            >
-              <CardTitle className="text-sm font-medium" data-oid="nv4er:4">
+          <Card key={metric.id}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
                 {metric.title}
               </CardTitle>
-              <metric.icon
-                className="h-4 w-4 text-muted-foreground"
-                data-oid="dbe4v49"
-              />
+              <metric.icon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent data-oid="48s0u.6">
-              <p className="text-xs text-muted-foreground" data-oid="hj99t12">
-                {metric.subtitle}
-              </p>
-              <div className="mt-2 space-y-2" data-oid="74-guzp">
-                <div
-                  className="flex items-center justify-between text-xs"
-                  data-oid="603vqsn"
-                >
+            <CardContent>
+              <p className="text-xs text-muted-foreground">{metric.subtitle}</p>
+              <div className="mt-2 space-y-2">
+                <div className="flex items-center justify-between text-xs">
                   <span
                     className={`px-2 py-1 rounded-full ${statusColors[metric.status]}`}
-                    data-oid="4dah2t."
                   >
                     {metric.status}
                   </span>
-                  <span className="text-muted-foreground" data-oid="tuiei3v">
+                  <span className="text-muted-foreground">
                     {metric.current} / {metric.target} {metric.unit}
                   </span>
                 </div>
-                <div
-                  className="w-full bg-secondary rounded-full h-1.5"
-                  data-oid="h.gadh_"
-                >
+                <div className="w-full bg-secondary rounded-full h-1.5">
                   <div
                     className="bg-primary h-1.5 rounded-full"
                     style={{ width: `${Math.min(metric.progress, 100)}%` }}
-                    data-oid="_:12p5w"
                   />
                 </div>
-                <div
-                  className="flex justify-between items-center text-sm"
-                  data-oid="pz27ilh"
-                >
-                  <span className="font-medium" data-oid="yo0:o9s">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="font-medium">
                     {metric.unit}
                     {metric.target.toLocaleString()}
                   </span>
-                  <span className="text-muted-foreground" data-oid="c7_.ajj">
+                  <span className="text-muted-foreground">
                     {metric.progress}% complete
                   </span>
                 </div>

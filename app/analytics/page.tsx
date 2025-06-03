@@ -16,56 +16,38 @@ export default function AnalyticsPage() {
   };
 
   return (
-    <div className="flex-1 space-y-4 p-8 pt-6" data-oid="fa.:axk">
-      <div
-        className="flex items-center justify-between space-y-2"
-        data-oid="c13dah9"
-      >
-        <h2 className="text-3xl font-bold tracking-tight" data-oid="f:df_y2">
-          Analytics
-        </h2>
-        <div className="flex items-center space-x-2" data-oid="tp7vp6w">
-          <DateRangePicker data-oid="tajkatq" />
+    <div className="flex-1 space-y-4 p-8 pt-6">
+      <div className="flex items-center justify-between space-y-2">
+        <h2 className="text-3xl font-bold tracking-tight">Analytics</h2>
+        <div className="flex items-center space-x-2">
+          <DateRangePicker />
           <Button
             onClick={handleExportData}
             className="flex items-center gap-2"
-            data-oid="2.tkrak"
           >
-            <Download className="h-4 w-4" data-oid="xig8-p_" />
+            <Download className="h-4 w-4" />
             Export Data
           </Button>
         </div>
       </div>
-      <Tabs defaultValue="overview" className="space-y-4" data-oid="h61piag">
-        <TabsList className="grid w-full grid-cols-4" data-oid="cay8tb6">
-          <TabsTrigger value="overview" data-oid="c9l35s3">
-            Overview
-          </TabsTrigger>
-          <TabsTrigger value="analytics" data-oid="m6h38yf">
-            Analytics
-          </TabsTrigger>
-          <TabsTrigger value="reports" data-oid="gt315n:">
-            Reports
-          </TabsTrigger>
-          <TabsTrigger value="notifications" data-oid="b09wt.m">
-            Notifications
-          </TabsTrigger>
+      <Tabs defaultValue="overview" className="space-y-4">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="reports">Reports</TabsTrigger>
+          <TabsTrigger value="notifications">Notifications</TabsTrigger>
         </TabsList>
-        <TabsContent value="overview" className="space-y-4" data-oid="9p3qswd">
-          <OverviewTab data-oid="..jr8p2" />
+        <TabsContent value="overview" className="space-y-4">
+          <OverviewTab />
         </TabsContent>
-        <TabsContent value="analytics" className="space-y-4" data-oid="c-9s2es">
-          <AnalyticsTab data-oid="eh_sra2" />
+        <TabsContent value="analytics" className="space-y-4">
+          <AnalyticsTab />
         </TabsContent>
-        <TabsContent value="reports" className="space-y-4" data-oid="qtlqs64">
-          <ReportsTab data-oid=".k6n:yd" />
+        <TabsContent value="reports" className="space-y-4">
+          <ReportsTab />
         </TabsContent>
-        <TabsContent
-          value="notifications"
-          className="space-y-4"
-          data-oid="unx1amf"
-        >
-          <NotificationsTab data-oid="2lun71m" />
+        <TabsContent value="notifications" className="space-y-4">
+          <NotificationsTab />
         </TabsContent>
       </Tabs>
     </div>

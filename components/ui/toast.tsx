@@ -20,7 +20,6 @@ const ToastViewport = React.forwardRef<
       className,
     )}
     {...props}
-    data-oid="xrphh:n"
   />
 ));
 ToastViewport.displayName = ToastPrimitives.Viewport.displayName;
@@ -51,7 +50,6 @@ const Toast = React.forwardRef<
       ref={ref}
       className={cn(toastVariants({ variant }), className)}
       {...props}
-      data-oid="69j4q47"
     />
   );
 });
@@ -68,7 +66,6 @@ const ToastAction = React.forwardRef<
       className,
     )}
     {...props}
-    data-oid="4.0k63n"
   />
 ));
 ToastAction.displayName = ToastPrimitives.Action.displayName;
@@ -85,9 +82,8 @@ const ToastClose = React.forwardRef<
     )}
     toast-close=""
     {...props}
-    data-oid="1m3gpt9"
   >
-    <X className="h-4 w-4" data-oid="n91:nne" />
+    <X className="h-4 w-4" />
   </ToastPrimitives.Close>
 ));
 ToastClose.displayName = ToastPrimitives.Close.displayName;
@@ -100,7 +96,6 @@ const ToastTitle = React.forwardRef<
     ref={ref}
     className={cn("text-sm font-semibold", className)}
     {...props}
-    data-oid="jc2txvl"
   />
 ));
 ToastTitle.displayName = ToastPrimitives.Title.displayName;
@@ -113,7 +108,6 @@ const ToastDescription = React.forwardRef<
     ref={ref}
     className={cn("text-sm opacity-90", className)}
     {...props}
-    data-oid="zya4qvq"
   />
 ));
 ToastDescription.displayName = ToastPrimitives.Description.displayName;

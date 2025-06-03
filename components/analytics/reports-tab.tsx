@@ -65,76 +65,59 @@ export function ReportsTab() {
   };
 
   return (
-    <div className="space-y-4" data-oid="78a9-lv">
-      <Card data-oid=":na2b5q">
-        <CardHeader data-oid="p9dwvt8">
-          <CardTitle className="text-xl font-semibold" data-oid="c8jrw.4">
+    <div className="space-y-4">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">
             Generate Report
           </CardTitle>
         </CardHeader>
-        <CardContent className="flex items-center space-x-4" data-oid="mce3nv4">
-          <Select
-            value={selectedReport}
-            onValueChange={setSelectedReport}
-            data-oid="su4:n1q"
-          >
-            <SelectTrigger className="w-[240px]" data-oid="r6ofwk0">
-              <SelectValue
-                placeholder="Select report type"
-                data-oid="btgmjn6"
-              />
+        <CardContent className="flex items-center space-x-4">
+          <Select value={selectedReport} onValueChange={setSelectedReport}>
+            <SelectTrigger className="w-[240px]">
+              <SelectValue placeholder="Select report type" />
             </SelectTrigger>
-            <SelectContent data-oid="5vl2mk.">
+            <SelectContent>
               {reportTypes.map((type) => (
-                <SelectItem key={type} value={type} data-oid="3w251.q">
+                <SelectItem key={type} value={type}>
                   {type}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          <Button onClick={handleGenerateReport} data-oid="1gz8l-l">
-            Generate Report
-          </Button>
+          <Button onClick={handleGenerateReport}>Generate Report</Button>
         </CardContent>
       </Card>
-      <Card data-oid="su1w.pt">
-        <CardHeader data-oid="6bs2:z7">
-          <CardTitle className="text-xl font-semibold" data-oid="3hgzw5_">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">
             {selectedReport} Report
           </CardTitle>
         </CardHeader>
-        <CardContent data-oid="x38wqxy">
-          <Table data-oid="2k4skx:">
-            <TableHeader data-oid="g378wqo">
-              <TableRow data-oid="s3jqh82">
-                <TableHead data-oid="9_g6.n2">Metric</TableHead>
-                <TableHead data-oid="m5_yiql">Value</TableHead>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Metric</TableHead>
+                <TableHead>Value</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody data-oid="apbulhq">
+            <TableBody>
               {dummyReportData[selectedReport]?.map((row) => (
-                <TableRow key={row.id} data-oid="p1.nojh">
-                  <TableCell data-oid="a2:4q.0">{row.metric}</TableCell>
-                  <TableCell data-oid="m7q097f">{row.value}</TableCell>
+                <TableRow key={row.id}>
+                  <TableCell>{row.metric}</TableCell>
+                  <TableCell>{row.value}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-          <div className="flex justify-end space-x-2 mt-4" data-oid="-cjc5jd">
-            <Button
-              variant="outline"
-              onClick={handleDownloadReport}
-              data-oid="m-ivn-s"
-            >
-              <Download className="mr-2 h-4 w-4" data-oid="txyfu-:" />
+          <div className="flex justify-end space-x-2 mt-4">
+            <Button variant="outline" onClick={handleDownloadReport}>
+              <Download className="mr-2 h-4 w-4" />
               Download
             </Button>
-            <Button
-              variant="outline"
-              onClick={handlePrintReport}
-              data-oid="78ofb4:"
-            >
-              <Printer className="mr-2 h-4 w-4" data-oid="5cs8dt6" />
+            <Button variant="outline" onClick={handlePrintReport}>
+              <Printer className="mr-2 h-4 w-4" />
               Print
             </Button>
           </div>

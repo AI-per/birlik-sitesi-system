@@ -23,65 +23,48 @@ export function UserNav() {
   };
 
   return (
-    <DropdownMenu data-oid="65-erve">
-      <DropdownMenuTrigger asChild data-oid="6wtkyto">
-        <Button
-          variant="ghost"
-          className="relative h-8 w-8 rounded-full"
-          data-oid="st:b65k"
-        >
-          <Avatar className="h-8 w-8" data-oid="5okapoo">
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+          <Avatar className="h-8 w-8">
             <AvatarImage
               src={user.image || "/placeholder.svg"}
               alt={user.name}
-              data-oid="t87s.jm"
             />
 
-            <AvatarFallback data-oid="zg93lh5">
-              {user.name.charAt(0)}
-            </AvatarFallback>
+            <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        className="w-56"
-        align="end"
-        forceMount
-        data-oid="toqz.9p"
-      >
-        <DropdownMenuLabel className="font-normal" data-oid="0eij8_n">
-          <div className="flex flex-col space-y-1" data-oid="e:1sg5e">
-            <p className="text-sm font-medium leading-none" data-oid="_q7adhj">
-              {user.name}
-            </p>
-            <p
-              className="text-xs leading-none text-muted-foreground"
-              data-oid="-3.sd1s"
-            >
+      <DropdownMenuContent className="w-56" align="end" forceMount>
+        <DropdownMenuLabel className="font-normal">
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-medium leading-none">{user.name}</p>
+            <p className="text-xs leading-none text-muted-foreground">
               {user.email}
             </p>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator data-oid="wur1.si" />
-        <DropdownMenuGroup data-oid="v5ves:t">
-          <DropdownMenuItem asChild data-oid="y5m9y3v">
-            <Link href="/dashboard/profile" data-oid="w82iit2">
-              <Icons.user className="mr-2 h-4 w-4" data-oid="21s-8oe" />
-              <span data-oid="ckbsr4_">Profil</span>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem asChild>
+            <Link href="/dashboard/profile">
+              <Icons.user className="mr-2 h-4 w-4" />
+              <span>Profil</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild data-oid="7jemnmb">
-            <Link href="/dashboard/settings" data-oid="a1juixk">
-              <Icons.settings className="mr-2 h-4 w-4" data-oid="lugy79d" />
-              <span data-oid="38-fskm">Ayarlar</span>
+          <DropdownMenuItem asChild>
+            <Link href="/dashboard/settings">
+              <Icons.settings className="mr-2 h-4 w-4" />
+              <span>Ayarlar</span>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
-        <DropdownMenuSeparator data-oid="ubfev:6" />
-        <DropdownMenuItem asChild data-oid="neusx4z">
-          <Link href="/" data-oid="_f5bkmn">
-            <Icons.logout className="mr-2 h-4 w-4" data-oid="tme8vyq" />
-            <span data-oid="i9jrxvt">Çıkış Yap</span>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href="/">
+            <Icons.logout className="mr-2 h-4 w-4" />
+            <span>Çıkış Yap</span>
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>

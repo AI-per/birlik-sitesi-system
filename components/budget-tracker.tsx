@@ -21,55 +21,36 @@ export function BudgetTracker() {
   const overallPercentage = (totalSpent / totalBudget) * 100;
 
   return (
-    <Card data-oid=":t7ed-o">
-      <CardHeader data-oid="o2rry6w">
-        <CardTitle data-oid="06.k0oi">Budget Overview</CardTitle>
+    <Card>
+      <CardHeader>
+        <CardTitle>Budget Overview</CardTitle>
       </CardHeader>
-      <CardContent data-oid="cbk88n5">
-        <div className="space-y-4" data-oid="wt0-jh_">
-          <div className="flex justify-between items-center" data-oid="g38ltiu">
-            <span className="text-sm font-medium" data-oid=".o9mjcg">
-              Total Spent
-            </span>
-            <span className="text-sm font-medium" data-oid="j36lkp1">
+      <CardContent>
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-medium">Total Spent</span>
+            <span className="text-sm font-medium">
               ${totalSpent.toLocaleString()} / ${totalBudget.toLocaleString()}
             </span>
           </div>
-          <Progress
-            value={overallPercentage}
-            className="h-2"
-            data-oid="ylg.eo0"
-          />
+          <Progress value={overallPercentage} className="h-2" />
 
-          <p
-            className="text-sm text-muted-foreground text-right"
-            data-oid="ntb7f3l"
-          >
+          <p className="text-sm text-muted-foreground text-right">
             {overallPercentage.toFixed(1)}% of budget used
           </p>
 
-          <div className="space-y-2" data-oid="11ahx6w">
+          <div className="space-y-2">
             {budgetCategories.map((category) => {
               const percentage = (category.spent / category.budget) * 100;
               return (
                 <div
                   key={category.name}
                   className="grid grid-cols-3 gap-2 items-center"
-                  data-oid="intzv-:"
                 >
-                  <span className="text-sm font-medium" data-oid="f-ukgmq">
-                    {category.name}
-                  </span>
-                  <Progress
-                    value={percentage}
-                    className="h-1.5"
-                    data-oid="r8xf:.."
-                  />
+                  <span className="text-sm font-medium">{category.name}</span>
+                  <Progress value={percentage} className="h-1.5" />
 
-                  <span
-                    className="text-sm text-muted-foreground text-right"
-                    data-oid="ziuwybb"
-                  >
+                  <span className="text-sm text-muted-foreground text-right">
                     {percentage.toFixed(0)}%
                   </span>
                 </div>

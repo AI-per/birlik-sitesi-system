@@ -13,36 +13,28 @@ export function ModeToggle() {
   const { setTheme } = useTheme();
 
   return (
-    <DropdownMenu data-oid="0oib9kx">
-      <DropdownMenuTrigger asChild data-oid="g.3-tx8">
-        <Button variant="ghost" size="icon" data-oid="30bw:2r">
-          <Icons.sun
-            className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
-            data-oid="qu4ltuq"
-          />
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <Icons.sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
 
-          <Icons.moon
-            className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
-            data-oid="cln8r3h"
-          />
+          <Icons.moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
 
-          <span className="sr-only" data-oid="kjl35u5">
-            Tema değiştir
-          </span>
+          <span className="sr-only">Tema değiştir</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" data-oid="hr2wgsf">
-        <DropdownMenuItem onClick={() => setTheme("light")} data-oid="tvt7eab">
-          <Icons.sun className="mr-2 h-4 w-4" data-oid="vaf.nx1" />
-          <span data-oid="_0h2tv5">Açık</span>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme("light")}>
+          <Icons.sun className="mr-2 h-4 w-4" />
+          <span>Açık</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")} data-oid="bgay4dr">
-          <Icons.moon className="mr-2 h-4 w-4" data-oid="2ot1siv" />
-          <span data-oid="9o2e9.r">Koyu</span>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>
+          <Icons.moon className="mr-2 h-4 w-4" />
+          <span>Koyu</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")} data-oid="iv.csvy">
-          <Icons.laptop className="mr-2 h-4 w-4" data-oid="07whds_" />
-          <span data-oid="rtxul44">Sistem</span>
+        <DropdownMenuItem onClick={() => setTheme("system")}>
+          <Icons.laptop className="mr-2 h-4 w-4" />
+          <span>Sistem</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -84,121 +84,82 @@ export function RegisterForm() {
   }
 
   return (
-    <Form {...form} data-oid="8gfebnn">
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4"
-        data-oid="1c5u7fr"
-      >
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="fullName"
           render={({ field }) => (
-            <FormItem data-oid="3sswy:c">
-              <FormLabel data-oid=":6y:vnp">Ad Soyad</FormLabel>
-              <FormControl data-oid="vg10y66">
-                <Input
-                  placeholder="Ahmet Yılmaz"
-                  {...field}
-                  data-oid="x.m_n85"
-                />
+            <FormItem>
+              <FormLabel>Ad Soyad</FormLabel>
+              <FormControl>
+                <Input placeholder="Ahmet Yılmaz" {...field} />
               </FormControl>
-              <FormMessage data-oid="-scgm6s" />
+              <FormMessage />
             </FormItem>
           )}
-          data-oid="6_:8i43"
         />
 
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem data-oid="gcg3ifl">
-              <FormLabel data-oid="s2jhabi">E-posta</FormLabel>
-              <FormControl data-oid="e23qmh:">
-                <Input
-                  placeholder="ornek@email.com"
-                  {...field}
-                  data-oid="gy:zte4"
-                />
+            <FormItem>
+              <FormLabel>E-posta</FormLabel>
+              <FormControl>
+                <Input placeholder="ornek@email.com" {...field} />
               </FormControl>
-              <FormMessage data-oid="fifdjht" />
+              <FormMessage />
             </FormItem>
           )}
-          data-oid="b87z-2u"
         />
 
         <FormField
           control={form.control}
           name="phone"
           render={({ field }) => (
-            <FormItem data-oid="4wi.6vk">
-              <FormLabel data-oid="yk698--">Telefon (İsteğe bağlı)</FormLabel>
-              <FormControl data-oid="ungvxke">
-                <Input
-                  placeholder="05XX XXX XX XX"
-                  {...field}
-                  data-oid="-.alb2i"
-                />
+            <FormItem>
+              <FormLabel>Telefon (İsteğe bağlı)</FormLabel>
+              <FormControl>
+                <Input placeholder="05XX XXX XX XX" {...field} />
               </FormControl>
-              <FormMessage data-oid="eyi.5u:" />
+              <FormMessage />
             </FormItem>
           )}
-          data-oid="xjuvfkg"
         />
 
         <FormField
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem data-oid="26an29x">
-              <FormLabel data-oid="svf3jy.">Şifre</FormLabel>
-              <FormControl data-oid="4ak..9a">
-                <Input
-                  type="password"
-                  placeholder="******"
-                  {...field}
-                  data-oid="vma-e5y"
-                />
+            <FormItem>
+              <FormLabel>Şifre</FormLabel>
+              <FormControl>
+                <Input type="password" placeholder="******" {...field} />
               </FormControl>
-              <FormMessage data-oid="f1dfa26" />
+              <FormMessage />
             </FormItem>
           )}
-          data-oid="s3izlzy"
         />
 
         <FormField
           control={form.control}
           name="confirmPassword"
           render={({ field }) => (
-            <FormItem data-oid="kv5ak8y">
-              <FormLabel data-oid="6ln865v">Şifre Tekrar</FormLabel>
-              <FormControl data-oid="4l2ka_o">
-                <Input
-                  type="password"
-                  placeholder="******"
-                  {...field}
-                  data-oid="llbao2p"
-                />
+            <FormItem>
+              <FormLabel>Şifre Tekrar</FormLabel>
+              <FormControl>
+                <Input type="password" placeholder="******" {...field} />
               </FormControl>
-              <FormMessage data-oid="gk0p9h." />
+              <FormMessage />
             </FormItem>
           )}
-          data-oid="tqigcts"
         />
 
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={isLoading}
-          data-oid="ds063ns"
-        >
+        <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? (
             <>
-              <Icons.spinner
-                className="mr-2 h-4 w-4 animate-spin"
-                data-oid="mo4gc-v"
-              />
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               Kayıt yapılıyor...
             </>
           ) : (

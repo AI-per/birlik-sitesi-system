@@ -36,37 +36,21 @@ export function OverviewCards() {
   return (
     <>
       {cards.map((card) => (
-        <Card key={card.title} data-oid="8-43.:m">
-          <CardHeader
-            className="flex flex-row items-center justify-between space-y-0 pb-2"
-            data-oid=":weuebx"
-          >
-            <CardTitle className="text-sm font-medium" data-oid="gnm:3xj">
-              {card.title}
-            </CardTitle>
-            <card.icon
-              className="h-4 w-4 text-muted-foreground"
-              data-oid="7xsqg:x"
-            />
+        <Card key={card.title}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
+            <card.icon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent data-oid="-yec:ih">
-            <div className="text-2xl font-bold" data-oid=".kfn9q2">
-              {card.amount}
-            </div>
-            <p className="text-xs text-muted-foreground" data-oid="akvkgcb">
-              {card.description}
-            </p>
+          <CardContent>
+            <div className="text-2xl font-bold">{card.amount}</div>
+            <p className="text-xs text-muted-foreground">{card.description}</p>
             <div
               className={`mt-2 flex items-center text-xs ${card.trend === "up" ? "text-green-500" : "text-red-500"}`}
-              data-oid="jzirruv"
             >
               {card.trend === "up" ? (
-                <TrendingUp className="mr-1 h-3 w-3" data-oid="q53egzp" />
+                <TrendingUp className="mr-1 h-3 w-3" />
               ) : (
-                <TrendingUp
-                  className="mr-1 h-3 w-3 transform rotate-180"
-                  data-oid="xiwn5cx"
-                />
+                <TrendingUp className="mr-1 h-3 w-3 transform rotate-180" />
               )}
               {card.description.split(" ")[0]}
             </div>

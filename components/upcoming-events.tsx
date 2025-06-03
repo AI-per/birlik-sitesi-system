@@ -52,75 +52,48 @@ const statusColors = {
 
 export function UpcomingEvents() {
   return (
-    <div className="space-y-4" data-oid="-1.--uo">
-      <div className="flex items-center justify-between" data-oid="fdabaff">
-        <h2 className="text-lg font-semibold" data-oid="juaso1_">
-          Upcoming Events
-        </h2>
-        <Button variant="outline" size="sm" data-oid="liaccdj">
-          View All <ArrowRight className="ml-2 h-4 w-4" data-oid="my8ds6:" />
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-semibold">Upcoming Events</h2>
+        <Button variant="outline" size="sm">
+          View All <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </div>
-      <div
-        className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
-        data-oid="wkyq42a"
-      >
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {events.map((event) => (
-          <Card key={event.id} data-oid=".j2fue-">
-            <CardHeader
-              className="flex flex-row items-center justify-between space-y-0 pb-2"
-              data-oid=":7taol9"
-            >
-              <CardTitle className="text-sm font-medium" data-oid="ke-koeu">
+          <Card key={event.id}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
                 {event.title}
               </CardTitle>
-              <event.icon
-                className="h-4 w-4 text-muted-foreground"
-                data-oid="f50srdv"
-              />
+              <event.icon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent data-oid="8o5erzq">
-              <p className="text-xs text-muted-foreground" data-oid="mb0jbc2">
-                {event.subtitle}
-              </p>
-              <div className="mt-2 space-y-2" data-oid="kaumd_i">
-                <div
-                  className="flex items-center justify-between text-xs"
-                  data-oid="dyhmzfg"
-                >
+            <CardContent>
+              <p className="text-xs text-muted-foreground">{event.subtitle}</p>
+              <div className="mt-2 space-y-2">
+                <div className="flex items-center justify-between text-xs">
                   <span
                     className={`px-2 py-1 rounded-full ${statusColors[event.status]}`}
-                    data-oid="oxtogor"
                   >
                     {event.status}
                   </span>
-                  <span className="text-muted-foreground" data-oid="_xxrvs6">
-                    <Calendar
-                      className="inline mr-1 h-3 w-3"
-                      data-oid="xfx3ga7"
-                    />
+                  <span className="text-muted-foreground">
+                    <Calendar className="inline mr-1 h-3 w-3" />
 
                     {event.date}
                   </span>
                 </div>
-                <div
-                  className="w-full bg-secondary rounded-full h-1.5"
-                  data-oid="mhic:au"
-                >
+                <div className="w-full bg-secondary rounded-full h-1.5">
                   <div
                     className="bg-primary h-1.5 rounded-full"
                     style={{ width: `${event.progress}%` }}
-                    data-oid="cd1czoa"
                   />
                 </div>
-                <div
-                  className="flex justify-between items-center text-sm"
-                  data-oid="whmf734"
-                >
-                  <span className="font-medium" data-oid="z.iwp8z">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="font-medium">
                     ${event.target.toLocaleString()}
                   </span>
-                  <span className="text-muted-foreground" data-oid="5isfu:v">
+                  <span className="text-muted-foreground">
                     {event.progress}% complete
                   </span>
                 </div>

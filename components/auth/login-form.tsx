@@ -66,63 +66,40 @@ export function LoginForm() {
   }
 
   return (
-    <Form {...form} data-oid="9687xqh">
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4"
-        data-oid="ay8_0vt"
-      >
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem data-oid="sn8-z_9">
-              <FormLabel data-oid="tmkie4c">E-posta</FormLabel>
-              <FormControl data-oid="12q6e_m">
-                <Input
-                  placeholder="ornek@email.com"
-                  {...field}
-                  data-oid="hk82mr6"
-                />
+            <FormItem>
+              <FormLabel>E-posta</FormLabel>
+              <FormControl>
+                <Input placeholder="ornek@email.com" {...field} />
               </FormControl>
-              <FormMessage data-oid="af7vnzv" />
+              <FormMessage />
             </FormItem>
           )}
-          data-oid=":-ofx.k"
         />
 
         <FormField
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem data-oid="58r1b0g">
-              <FormLabel data-oid="oyf5uap">Şifre</FormLabel>
-              <FormControl data-oid="s3ior_k">
-                <Input
-                  type="password"
-                  placeholder="******"
-                  {...field}
-                  data-oid="f23y8dh"
-                />
+            <FormItem>
+              <FormLabel>Şifre</FormLabel>
+              <FormControl>
+                <Input type="password" placeholder="******" {...field} />
               </FormControl>
-              <FormMessage data-oid="-aduu8v" />
+              <FormMessage />
             </FormItem>
           )}
-          data-oid="lp:j136"
         />
 
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={isLoading}
-          data-oid="0vr_8y9"
-        >
+        <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? (
             <>
-              <Icons.spinner
-                className="mr-2 h-4 w-4 animate-spin"
-                data-oid="gkh4_21"
-              />
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               Giriş yapılıyor...
             </>
           ) : (
@@ -130,8 +107,8 @@ export function LoginForm() {
           )}
         </Button>
       </form>
-      <div className="mt-4 text-center text-sm" data-oid="aiqb0bw">
-        <a href="#" className="text-primary hover:underline" data-oid="c2n77-v">
+      <div className="mt-4 text-center text-sm">
+        <a href="#" className="text-primary hover:underline">
           Şifremi unuttum
         </a>
       </div>

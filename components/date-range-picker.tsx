@@ -23,9 +23,9 @@ export function DateRangePicker({
   });
 
   return (
-    <div className={cn("grid gap-2", className)} data-oid="bvz6:gc">
-      <Popover data-oid="is7u_ut">
-        <PopoverTrigger asChild data-oid="e3ouewl">
+    <div className={cn("grid gap-2", className)}>
+      <Popover>
+        <PopoverTrigger asChild>
           <Button
             id="date"
             variant={"outline"}
@@ -33,9 +33,8 @@ export function DateRangePicker({
               "w-[300px] justify-start text-left font-normal",
               !date && "text-muted-foreground",
             )}
-            data-oid="otlc7pu"
           >
-            <CalendarIcon className="mr-2 h-4 w-4" data-oid="0g3bg5n" />
+            <CalendarIcon className="mr-2 h-4 w-4" />
             {date?.from ? (
               date.to ? (
                 <>
@@ -46,11 +45,11 @@ export function DateRangePicker({
                 format(date.from, "LLL dd, y")
               )
             ) : (
-              <span data-oid="kj:m7yw">Pick a date</span>
+              <span>Pick a date</span>
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start" data-oid=":rq0hjr">
+        <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             initialFocus
             mode="range"
@@ -58,7 +57,6 @@ export function DateRangePicker({
             selected={date}
             onSelect={setDate}
             numberOfMonths={2}
-            data-oid="si5cw1y"
           />
         </PopoverContent>
       </Popover>

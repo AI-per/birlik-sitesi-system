@@ -86,20 +86,18 @@ export function Sidebar({ className }: SidebarProps) {
         isOpen ? "translate-x-0" : "-translate-x-full",
         className,
       )}
-      data-oid="04yr-fn"
     >
-      <div className="flex h-14 items-center border-b px-4" data-oid="m2mw73h">
+      <div className="flex h-14 items-center border-b px-4">
         <Link
           href="/dashboard"
           className="flex items-center gap-2 font-semibold"
-          data-oid="iuedr76"
         >
-          <Icons.building className="h-6 w-6" data-oid="qz-9.rd" />
-          <span data-oid="b8zoqwz">Site Yönetim</span>
+          <Icons.building className="h-6 w-6" />
+          <span>Site Yönetim</span>
         </Link>
       </div>
-      <ScrollArea className="flex-1" data-oid="w81:klw">
-        <div className="flex flex-col gap-1 p-2" data-oid="cu09-:v">
+      <ScrollArea className="flex-1">
+        <div className="flex flex-col gap-1 p-2">
           {routes.map((route) => (
             <Button
               key={route.href}
@@ -109,13 +107,9 @@ export function Sidebar({ className }: SidebarProps) {
                 pathname === route.href && "bg-muted",
               )}
               asChild
-              data-oid="ph23zzz"
             >
-              <Link href={route.href} data-oid="1_cqu97">
-                <route.icon
-                  className={cn("mr-2 h-5 w-5", route.color)}
-                  data-oid="6.hzh6:"
-                />
+              <Link href={route.href}>
+                <route.icon className={cn("mr-2 h-5 w-5", route.color)} />
 
                 {route.label}
               </Link>
@@ -123,18 +117,10 @@ export function Sidebar({ className }: SidebarProps) {
           ))}
         </div>
       </ScrollArea>
-      <div className="mt-auto p-4 border-t" data-oid="i07n0_-">
-        <Button
-          variant="ghost"
-          className="w-full justify-start"
-          asChild
-          data-oid="1a4gfvi"
-        >
-          <Link href="/" data-oid="4w6sk3-">
-            <Icons.logout
-              className="mr-2 h-5 w-5 text-red-500"
-              data-oid="9_zp1p5"
-            />
+      <div className="mt-auto p-4 border-t">
+        <Button variant="ghost" className="w-full justify-start" asChild>
+          <Link href="/">
+            <Icons.logout className="mr-2 h-5 w-5 text-red-500" />
             Çıkış Yap
           </Link>
         </Button>

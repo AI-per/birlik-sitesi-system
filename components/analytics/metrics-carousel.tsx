@@ -122,33 +122,21 @@ export function MetricsCarousel() {
         key={index}
         className="flex-shrink-0"
         style={{ width: `${cardWidth}%` }}
-        data-oid="1md0487"
       >
-        <Card className="h-full mx-2" data-oid=".603any">
-          <CardContent className="p-6" data-oid="_vydcr.">
-            <div
-              className="flex items-center justify-between mb-4"
-              data-oid=".6kf_h_"
-            >
-              <metric.icon
-                className="h-8 w-8 text-primary"
-                data-oid="19fb4w3"
-              />
+        <Card className="h-full mx-2">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <metric.icon className="h-8 w-8 text-primary" />
 
               <span
                 className={`text-sm font-semibold ${metric.change.startsWith("+") ? "text-green-500" : "text-red-500"}`}
-                data-oid="b:vbje:"
               >
                 {metric.change}
               </span>
             </div>
-            <h3 className="text-lg font-bold mb-2" data-oid="rv6tz.7">
-              {metric.title}
-            </h3>
-            <p className="text-2xl font-extrabold mb-4" data-oid="s7ay6ux">
-              {metric.value}
-            </p>
-            <p className="text-sm text-muted-foreground" data-oid="m7kbovk">
+            <h3 className="text-lg font-bold mb-2">{metric.title}</h3>
+            <p className="text-2xl font-extrabold mb-4">{metric.value}</p>
+            <p className="text-sm text-muted-foreground">
               {metric.description}
             </p>
           </CardContent>
@@ -158,18 +146,17 @@ export function MetricsCarousel() {
   };
 
   return (
-    <div className="w-full relative" data-oid="kbiul4v">
-      <div className="flex justify-between items-center" data-oid="_cgx8ij">
+    <div className="w-full relative">
+      <div className="flex justify-between items-center">
         <Button
           variant="outline"
           size="icon"
           onClick={prevSlide}
           className="z-10"
-          data-oid="h88uaj-"
         >
           &lt;
         </Button>
-        <div className="flex-grow overflow-hidden" data-oid="5k0dj3s">
+        <div className="flex-grow overflow-hidden">
           <div
             ref={carouselRef}
             className="flex transition-transform duration-300 ease-in-out"
@@ -177,7 +164,6 @@ export function MetricsCarousel() {
               transform: `translateX(-${currentIndex * cardWidth}%)`,
               width: `${metrics.length * 3 * cardWidth}%`,
             }}
-            data-oid="i70-t5i"
           >
             {renderMetrics()}
           </div>
@@ -187,7 +173,6 @@ export function MetricsCarousel() {
           size="icon"
           onClick={nextSlide}
           className="z-10"
-          data-oid="tql3bz1"
         >
           &gt;
         </Button>

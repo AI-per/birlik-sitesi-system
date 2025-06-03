@@ -50,66 +50,45 @@ export function AccountsOverview() {
   };
 
   return (
-    <Card data-oid="m846.yq">
-      <CardHeader
-        className="flex flex-row items-center justify-between space-y-0 pb-2"
-        data-oid="ly_bnbi"
-      >
-        <CardTitle className="text-sm font-medium" data-oid="ut7w.2o">
-          Accounts Overview
-        </CardTitle>
-        <Wallet className="h-4 w-4 text-muted-foreground" data-oid="xzifxzt" />
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">Accounts Overview</CardTitle>
+        <Wallet className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
-      <CardContent data-oid="028922n">
-        <div className="text-2xl font-bold" data-oid="s0.hae8">
+      <CardContent>
+        <div className="text-2xl font-bold">
           ${totalBalance.toLocaleString()}
         </div>
-        <p className="text-xs text-muted-foreground" data-oid="5uyyl_5">
+        <p className="text-xs text-muted-foreground">
           Total balance across all accounts
         </p>
-        <div className="mt-4 space-y-2" data-oid="8u_itab">
+        <div className="mt-4 space-y-2">
           {accounts.map((account) => (
             <div
               key={account.name}
               className="flex justify-between items-center"
-              data-oid="huf24q3"
             >
-              <span
-                className="text-sm text-muted-foreground"
-                data-oid="zko3d0b"
-              >
+              <span className="text-sm text-muted-foreground">
                 {account.name}
               </span>
-              <span className="text-sm font-medium" data-oid="whxu51v">
+              <span className="text-sm font-medium">
                 ${account.balance.toLocaleString()}
               </span>
             </div>
           ))}
         </div>
-        <div className="mt-4 grid grid-cols-2 gap-2" data-oid="8xjjs6-">
-          <Button
-            size="sm"
-            onClick={() => setIsAddMoneyModalOpen(true)}
-            data-oid="0nvi0x-"
-          >
-            <Plus className="mr-2 h-4 w-4" data-oid="ovb5qt5" /> Add
+        <div className="mt-4 grid grid-cols-2 gap-2">
+          <Button size="sm" onClick={() => setIsAddMoneyModalOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" /> Add
           </Button>
-          <Button
-            size="sm"
-            onClick={() => setIsSendMoneyModalOpen(true)}
-            data-oid="slev46c"
-          >
-            <Send className="mr-2 h-4 w-4" data-oid="9xt__1n" /> Send
+          <Button size="sm" onClick={() => setIsSendMoneyModalOpen(true)}>
+            <Send className="mr-2 h-4 w-4" /> Send
           </Button>
-          <Button
-            size="sm"
-            onClick={() => setIsRequestMoneyModalOpen(true)}
-            data-oid="2g1tm52"
-          >
-            <CreditCard className="mr-2 h-4 w-4" data-oid="m42oz4o" /> Request
+          <Button size="sm" onClick={() => setIsRequestMoneyModalOpen(true)}>
+            <CreditCard className="mr-2 h-4 w-4" /> Request
           </Button>
-          <Button size="sm" variant="outline" data-oid="yv2u:5w">
-            <MoreHorizontal className="mr-2 h-4 w-4" data-oid=":ex_uw9" /> More
+          <Button size="sm" variant="outline">
+            <MoreHorizontal className="mr-2 h-4 w-4" /> More
           </Button>
         </div>
       </CardContent>
@@ -117,7 +96,6 @@ export function AccountsOverview() {
         isOpen={isAddMoneyModalOpen}
         onClose={() => setIsAddMoneyModalOpen(false)}
         onAddMoney={handleAddMoney}
-        data-oid="y42yd77"
       />
 
       <SendMoneyModal
@@ -125,14 +103,12 @@ export function AccountsOverview() {
         onClose={() => setIsSendMoneyModalOpen(false)}
         onSendMoney={handleSendMoney}
         accounts={accounts}
-        data-oid="w5l27ec"
       />
 
       <RequestMoneyModal
         isOpen={isRequestMoneyModalOpen}
         onClose={() => setIsRequestMoneyModalOpen(false)}
         onRequestMoney={handleRequestMoney}
-        data-oid="2qjfuao"
       />
     </Card>
   );

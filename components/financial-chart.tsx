@@ -21,21 +21,20 @@ const data = [
 
 export function FinancialChart() {
   return (
-    <Card data-oid="agyt0dj">
-      <CardHeader data-oid="eb6-7_1">
-        <CardTitle data-oid="me9l_p1">Financial Overview</CardTitle>
+    <Card>
+      <CardHeader>
+        <CardTitle>Financial Overview</CardTitle>
       </CardHeader>
-      <CardContent className="pb-4" data-oid="27ez.7d">
-        <div className="h-[200px]" data-oid="fwzfj66">
-          <ResponsiveContainer width="100%" height="100%" data-oid="xjnins.">
-            <LineChart data={data} data-oid=":g0vzw-">
+      <CardContent className="pb-4">
+        <div className="h-[200px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data}>
               <XAxis
                 dataKey="month"
                 stroke="#888888"
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
-                data-oid="ht8om6g"
               />
 
               <YAxis
@@ -44,16 +43,14 @@ export function FinancialChart() {
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(value) => `$${value}`}
-                data-oid="6:jz0m:"
               />
 
-              <Tooltip data-oid="np_m81-" />
+              <Tooltip />
               <Line
                 type="monotone"
                 dataKey="income"
                 stroke="#8884d8"
                 strokeWidth={2}
-                data-oid="u9h1vyp"
               />
 
               <Line
@@ -61,7 +58,6 @@ export function FinancialChart() {
                 dataKey="expenses"
                 stroke="#82ca9d"
                 strokeWidth={2}
-                data-oid="f7fftj7"
               />
             </LineChart>
           </ResponsiveContainer>
