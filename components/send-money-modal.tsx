@@ -50,29 +50,42 @@ export function SendMoneyModal({ isOpen, onClose, onSendMoney, accounts }) {
     switch (currentStep) {
       case 0:
         return (
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="amount">Amount to Send</Label>
+          <div className="space-y-4" data-oid="hwigfxe">
+            <div className="space-y-2" data-oid="hedr0rj">
+              <Label htmlFor="amount" data-oid="6mvdyi8">
+                Amount to Send
+              </Label>
               <Input
                 id="amount"
                 type="number"
                 placeholder="Enter amount"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
+                data-oid="olxc06z"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="account">From Account</Label>
+            <div className="space-y-2" data-oid="nsec5mo">
+              <Label htmlFor="account" data-oid="b-2qare">
+                From Account
+              </Label>
               <Select
                 onValueChange={setSelectedAccount}
                 value={selectedAccount}
+                data-oid="e87xcs0"
               >
-                <SelectTrigger id="account">
-                  <SelectValue placeholder="Select account" />
+                <SelectTrigger id="account" data-oid="_:0kkzx">
+                  <SelectValue
+                    placeholder="Select account"
+                    data-oid="fbmwdm-"
+                  />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent data-oid="caf3kt4">
                   {accounts.map((account) => (
-                    <SelectItem key={account.name} value={account.name}>
+                    <SelectItem
+                      key={account.name}
+                      value={account.name}
+                      data-oid=":wtrk3d"
+                    >
                       {account.name} (${account.balance.toFixed(2)})
                     </SelectItem>
                   ))}
@@ -84,9 +97,11 @@ export function SendMoneyModal({ isOpen, onClose, onSendMoney, accounts }) {
 
       case 1:
         return (
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="cardNumber">Card Number</Label>
+          <div className="space-y-4" data-oid="uagt0um">
+            <div className="space-y-2" data-oid="rw5y12d">
+              <Label htmlFor="cardNumber" data-oid="3mt4vh2">
+                Card Number
+              </Label>
               <Input
                 id="cardNumber"
                 placeholder="1234 5678 9012 3456"
@@ -94,11 +109,14 @@ export function SendMoneyModal({ isOpen, onClose, onSendMoney, accounts }) {
                 onChange={(e) =>
                   setCardDetails({ ...cardDetails, number: e.target.value })
                 }
+                data-oid="0d5qfoy"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="expiry">Expiry Date</Label>
+            <div className="grid grid-cols-2 gap-4" data-oid="utaabjn">
+              <div className="space-y-2" data-oid="j.m1m68">
+                <Label htmlFor="expiry" data-oid="bc3cnks">
+                  Expiry Date
+                </Label>
                 <Input
                   id="expiry"
                   placeholder="MM/YY"
@@ -106,10 +124,13 @@ export function SendMoneyModal({ isOpen, onClose, onSendMoney, accounts }) {
                   onChange={(e) =>
                     setCardDetails({ ...cardDetails, expiry: e.target.value })
                   }
+                  data-oid="xzdlyn8"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="cvv">CVV</Label>
+              <div className="space-y-2" data-oid="fgv7g-9">
+                <Label htmlFor="cvv" data-oid="5d2dy:v">
+                  CVV
+                </Label>
                 <Input
                   id="cvv"
                   placeholder="123"
@@ -117,6 +138,7 @@ export function SendMoneyModal({ isOpen, onClose, onSendMoney, accounts }) {
                   onChange={(e) =>
                     setCardDetails({ ...cardDetails, cvv: e.target.value })
                   }
+                  data-oid="wkvam58"
                 />
               </div>
             </div>
@@ -125,25 +147,31 @@ export function SendMoneyModal({ isOpen, onClose, onSendMoney, accounts }) {
 
       case 2:
         return (
-          <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">
+          <div className="space-y-4" data-oid="rvpn91n">
+            <p className="text-sm text-muted-foreground" data-oid="qac6d._">
               Enter the OTP sent to your registered mobile number
             </p>
             <Input
               placeholder="Enter OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
+              data-oid="g.-029s"
             />
           </div>
         );
 
       case 3:
         return (
-          <div className="text-center space-y-4">
-            <CheckCircle2 className="mx-auto h-12 w-12 text-green-500" />
+          <div className="text-center space-y-4" data-oid="rk6rzr3">
+            <CheckCircle2
+              className="mx-auto h-12 w-12 text-green-500"
+              data-oid="ezgjcq5"
+            />
 
-            <p className="text-lg font-medium">Money Sent Successfully</p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-lg font-medium" data-oid="-:vl_xo">
+              Money Sent Successfully
+            </p>
+            <p className="text-sm text-muted-foreground" data-oid="28broz:">
               ${amount} has been sent from your {selectedAccount} account.
             </p>
           </div>
@@ -152,23 +180,28 @@ export function SendMoneyModal({ isOpen, onClose, onSendMoney, accounts }) {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>{steps[currentStep]}</DialogTitle>
+    <Dialog open={isOpen} onOpenChange={onClose} data-oid="13i_68-">
+      <DialogContent className="sm:max-w-[425px]" data-oid="5dgx3nz">
+        <DialogHeader data-oid="o8qkwez">
+          <DialogTitle data-oid="nccd9zi">{steps[currentStep]}</DialogTitle>
         </DialogHeader>
-        <div className="mt-4 space-y-4">
+        <div className="mt-4 space-y-4" data-oid="ggjd.-6">
           {renderStepContent()}
-          <div className="flex justify-between">
+          <div className="flex justify-between" data-oid="ns-cd_e">
             {currentStep > 0 && currentStep < steps.length - 1 && (
               <Button
                 variant="outline"
                 onClick={() => setCurrentStep(currentStep - 1)}
+                data-oid=".7eevrk"
               >
                 Back
               </Button>
             )}
-            <Button onClick={handleContinue} className="ml-auto">
+            <Button
+              onClick={handleContinue}
+              className="ml-auto"
+              data-oid="awv_1.v"
+            >
               {currentStep === steps.length - 1 ? "Close" : "Continue"}
             </Button>
           </div>

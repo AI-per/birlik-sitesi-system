@@ -42,43 +42,56 @@ const transactions = [
 
 export function RecentTransactions() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-lg font-medium">
+    <Card data-oid="c8294ie">
+      <CardHeader data-oid="vd.ibsy">
+        <CardTitle className="text-lg font-medium" data-oid="qumticp">
           Recent Transactions
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
+      <CardContent data-oid="_lrn7oq">
+        <div className="space-y-4" data-oid="7-em38_">
           {transactions.slice(0, 3).map((transaction) => (
-            <div key={transaction.id} className="flex items-center">
-              <div className="flex-1">
-                <p className="text-sm font-medium">{transaction.name}</p>
-                <p className="text-xs text-muted-foreground">
+            <div
+              key={transaction.id}
+              className="flex items-center"
+              data-oid="b52izdg"
+            >
+              <div className="flex-1" data-oid="giwm6v0">
+                <p className="text-sm font-medium" data-oid="un:te8w">
+                  {transaction.name}
+                </p>
+                <p className="text-xs text-muted-foreground" data-oid="8iyfs08">
                   {transaction.date}
                 </p>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center" data-oid="i6ej2c.">
                 <span
                   className={`text-sm font-medium ${
                     transaction.type === "income"
                       ? "text-green-600 dark:text-green-400"
                       : "text-red-600 dark:text-red-400"
                   }`}
+                  data-oid="9g-wid2"
                 >
                   {transaction.type === "income" ? "+" : "-"}$
                   {Math.abs(transaction.amount).toFixed(2)}
                 </span>
                 {transaction.type === "income" ? (
-                  <ArrowUpRight className="h-4 w-4 text-green-600 dark:text-green-400 ml-1" />
+                  <ArrowUpRight
+                    className="h-4 w-4 text-green-600 dark:text-green-400 ml-1"
+                    data-oid="y5i4694"
+                  />
                 ) : (
-                  <ArrowDownRight className="h-4 w-4 text-red-600 dark:text-red-400 ml-1" />
+                  <ArrowDownRight
+                    className="h-4 w-4 text-red-600 dark:text-red-400 ml-1"
+                    data-oid="0t1v3xp"
+                  />
                 )}
               </div>
             </div>
           ))}
         </div>
-        <Button className="w-full mt-4" variant="outline">
+        <Button className="w-full mt-4" variant="outline" data-oid="t9dj0ku">
           View All Transactions
         </Button>
       </CardContent>

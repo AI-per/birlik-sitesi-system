@@ -19,7 +19,10 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
   const close = () => setIsOpen(false);
 
   return (
-    <SidebarContext.Provider value={{ isOpen, toggle, close }}>
+    <SidebarContext.Provider
+      value={{ isOpen, toggle, close }}
+      data-oid="2t5gezx"
+    >
       {children}
     </SidebarContext.Provider>
   );

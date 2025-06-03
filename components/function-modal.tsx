@@ -25,21 +25,30 @@ export function FunctionModal({
   icon,
 }: FunctionModalProps) {
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline" className="w-full justify-start">
+    <Dialog data-oid="5azugzc">
+      <DialogTrigger asChild data-oid="-s.odnb">
+        <Button
+          variant="outline"
+          className="w-full justify-start"
+          data-oid="-ap:a0f"
+        >
           {icon}
           {title}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
+      <DialogContent className="sm:max-w-[425px]" data-oid="4pzn1ou">
+        <DialogHeader data-oid="ahub911">
+          <DialogTitle data-oid="gy6qcxf">{title}</DialogTitle>
+          <DialogDescription data-oid="8tu1qk1">
+            {description}
+          </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="amount" className="text-right">
+        <div className="grid gap-4 py-4" data-oid="gif0diw">
+          <div
+            className="grid grid-cols-4 items-center gap-4"
+            data-oid="iwkm_xd"
+          >
+            <Label htmlFor="amount" className="text-right" data-oid="kwme14s">
               Amount
             </Label>
             <Input
@@ -47,10 +56,13 @@ export function FunctionModal({
               type="number"
               placeholder="Enter amount"
               className="col-span-3"
+              data-oid="ob.stxz"
             />
           </div>
         </div>
-        <Button type="submit">{actionText}</Button>
+        <Button type="submit" data-oid="-cxp7zd">
+          {actionText}
+        </Button>
       </DialogContent>
     </Dialog>
   );

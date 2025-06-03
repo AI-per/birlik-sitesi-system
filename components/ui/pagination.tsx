@@ -10,6 +10,7 @@ const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
     aria-label="pagination"
     className={cn("mx-auto flex w-full justify-center", className)}
     {...props}
+    data-oid="2gr8380"
   />
 );
 
@@ -23,6 +24,7 @@ const PaginationContent = React.forwardRef<
     ref={ref}
     className={cn("flex flex-row items-center gap-1", className)}
     {...props}
+    data-oid="fal.7:i"
   />
 ));
 PaginationContent.displayName = "PaginationContent";
@@ -31,7 +33,7 @@ const PaginationItem = React.forwardRef<
   HTMLLIElement,
   React.ComponentProps<"li">
 >(({ className, ...props }, ref) => (
-  <li ref={ref} className={cn("", className)} {...props} />
+  <li ref={ref} className={cn("", className)} {...props} data-oid="-a6dpd2" />
 ));
 PaginationItem.displayName = "PaginationItem";
 
@@ -56,6 +58,7 @@ const PaginationLink = ({
       className,
     )}
     {...props}
+    data-oid="vo:l_24"
   />
 );
 
@@ -70,9 +73,10 @@ const PaginationPrevious = ({
     size="default"
     className={cn("gap-1 pl-2.5", className)}
     {...props}
+    data-oid="l3bkk8f"
   >
-    <ChevronLeft className="h-4 w-4" />
-    <span>Previous</span>
+    <ChevronLeft className="h-4 w-4" data-oid="rc5fzpd" />
+    <span data-oid="69wa84u">Previous</span>
   </PaginationLink>
 );
 
@@ -87,9 +91,10 @@ const PaginationNext = ({
     size="default"
     className={cn("gap-1 pr-2.5", className)}
     {...props}
+    data-oid="i67e-zs"
   >
-    <span>Next</span>
-    <ChevronRight className="h-4 w-4" />
+    <span data-oid="6j0eyiw">Next</span>
+    <ChevronRight className="h-4 w-4" data-oid="wbwhb82" />
   </PaginationLink>
 );
 
@@ -103,9 +108,12 @@ const PaginationEllipsis = ({
     aria-hidden
     className={cn("flex h-9 w-9 items-center justify-center", className)}
     {...props}
+    data-oid="3:s4unl"
   >
-    <MoreHorizontal className="h-4 w-4" />
-    <span className="sr-only">More pages</span>
+    <MoreHorizontal className="h-4 w-4" data-oid=".ntrenr" />
+    <span className="sr-only" data-oid="dqx2tj3">
+      More pages
+    </span>
   </span>
 );
 

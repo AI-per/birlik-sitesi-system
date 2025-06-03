@@ -71,39 +71,56 @@ export function RecentAnnouncements() {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" data-oid="gvl0vlj">
       {announcements.map((announcement) => (
-        <Card key={announcement.id}>
-          <CardContent className="p-4">
-            <div className="flex items-start justify-between">
-              <div className="space-y-1">
-                <h4 className="text-sm font-medium">{announcement.title}</h4>
-                <p className="text-sm text-muted-foreground line-clamp-2">
+        <Card key={announcement.id} data-oid="nf9lwri">
+          <CardContent className="p-4" data-oid="85157xi">
+            <div
+              className="flex items-start justify-between"
+              data-oid="03dk8f-"
+            >
+              <div className="space-y-1" data-oid="hh166hz">
+                <h4 className="text-sm font-medium" data-oid="80n27ha">
+                  {announcement.title}
+                </h4>
+                <p
+                  className="text-sm text-muted-foreground line-clamp-2"
+                  data-oid="-lsefw0"
+                >
                   {announcement.content}
                 </p>
               </div>
-              <div className="flex items-center">
-                <div className="text-xs text-muted-foreground text-right mr-4">
+              <div className="flex items-center" data-oid="e:t83jb">
+                <div
+                  className="text-xs text-muted-foreground text-right mr-4"
+                  data-oid="asx4:9m"
+                >
                   {formatDistanceToNow(announcement.date, {
                     addSuffix: true,
                     locale: tr,
                   })}
                 </div>
-                <Avatar className="h-8 w-8">
+                <Avatar className="h-8 w-8" data-oid=":sivtq7">
                   <AvatarImage
                     src={announcement.author.image || "/placeholder.svg"}
                     alt={announcement.author.name}
+                    data-oid="9:8srmf"
                   />
 
-                  <AvatarFallback>{announcement.author.name[0]}</AvatarFallback>
+                  <AvatarFallback data-oid="w.t-l6p">
+                    {announcement.author.name[0]}
+                  </AvatarFallback>
                 </Avatar>
               </div>
             </div>
-            <div className="mt-2 flex items-center justify-between">
-              <div className="text-xs text-muted-foreground">
+            <div
+              className="mt-2 flex items-center justify-between"
+              data-oid="7epwn2d"
+            >
+              <div className="text-xs text-muted-foreground" data-oid="2qp8z:_">
                 {announcement.author.name} - {announcement.author.role}
               </div>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" data-oid="qa7ed08">
                 Detaylar
               </Button>
             </div>

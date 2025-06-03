@@ -51,30 +51,48 @@ export function RequestMoneyModal({ isOpen, onClose, onRequestMoney }) {
     switch (currentStep) {
       case 0:
         return (
-          <div className="space-y-4">
-            <Label htmlFor="contact">Select Contact</Label>
+          <div className="space-y-4" data-oid="9-w12c0">
+            <Label htmlFor="contact" data-oid="9a_:_a3">
+              Select Contact
+            </Label>
             <Select
               onValueChange={(value) =>
                 setSelectedContact(contacts.find((c) => c.id === value))
               }
+              data-oid="ihfr_3r"
             >
-              <SelectTrigger id="contact">
-                <SelectValue placeholder="Select a contact" />
+              <SelectTrigger id="contact" data-oid="lyk88tl">
+                <SelectValue
+                  placeholder="Select a contact"
+                  data-oid="le63p4a"
+                />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent data-oid="xn6nt09">
                 {contacts.map((contact) => (
-                  <SelectItem key={contact.id} value={contact.id}>
+                  <SelectItem
+                    key={contact.id}
+                    value={contact.id}
+                    data-oid="7tthkww"
+                  >
                     {contact.name}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             {selectedContact && (
-              <div className="space-y-2">
-                <p className="text-sm font-medium">Contact Details:</p>
-                <p className="text-sm">Name: {selectedContact.name}</p>
-                <p className="text-sm">ID: {selectedContact.id}</p>
-                <p className="text-sm">Phone: {selectedContact.phoneNumber}</p>
+              <div className="space-y-2" data-oid="mwg6.g7">
+                <p className="text-sm font-medium" data-oid="6j7f1qx">
+                  Contact Details:
+                </p>
+                <p className="text-sm" data-oid="_jovx-x">
+                  Name: {selectedContact.name}
+                </p>
+                <p className="text-sm" data-oid="82bic15">
+                  ID: {selectedContact.id}
+                </p>
+                <p className="text-sm" data-oid="01xb3.c">
+                  Phone: {selectedContact.phoneNumber}
+                </p>
               </div>
             )}
           </div>
@@ -82,39 +100,48 @@ export function RequestMoneyModal({ isOpen, onClose, onRequestMoney }) {
 
       case 1:
         return (
-          <div className="space-y-4">
-            <Label htmlFor="amount">Amount to Request</Label>
+          <div className="space-y-4" data-oid="em458hz">
+            <Label htmlFor="amount" data-oid="xreh:2k">
+              Amount to Request
+            </Label>
             <Input
               id="amount"
               type="number"
               placeholder="Enter amount"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
+              data-oid="e2j7bfl"
             />
           </div>
         );
 
       case 2:
         return (
-          <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">
+          <div className="space-y-4" data-oid="ohj4ylf">
+            <p className="text-sm text-muted-foreground" data-oid="e5ff4y3">
               Enter the OTP sent to your registered mobile number
             </p>
             <Input
               placeholder="Enter OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
+              data-oid="t.sz-qh"
             />
           </div>
         );
 
       case 3:
         return (
-          <div className="text-center space-y-4">
-            <CheckCircle2 className="mx-auto h-12 w-12 text-green-500" />
+          <div className="text-center space-y-4" data-oid="03lec.e">
+            <CheckCircle2
+              className="mx-auto h-12 w-12 text-green-500"
+              data-oid="rgpkkvj"
+            />
 
-            <p className="text-lg font-medium">Money Request Sent</p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-lg font-medium" data-oid="ul1qow8">
+              Money Request Sent
+            </p>
+            <p className="text-sm text-muted-foreground" data-oid="425g7hc">
               ${amount} has been requested from {selectedContact.name}.
             </p>
           </div>
@@ -123,23 +150,28 @@ export function RequestMoneyModal({ isOpen, onClose, onRequestMoney }) {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>{steps[currentStep]}</DialogTitle>
+    <Dialog open={isOpen} onOpenChange={onClose} data-oid="zgsi4ld">
+      <DialogContent className="sm:max-w-[425px]" data-oid="socj8-s">
+        <DialogHeader data-oid="kt-rnhx">
+          <DialogTitle data-oid="sfiw_wr">{steps[currentStep]}</DialogTitle>
         </DialogHeader>
-        <div className="mt-4 space-y-4">
+        <div className="mt-4 space-y-4" data-oid="di8.j85">
           {renderStepContent()}
-          <div className="flex justify-between">
+          <div className="flex justify-between" data-oid="t7xo0u1">
             {currentStep > 0 && currentStep < steps.length - 1 && (
               <Button
                 variant="outline"
                 onClick={() => setCurrentStep(currentStep - 1)}
+                data-oid="rjiudk7"
               >
                 Back
               </Button>
             )}
-            <Button onClick={handleContinue} className="ml-auto">
+            <Button
+              onClick={handleContinue}
+              className="ml-auto"
+              data-oid="k8yq:w8"
+            >
               {currentStep === steps.length - 1 ? "Close" : "Continue"}
             </Button>
           </div>

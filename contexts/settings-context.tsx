@@ -125,6 +125,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         updateNotificationSettings,
         updatePrivacySettings,
       }}
+      data-oid="qzkb.cc"
     >
       {children}
     </SettingsContext.Provider>

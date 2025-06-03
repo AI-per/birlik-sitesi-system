@@ -10,20 +10,22 @@ import { CreateBlockDialog } from "@/components/blocks/create-block-dialog";
 
 export default function BlocksPage() {
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold tracking-tight">Bloklar</h2>
-        <CreateBlockDialog />
+    <div className="flex flex-col gap-4" data-oid="icltl4j">
+      <div className="flex items-center justify-between" data-oid=".fnhqpc">
+        <h2 className="text-3xl font-bold tracking-tight" data-oid="vu1puwy">
+          Bloklar
+        </h2>
+        <CreateBlockDialog data-oid=".eeezr_" />
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Blok Listesi</CardTitle>
-          <CardDescription>
+      <Card data-oid="pbonx3m">
+        <CardHeader data-oid="ef38lwx">
+          <CardTitle data-oid="0pge:bj">Blok Listesi</CardTitle>
+          <CardDescription data-oid="hp.416w">
             Sitedeki tüm blokları görüntüleyin ve yönetin.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <BlockList />
+        <CardContent data-oid="cqos4mq">
+          <BlockList data-oid="oguvv28" />
         </CardContent>
       </Card>
     </div>

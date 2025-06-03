@@ -44,18 +44,21 @@ export function EditBlockDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Blok Düzenle</DialogTitle>
-          <DialogDescription>
+    <Dialog open={open} onOpenChange={onOpenChange} data-oid="351ndig">
+      <DialogContent className="sm:max-w-[425px]" data-oid="1k:tadv">
+        <DialogHeader data-oid="g6:abx2">
+          <DialogTitle data-oid="yqq6fvs">Blok Düzenle</DialogTitle>
+          <DialogDescription data-oid="x41_dbi">
             Blok bilgilerini düzenleyin. Değişiklikleri kaydetmek için kaydet
             butonuna tıklayın.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
+        <div className="grid gap-4 py-4" data-oid="x5lrftl">
+          <div
+            className="grid grid-cols-4 items-center gap-4"
+            data-oid="yiftd8l"
+          >
+            <Label htmlFor="name" className="text-right" data-oid="8djnnm7">
               Blok Adı
             </Label>
             <Input
@@ -63,10 +66,18 @@ export function EditBlockDialog({
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="col-span-3"
+              data-oid="0vf3.:8"
             />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="apartmentCount" className="text-right">
+          <div
+            className="grid grid-cols-4 items-center gap-4"
+            data-oid="5qg6pec"
+          >
+            <Label
+              htmlFor="apartmentCount"
+              className="text-right"
+              data-oid="wjjwv99"
+            >
               Daire Sayısı
             </Label>
             <Input
@@ -75,14 +86,19 @@ export function EditBlockDialog({
               value={apartmentCount}
               onChange={(e) => setApartmentCount(e.target.value)}
               className="col-span-3"
+              data-oid="y.4r._n"
             />
           </div>
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+        <DialogFooter data-oid="26p8hb.">
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            data-oid="ln.ys-e"
+          >
             İptal
           </Button>
-          <Button onClick={handleSave} disabled={isLoading}>
+          <Button onClick={handleSave} disabled={isLoading} data-oid="o:7eg8i">
             {isLoading ? "Kaydediliyor..." : "Kaydet"}
           </Button>
         </DialogFooter>

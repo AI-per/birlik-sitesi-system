@@ -13,24 +13,32 @@ export function AccountOverview() {
   );
 
   return (
-    <Card className="border border-border">
-      <CardHeader>
-        <CardTitle className="text-lg font-medium">Account Overview</CardTitle>
+    <Card className="border border-border" data-oid="j45zzed">
+      <CardHeader data-oid="yfkshrp">
+        <CardTitle className="text-lg font-medium" data-oid="k2fk28v">
+          Account Overview
+        </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-semibold mb-4">
+      <CardContent data-oid="3.sdk0-">
+        <div className="text-2xl font-semibold mb-4" data-oid="3p:2uu_">
           ${totalBalance.toFixed(2)}
         </div>
-        <div className="space-y-2">
+        <div className="space-y-2" data-oid="io36g.o">
           {accounts.map((account) => (
             <div
               key={account.name}
               className="flex justify-between items-center"
+              data-oid="2ii7o9h"
             >
-              <span className="text-sm text-muted-foreground">
+              <span
+                className="text-sm text-muted-foreground"
+                data-oid="f7r1d:_"
+              >
                 {account.name}
               </span>
-              <span className="font-medium">${account.balance.toFixed(2)}</span>
+              <span className="font-medium" data-oid="sw-g.tv">
+                ${account.balance.toFixed(2)}
+              </span>
             </div>
           ))}
         </div>

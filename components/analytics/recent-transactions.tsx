@@ -56,30 +56,40 @@ const recentTransactions = [
 
 export function RecentTransactions() {
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" data-oid="icx-fsb">
       {recentTransactions.map((transaction) => (
-        <Card key={transaction.id} className="p-4">
-          <CardContent className="flex items-center p-0">
-            <Avatar className="h-10 w-10">
-              <AvatarImage src={transaction.avatar} alt={transaction.name} />
+        <Card key={transaction.id} className="p-4" data-oid="yx15q.2">
+          <CardContent className="flex items-center p-0" data-oid="y_x4zfr">
+            <Avatar className="h-10 w-10" data-oid="1uil92l">
+              <AvatarImage
+                src={transaction.avatar}
+                alt={transaction.name}
+                data-oid="la68.be"
+              />
 
-              <AvatarFallback>{transaction.name.charAt(0)}</AvatarFallback>
+              <AvatarFallback data-oid="7.q1lq7">
+                {transaction.name.charAt(0)}
+              </AvatarFallback>
             </Avatar>
-            <div className="ml-4 flex-1 space-y-1">
-              <p className="text-sm font-medium leading-none">
+            <div className="ml-4 flex-1 space-y-1" data-oid="-skfho0">
+              <p
+                className="text-sm font-medium leading-none"
+                data-oid="3.m6lf3"
+              >
                 {transaction.name}
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground" data-oid="fgs2p8d">
                 {transaction.email}
               </p>
             </div>
-            <div className="ml-auto text-right">
+            <div className="ml-auto text-right" data-oid="9__m_or">
               <p
                 className={`text-sm font-medium ${transaction.amount.startsWith("+") ? "text-green-500" : "text-red-500"}`}
+                data-oid="p:uuupp"
               >
                 {transaction.amount}
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground" data-oid="nojgc3k">
                 {transaction.date}
               </p>
             </div>

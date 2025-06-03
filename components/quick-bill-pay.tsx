@@ -22,27 +22,39 @@ export function QuickBillPay() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Quick Bill Pay</CardTitle>
+    <Card data-oid="usmz6yp">
+      <CardHeader data-oid=":3qrsqw">
+        <CardTitle data-oid="ju_ko86">Quick Bill Pay</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent data-oid="ufamjnl">
         {bills.length > 0 ? (
-          <div className="space-y-4">
+          <div className="space-y-4" data-oid="o6ycnl8">
             {bills.map((bill) => (
-              <div key={bill.id} className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">{bill.name}</p>
-                  <p className="text-sm text-muted-foreground">
+              <div
+                key={bill.id}
+                className="flex items-center justify-between"
+                data-oid="w0f62v7"
+              >
+                <div data-oid="yag9dtw">
+                  <p className="font-medium" data-oid="o8ux5h2">
+                    {bill.name}
+                  </p>
+                  <p
+                    className="text-sm text-muted-foreground"
+                    data-oid="i5g2oy:"
+                  >
                     Due: {bill.dueDate}
                   </p>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <span className="font-bold">${bill.amount}</span>
+                <div className="flex items-center space-x-2" data-oid="73_5hsl">
+                  <span className="font-bold" data-oid="h9clgg6">
+                    ${bill.amount}
+                  </span>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => setSelectedBill(bill)}
+                    data-oid="u.bdcir"
                   >
                     Pay
                   </Button>
@@ -51,7 +63,9 @@ export function QuickBillPay() {
             ))}
           </div>
         ) : (
-          <p className="text-center text-muted-foreground">No pending bills</p>
+          <p className="text-center text-muted-foreground" data-oid="e18jp9m">
+            No pending bills
+          </p>
         )}
       </CardContent>
       {selectedBill && (
@@ -60,6 +74,7 @@ export function QuickBillPay() {
           isOpen={!!selectedBill}
           onClose={() => setSelectedBill(null)}
           onPaymentSuccess={() => handlePaymentSuccess(selectedBill.id)}
+          data-oid="jzis8f7"
         />
       )}
     </Card>

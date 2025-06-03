@@ -10,16 +10,30 @@ const topProducts = [
 
 export function TopProducts() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" data-oid="zcc93ja">
       {topProducts.map((product) => (
-        <div key={product.name} className="flex items-center">
-          <CheckCircle2 className="mr-2 h-4 w-4 text-muted-foreground" />
+        <div
+          key={product.name}
+          className="flex items-center"
+          data-oid="zki4mx3"
+        >
+          <CheckCircle2
+            className="mr-2 h-4 w-4 text-muted-foreground"
+            data-oid="_9ixxut"
+          />
 
-          <div className="ml-4 space-y-1">
-            <p className="text-sm font-medium leading-none">{product.name}</p>
-            <p className="text-sm text-muted-foreground">{product.revenue}</p>
+          <div className="ml-4 space-y-1" data-oid=".i.4znj">
+            <p className="text-sm font-medium leading-none" data-oid="iyjdub0">
+              {product.name}
+            </p>
+            <p className="text-sm text-muted-foreground" data-oid="nbs6dub">
+              {product.revenue}
+            </p>
           </div>
-          <div className="ml-auto font-medium text-green-500">
+          <div
+            className="ml-auto font-medium text-green-500"
+            data-oid="-e0kes2"
+          >
             {product.growth}
           </div>
         </div>

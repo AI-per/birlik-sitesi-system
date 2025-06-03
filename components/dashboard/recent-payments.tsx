@@ -68,28 +68,37 @@ export function RecentPayments() {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" data-oid="1:03:5w">
       {payments.map((payment) => (
-        <div key={payment.id} className="flex items-center">
-          <Avatar className="h-9 w-9">
+        <div key={payment.id} className="flex items-center" data-oid="o58o2bg">
+          <Avatar className="h-9 w-9" data-oid="2ly9ymn">
             <AvatarImage
               src={payment.user.image || "/placeholder.svg"}
               alt={payment.user.name}
+              data-oid="o0bfzms"
             />
 
-            <AvatarFallback>{payment.user.name[0]}</AvatarFallback>
+            <AvatarFallback data-oid="ghib5l5">
+              {payment.user.name[0]}
+            </AvatarFallback>
           </Avatar>
-          <div className="ml-4 space-y-1">
-            <p className="text-sm font-medium leading-none">
+          <div className="ml-4 space-y-1" data-oid="f-c-3t7">
+            <p className="text-sm font-medium leading-none" data-oid="14lcmiw">
               {payment.user.name}
             </p>
-            <p className="text-sm text-muted-foreground">{payment.apartment}</p>
+            <p className="text-sm text-muted-foreground" data-oid="zf6uy9j">
+              {payment.apartment}
+            </p>
           </div>
-          <div className="ml-auto text-right">
-            <p className="text-sm font-medium">{payment.amount}</p>
-            <div className="text-xs text-muted-foreground">{payment.date}</div>
+          <div className="ml-auto text-right" data-oid="ryg1b25">
+            <p className="text-sm font-medium" data-oid="hs6jvdj">
+              {payment.amount}
+            </p>
+            <div className="text-xs text-muted-foreground" data-oid="92vbza:">
+              {payment.date}
+            </div>
           </div>
-          <div className="ml-2">
+          <div className="ml-2" data-oid="ffs_oux">
             <Badge
               variant={
                 payment.status === "success"
@@ -98,6 +107,7 @@ export function RecentPayments() {
                     ? "outline"
                     : "destructive"
               }
+              data-oid="wtz8:xf"
             >
               {payment.status === "success"
                 ? "Ödendi"

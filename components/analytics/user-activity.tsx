@@ -38,23 +38,36 @@ const userActivities = [
 
 export function UserActivity() {
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" data-oid="bxv7:v:">
       {userActivities.map((activity) => (
-        <Card key={activity.id} className="p-4">
-          <CardContent className="flex items-center p-0">
-            <Avatar className="h-10 w-10">
-              <AvatarImage src={activity.avatar} alt={activity.user} />
+        <Card key={activity.id} className="p-4" data-oid="9iwtfe3">
+          <CardContent className="flex items-center p-0" data-oid="v1yv737">
+            <Avatar className="h-10 w-10" data-oid="8aj:wsx">
+              <AvatarImage
+                src={activity.avatar}
+                alt={activity.user}
+                data-oid="egrjjwx"
+              />
 
-              <AvatarFallback>{activity.user.charAt(0)}</AvatarFallback>
+              <AvatarFallback data-oid="n7.ojnk">
+                {activity.user.charAt(0)}
+              </AvatarFallback>
             </Avatar>
-            <div className="ml-4 flex-1 space-y-1">
-              <p className="text-sm font-medium leading-none">
+            <div className="ml-4 flex-1 space-y-1" data-oid="_879c-3">
+              <p
+                className="text-sm font-medium leading-none"
+                data-oid="d4mhfil"
+              >
                 {activity.user}
               </p>
-              <p className="text-xs text-muted-foreground">{activity.action}</p>
+              <p className="text-xs text-muted-foreground" data-oid="veyastc">
+                {activity.action}
+              </p>
             </div>
-            <div className="ml-auto text-right">
-              <p className="text-xs text-muted-foreground">{activity.time}</p>
+            <div className="ml-auto text-right" data-oid="ujj8jep">
+              <p className="text-xs text-muted-foreground" data-oid="s39b_i.">
+                {activity.time}
+              </p>
             </div>
           </CardContent>
         </Card>

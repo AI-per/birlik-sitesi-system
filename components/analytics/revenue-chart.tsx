@@ -32,10 +32,12 @@ export function RevenueChart() {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <Card className="border-none shadow-lg">
-          <CardContent className="p-2">
-            <p className="text-sm font-semibold">{label}</p>
-            <p className="text-sm text-muted-foreground">
+        <Card className="border-none shadow-lg" data-oid="21dpm8y">
+          <CardContent className="p-2" data-oid="rr2agb9">
+            <p className="text-sm font-semibold" data-oid="43xdg.r">
+              {label}
+            </p>
+            <p className="text-sm text-muted-foreground" data-oid="9doextf">
               Revenue: ${payload[0].value.toLocaleString()}
             </p>
           </CardContent>
@@ -46,10 +48,11 @@ export function RevenueChart() {
   };
 
   return (
-    <ResponsiveContainer width="100%" height={350}>
+    <ResponsiveContainer width="100%" height={350} data-oid=".k::ytl">
       <LineChart
         data={data}
         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        data-oid="2mes6b_"
       >
         <XAxis
           dataKey="month"
@@ -57,6 +60,7 @@ export function RevenueChart() {
           fontSize={12}
           tickLine={false}
           axisLine={false}
+          data-oid="x-x13f6"
         />
 
         <YAxis
@@ -65,9 +69,13 @@ export function RevenueChart() {
           tickLine={false}
           axisLine={false}
           tickFormatter={(value) => `$${value}`}
+          data-oid="hqgentg"
         />
 
-        <Tooltip content={<CustomTooltip />} />
+        <Tooltip
+          content={<CustomTooltip data-oid="ykjuag6" />}
+          data-oid=":v04qxo"
+        />
 
         <Line
           type="monotone"
@@ -75,6 +83,7 @@ export function RevenueChart() {
           stroke={theme === "dark" ? "#adfa1d" : "#0ea5e9"}
           strokeWidth={2}
           dot={false}
+          data-oid="92w7pu2"
         />
       </LineChart>
     </ResponsiveContainer>
