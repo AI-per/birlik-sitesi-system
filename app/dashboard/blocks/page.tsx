@@ -6,7 +6,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { BlockList } from "@/components/blocks/block-list";
-import { CreateBlockDialog } from "@/components/blocks/create-block-dialog";
 
 export default function BlocksPage() {
   return (
@@ -15,7 +14,6 @@ export default function BlocksPage() {
         <h2 className="text-3xl font-bold tracking-tight" data-oid="vu1puwy">
           Bloklar
         </h2>
-        <CreateBlockDialog data-oid=".eeezr_" />
       </div>
       <Card data-oid="pbonx3m">
         <CardHeader data-oid="ef38lwx">
