@@ -1,0 +1,157 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Kullanıcı rolleri için enum
+enum Role {
+  RESIDENT      // Daire Sahibi
+  MANAGER       // Site Yöneticisi
+  ADMIN         // Sistem Yöneticisi (Ana Yönetici)
+}
+
+// Blok modeli
+model Block {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // İlişkiler
+  apartments Apartment[]
+
+  @@map("blocks")
+}
+
+// Daire modeli
+model Apartment {
+  id            String   @id @default(uuid())
+  number        String
+  floor         Int
+  type          String?  // Örn: 1+1, 2+1, 3+1
+  squareMeters  Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // İlişkiler
+  blockId       String
+  block         Block    @relation(fields: [blockId], references: [id], onDelete: Cascade)
+  residents     User[]   // Dairede yaşayan kullanıcılar (birden fazla olabilir)
+  dues          Due[]    // Daireye ait aidatlar
+
+  @@unique([blockId, number]) // Aynı blokta aynı numaralı iki daire olamaz
+  @@map("apartments")
+}
+
+// Kullanıcı modeli
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password      String
+  fullName      String
+  phone         String?
+  role          Role     @default(RESIDENT)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // İlişkiler
+  apartmentId   String?
+  apartment     Apartment? @relation(fields: [apartmentId], references: [id])
+  announcements Announcement[] // Yöneticiler tarafından yapılan duyurular
+  payments      Payment[]      // Kullanıcının yaptığı ödemeler
+  contactMessages ContactMessage[] // Kullanıcının gönderdiği iletişim mesajları
+
+  @@map("users")
+}
+
+// Duyuru modeli
+model Announcement {
+  id          String   @id @default(uuid())
+  title       String
+  content     String
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // İlişkiler
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+
+  @@map("announcements")
+}
+
+// Aidat modeli
+model Due {
+  id            String   @id @default(uuid())
+  amount        Decimal  @db.Decimal(10, 2)
+  description   String?
+  dueDate       DateTime
+  isAutomaticDue Boolean  @default(true)  // Otomatik oluşturulan aidat mı yoksa manuel eklenen ek gider mi?
+  month         Int      // 1-12 arası ay
+  year          Int      // Yıl (2025 vs)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // İlişkiler
+  apartmentId   String
+  apartment     Apartment @relation(fields: [apartmentId], references: [id], onDelete: Cascade)
+  payment       Payment?  // Ödeme yapıldıysa ilişkisi
+
+  @@unique([apartmentId, month, year, isAutomaticDue]) // Aynı daireye aynı ay için birden fazla otomatik aidat oluşmamalı
+  @@map("dues")
+}
+
+// Ödeme modeli
+model Payment {
+  id               String   @id @default(uuid())
+  amount           Decimal  @db.Decimal(10, 2)
+  paymentDate      DateTime @default(now())
+  paymentMethod    String?  // Nakit, Banka Havalesi, Kredi Kartı vs.
+  receiptNumber    String?
+  notes            String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // İlişkiler
+  dueId            String   @unique
+  due              Due      @relation(fields: [dueId], references: [id], onDelete: Cascade)
+  payerId          String
+  payer            User     @relation(fields: [payerId], references: [id])
+
+  @@map("payments")
+}
+
+// İletişim Formu Mesajları
+model ContactMessage {
+  id        String   @id @default(uuid())
+  subject   String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // İlişkiler
+  senderId  String
+  sender    User     @relation(fields: [senderId], references: [id])
+
+  @@map("contact_messages")
+}
+
+// Genel Ayarlar (Sistem genelinde kullanılacak ayarlar)
+model Setting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}
