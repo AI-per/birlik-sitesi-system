@@ -13,25 +13,25 @@ export function Header() {
   return (
     <header
       className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6"
-      data-oid="0w8si0i"
+      data-oid="extq8v4"
     >
       <Button
         variant="ghost"
         size="icon"
         className="lg:hidden"
         onClick={toggle}
-        data-oid="lyhwr09"
+        data-oid="rv7y1ll"
       >
-        <Icons.menu className="h-6 w-6" data-oid=":m-2qrs" />
-        <span className="sr-only" data-oid="ywx9v7.">
+        <Icons.menu className="h-6 w-6" data-oid="e:stmk5" />
+        <span className="sr-only" data-oid="c9rhi3:">
           Toggle Menu
         </span>
       </Button>
-      <div className="flex-1" data-oid="9mh3nzq" />
-      <div className="flex items-center gap-2" data-oid="9:n5_ng">
-        <NotificationPopover data-oid="p-du.83" />
-        <ModeToggle data-oid="9-._8ii" />
-        <UserNav data-oid="9ymy_7t" />
+      <div className="flex-1" data-oid="3ra.co8" />
+      <div className="flex items-center gap-2" data-oid="ua1o63e">
+        <NotificationPopover data-oid="v9mip_d" />
+        <ModeToggle data-oid="t:h7f-4" />
+        <UserNav data-oid="0-irhjm" />
       </div>
     </header>
   );

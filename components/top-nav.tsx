@@ -24,26 +24,26 @@ export function TopNav() {
   return (
     <header
       className="sticky top-0 z-40 border-b bg-background"
-      data-oid=":s7ugbr"
+      data-oid="qcqnl_u"
     >
       <div
         className="container flex h-16 items-center justify-between px-4 md:px-6"
-        data-oid="ppevki-"
+        data-oid="inc-1wh"
       >
-        <div className="hidden md:block" data-oid="-3d12hk">
-          <nav className="flex items-center space-x-2" data-oid="r.ywzbx">
-            <Link href="/" className="text-sm font-medium" data-oid="xqw_-8q">
+        <div className="hidden md:block" data-oid="2ibm70l">
+          <nav className="flex items-center space-x-2" data-oid="ots_ta9">
+            <Link href="/" className="text-sm font-medium" data-oid="_yampl.">
               Home
             </Link>
             {pathSegments.map((segment, index) => (
               <React.Fragment key={segment}>
-                <span className="text-muted-foreground" data-oid="oe0y0w.">
+                <span className="text-muted-foreground" data-oid="0rtsept">
                   /
                 </span>
                 <Link
                   href={`/${pathSegments.slice(0, index + 1).join("/")}`}
                   className="text-sm font-medium"
-                  data-oid="-c99bbq"
+                  data-oid="nhf1uro"
                 >
                   {segment.charAt(0).toUpperCase() + segment.slice(1)}
                 </Link>
@@ -51,24 +51,24 @@ export function TopNav() {
             ))}
           </nav>
         </div>
-        <div className="flex items-center gap-4" data-oid="06txq0u">
-          <Notifications data-oid="1a_58cn" />
-          <ThemeToggle data-oid="qlyypfs" />
-          <DropdownMenu data-oid="n5wm8gu">
-            <DropdownMenuTrigger asChild data-oid="a2-bjec">
+        <div className="flex items-center gap-4" data-oid="ohq:u2z">
+          <Notifications data-oid="x5jis2l" />
+          <ThemeToggle data-oid="yz09-:l" />
+          <DropdownMenu data-oid="6lq6nw.">
+            <DropdownMenuTrigger asChild data-oid="mrogiio">
               <Button
                 variant="ghost"
                 className="relative h-8 w-8 rounded-full"
-                data-oid="v.ndd8i"
+                data-oid="lp2fg4z"
               >
-                <Avatar className="h-8 w-8" data-oid="48vou8y">
+                <Avatar className="h-8 w-8" data-oid="2:kfr38">
                   <AvatarImage
                     src={settings.avatar}
                     alt={settings.fullName}
-                    data-oid="sed2s.:"
+                    data-oid="05s6xtf"
                   />
 
-                  <AvatarFallback data-oid="q1zqjto">
+                  <AvatarFallback data-oid="4gyrts2">
                     {settings.fullName
                       .split(" ")
                       .map((n) => n[0])
@@ -81,36 +81,36 @@ export function TopNav() {
               className="w-56"
               align="end"
               forceMount
-              data-oid="wmygd0v"
+              data-oid="ys6stb5"
             >
-              <DropdownMenuLabel className="font-normal" data-oid="u45v0a-">
-                <div className="flex flex-col space-y-1" data-oid="mky2wq2">
+              <DropdownMenuLabel className="font-normal" data-oid="98.t1tk">
+                <div className="flex flex-col space-y-1" data-oid="hz4p45t">
                   <p
                     className="text-sm font-medium leading-none"
-                    data-oid="m640lzm"
+                    data-oid="g31p:fv"
                   >
                     {settings.fullName}
                   </p>
                   <p
                     className="text-xs leading-none text-muted-foreground"
-                    data-oid="bppvtxe"
+                    data-oid="v7y7y:3"
                   >
                     {settings.email}
                   </p>
                 </div>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator data-oid="o08k7mh" />
-              <DropdownMenuItem asChild data-oid="q.ygwl2">
-                <Link href="/settings" data-oid="256ie8c">
+              <DropdownMenuSeparator data-oid="xhvmfez" />
+              <DropdownMenuItem asChild data-oid="6ghfij1">
+                <Link href="/settings" data-oid="xr1mgrr">
                   Profile
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild data-oid="sih:tul">
-                <Link href="/settings" data-oid="bvqywyn">
+              <DropdownMenuItem asChild data-oid="jax56:i">
+                <Link href="/settings" data-oid="utrmyd8">
                   Settings
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem data-oid="aboclwc">Log out</DropdownMenuItem>
+              <DropdownMenuItem data-oid="55nt7i_">Log out</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

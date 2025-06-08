@@ -37,8 +37,8 @@ export function TopUpModal({ isOpen, onClose, onTopUp }) {
     switch (currentStep) {
       case 0:
         return (
-          <div className="space-y-4" data-oid="8-t6o74">
-            <Label htmlFor="amount" data-oid="k0-lteh">
+          <div className="space-y-4" data-oid="-c5_5wq">
+            <Label htmlFor="amount" data-oid="y5squ.r">
               Top-up Amount
             </Label>
             <Input
@@ -47,16 +47,16 @@ export function TopUpModal({ isOpen, onClose, onTopUp }) {
               placeholder="Enter amount"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              data-oid=".r:ade3"
+              data-oid="knu3_yy"
             />
           </div>
         );
 
       case 1:
         return (
-          <div className="space-y-4" data-oid="0izulqz">
-            <div className="space-y-2" data-oid="gn9cbi2">
-              <Label htmlFor="cardNumber" data-oid="b595p:k">
+          <div className="space-y-4" data-oid="0eihzcg">
+            <div className="space-y-2" data-oid="1m7_t_a">
+              <Label htmlFor="cardNumber" data-oid="hsw55nc">
                 Card Number
               </Label>
               <Input
@@ -66,12 +66,12 @@ export function TopUpModal({ isOpen, onClose, onTopUp }) {
                 onChange={(e) =>
                   setCardDetails({ ...cardDetails, number: e.target.value })
                 }
-                data-oid="te-rvvw"
+                data-oid="u2jvxwo"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4" data-oid="g7goq8n">
-              <div className="space-y-2" data-oid="lpzsxlg">
-                <Label htmlFor="expiry" data-oid="p0m92c8">
+            <div className="grid grid-cols-2 gap-4" data-oid="-pwk8li">
+              <div className="space-y-2" data-oid="lkxfa7n">
+                <Label htmlFor="expiry" data-oid="cfmvlaa">
                   Expiry Date
                 </Label>
                 <Input
@@ -81,11 +81,11 @@ export function TopUpModal({ isOpen, onClose, onTopUp }) {
                   onChange={(e) =>
                     setCardDetails({ ...cardDetails, expiry: e.target.value })
                   }
-                  data-oid="taeqnty"
+                  data-oid="20f.e3u"
                 />
               </div>
-              <div className="space-y-2" data-oid="nk7_.:c">
-                <Label htmlFor="cvv" data-oid="ouyf3g.">
+              <div className="space-y-2" data-oid="a.9c-7l">
+                <Label htmlFor="cvv" data-oid="fn:k0bw">
                   CVV
                 </Label>
                 <Input
@@ -95,7 +95,7 @@ export function TopUpModal({ isOpen, onClose, onTopUp }) {
                   onChange={(e) =>
                     setCardDetails({ ...cardDetails, cvv: e.target.value })
                   }
-                  data-oid="z-8o9zs"
+                  data-oid="x05_u0l"
                 />
               </div>
             </div>
@@ -104,31 +104,31 @@ export function TopUpModal({ isOpen, onClose, onTopUp }) {
 
       case 2:
         return (
-          <div className="space-y-4" data-oid="fx5hg.0">
-            <p className="text-sm text-muted-foreground" data-oid="4_f4fvq">
+          <div className="space-y-4" data-oid="3mqnl0j">
+            <p className="text-sm text-muted-foreground" data-oid="n53u6if">
               Enter the OTP sent to your registered mobile number
             </p>
             <Input
               placeholder="Enter OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              data-oid="cai0-it"
+              data-oid="58f5.8u"
             />
           </div>
         );
 
       case 3:
         return (
-          <div className="text-center space-y-4" data-oid="r4uirw0">
+          <div className="text-center space-y-4" data-oid="f2744ps">
             <CheckCircle2
               className="mx-auto h-12 w-12 text-green-500"
-              data-oid="0w:8b2s"
+              data-oid="81l7ri4"
             />
 
-            <p className="text-lg font-medium" data-oid="um7jpv_">
+            <p className="text-lg font-medium" data-oid="vn3t5df">
               Top-up Successful
             </p>
-            <p className="text-sm text-muted-foreground" data-oid="f9ppt36">
+            <p className="text-sm text-muted-foreground" data-oid="kboumt8">
               ${amount} has been added to your account.
             </p>
           </div>
@@ -137,19 +137,19 @@ export function TopUpModal({ isOpen, onClose, onTopUp }) {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose} data-oid="gmw09sz">
-      <DialogContent className="sm:max-w-[425px]" data-oid=".b2z.ir">
-        <DialogHeader data-oid="ig4c02y">
-          <DialogTitle data-oid="m-zu2.d">{steps[currentStep]}</DialogTitle>
+    <Dialog open={isOpen} onOpenChange={onClose} data-oid=".8lo54h">
+      <DialogContent className="sm:max-w-[425px]" data-oid="la1lj:f">
+        <DialogHeader data-oid="9mt.jfj">
+          <DialogTitle data-oid="w8w65ch">{steps[currentStep]}</DialogTitle>
         </DialogHeader>
-        <div className="mt-4 space-y-4" data-oid="i02gqln">
+        <div className="mt-4 space-y-4" data-oid="1lywkni">
           {renderStepContent()}
-          <div className="flex justify-between" data-oid="24x_jt-">
+          <div className="flex justify-between" data-oid="f7mxbzu">
             {currentStep > 0 && currentStep < steps.length - 1 && (
               <Button
                 variant="outline"
                 onClick={() => setCurrentStep(currentStep - 1)}
-                data-oid="zfmic6p"
+                data-oid="f2u6dps"
               >
                 Back
               </Button>
@@ -157,7 +157,7 @@ export function TopUpModal({ isOpen, onClose, onTopUp }) {
             <Button
               onClick={handleContinue}
               className="ml-auto"
-              data-oid="fn01c8z"
+              data-oid="t-:p2b6"
             >
               {currentStep === steps.length - 1 ? "Close" : "Continue"}
             </Button>

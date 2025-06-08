@@ -8,7 +8,7 @@ import {
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return (
-    <NextThemesProvider {...props} data-oid="i.lkq2_">
+    <NextThemesProvider {...props} data-oid="4wiqxxk">
       {children}
     </NextThemesProvider>
   );

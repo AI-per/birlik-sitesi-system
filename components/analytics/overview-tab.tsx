@@ -23,31 +23,31 @@ export function OverviewTab() {
     <>
       <div
         className="flex justify-between items-center mb-4"
-        data-oid="t-8.8qc"
+        data-oid="-1up861"
       >
-        <h3 className="text-2xl font-semibold" data-oid="r44psy7">
+        <h3 className="text-2xl font-semibold" data-oid=":wvjcfq">
           Dashboard Overview
         </h3>
-        <div className="flex items-center gap-2" data-oid="-35o0ey">
-          <span className="text-sm font-medium" data-oid="-yczcim">
+        <div className="flex items-center gap-2" data-oid="ui8o9h-">
+          <span className="text-sm font-medium" data-oid="ych-ov7">
             Compare to:
           </span>
           <Select
             value={comparisonPeriod}
             onValueChange={setComparisonPeriod}
-            data-oid="38exd1l"
+            data-oid="nqcq:xb"
           >
-            <SelectTrigger className="w-[180px]" data-oid="v_qihxz">
-              <SelectValue placeholder="Select period" data-oid="j0d4ie7" />
+            <SelectTrigger className="w-[180px]" data-oid="dlzdmsw">
+              <SelectValue placeholder="Select period" data-oid="15s.796" />
             </SelectTrigger>
-            <SelectContent data-oid="mq9:mgt">
-              <SelectItem value="previous_month" data-oid="itgcqpy">
+            <SelectContent data-oid="x1-jyim">
+              <SelectItem value="previous_month" data-oid="8b89yum">
                 Previous Month
               </SelectItem>
-              <SelectItem value="previous_quarter" data-oid="r4ul2wq">
+              <SelectItem value="previous_quarter" data-oid=".p3h4wd">
                 Previous Quarter
               </SelectItem>
-              <SelectItem value="previous_year" data-oid="vww:dro">
+              <SelectItem value="previous_year" data-oid="z2k4:a.">
                 Previous Year
               </SelectItem>
             </SelectContent>
@@ -56,78 +56,78 @@ export function OverviewTab() {
       </div>
       <div
         className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"
-        data-oid="xc9uh4o"
+        data-oid="g552f0x"
       >
-        <OverviewCards comparisonPeriod={comparisonPeriod} data-oid="hmskja1" />
+        <OverviewCards comparisonPeriod={comparisonPeriod} data-oid="oq73hyo" />
       </div>
       <div
         className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-4"
-        data-oid="-1et5-p"
+        data-oid="6n:7_xf"
       >
-        <Card className="col-span-4" data-oid="-di4x5x">
-          <CardHeader data-oid="n79pnng">
-            <CardTitle className="text-xl font-semibold" data-oid="d.zgbo2">
+        <Card className="col-span-4" data-oid="qi:b-a5">
+          <CardHeader data-oid="u1.:5xq">
+            <CardTitle className="text-xl font-semibold" data-oid="mkwmnpl">
               Revenue
             </CardTitle>
           </CardHeader>
-          <CardContent className="pl-2" data-oid="53xvtga">
+          <CardContent className="pl-2" data-oid="y0io650">
             <RevenueChart
               comparisonPeriod={comparisonPeriod}
-              data-oid="ok1l266"
+              data-oid="s.ti-2q"
             />
           </CardContent>
         </Card>
-        <Card className="col-span-3" data-oid="a-mvy69">
-          <CardHeader data-oid="r9g2tkg">
-            <CardTitle className="text-xl font-semibold" data-oid="jqnvilc">
+        <Card className="col-span-3" data-oid="1ih7.l4">
+          <CardHeader data-oid="ngz9__i">
+            <CardTitle className="text-xl font-semibold" data-oid="efw8t4.">
               Recent Transactions
             </CardTitle>
           </CardHeader>
-          <CardContent data-oid="kfxs7ag">
-            <RecentTransactions data-oid="j.s8j6a" />
+          <CardContent data-oid="hyba1o-">
+            <RecentTransactions data-oid="0mu41ws" />
           </CardContent>
         </Card>
       </div>
       <div
         className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-4"
-        data-oid="tjja1yi"
+        data-oid="ijj5yyi"
       >
-        <Card className="col-span-4" data-oid="1ew4nfq">
-          <CardHeader data-oid="c09ja13">
-            <CardTitle className="text-xl font-semibold" data-oid="7jgc.tp">
+        <Card className="col-span-4" data-oid="gnge24v">
+          <CardHeader data-oid="wy_bajk">
+            <CardTitle className="text-xl font-semibold" data-oid="0g4_h9s">
               Account Growth
             </CardTitle>
           </CardHeader>
-          <CardContent data-oid="-aqvy7y">
+          <CardContent data-oid="3727j2y">
             <AccountGrowth
               comparisonPeriod={comparisonPeriod}
-              data-oid="n.zi4so"
+              data-oid="z15lydd"
             />
           </CardContent>
         </Card>
-        <Card className="col-span-3" data-oid="pha7jxb">
-          <CardHeader data-oid="zpz_ty5">
-            <CardTitle className="text-xl font-semibold" data-oid=":d9o75t">
+        <Card className="col-span-3" data-oid="-sw-zaa">
+          <CardHeader data-oid="3.k2bbv">
+            <CardTitle className="text-xl font-semibold" data-oid="jry6qck">
               Top Products
             </CardTitle>
           </CardHeader>
-          <CardContent data-oid="wrg3r67">
-            <TopProducts data-oid="elyis7c" />
+          <CardContent data-oid="_70e:i8">
+            <TopProducts data-oid="jmk6tkd" />
           </CardContent>
         </Card>
       </div>
       <div
         className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-4"
-        data-oid="rws8dsi"
+        data-oid="mf46vmt"
       >
-        <Card className="col-span-4" data-oid="5hveyhf">
-          <CardHeader data-oid="4gjwprm">
-            <CardTitle className="text-xl font-semibold" data-oid="_iv4:xw">
+        <Card className="col-span-4" data-oid="whyrd-7">
+          <CardHeader data-oid="..2t3q6">
+            <CardTitle className="text-xl font-semibold" data-oid="z1wnqx2">
               User Activity
             </CardTitle>
           </CardHeader>
-          <CardContent data-oid="kac032:">
-            <UserActivity data-oid=".mj57_i" />
+          <CardContent data-oid="kn7fxfx">
+            <UserActivity data-oid="_rrk5vk" />
           </CardContent>
         </Card>
       </div>

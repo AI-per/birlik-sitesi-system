@@ -51,28 +51,28 @@ export function RequestMoneyModal({ isOpen, onClose, onRequestMoney }) {
     switch (currentStep) {
       case 0:
         return (
-          <div className="space-y-4" data-oid="9-w12c0">
-            <Label htmlFor="contact" data-oid="9a_:_a3">
+          <div className="space-y-4" data-oid="e-innvd">
+            <Label htmlFor="contact" data-oid="15qj8-j">
               Select Contact
             </Label>
             <Select
               onValueChange={(value) =>
                 setSelectedContact(contacts.find((c) => c.id === value))
               }
-              data-oid="ihfr_3r"
+              data-oid="0jk0lxj"
             >
-              <SelectTrigger id="contact" data-oid="lyk88tl">
+              <SelectTrigger id="contact" data-oid="wdexhfn">
                 <SelectValue
                   placeholder="Select a contact"
-                  data-oid="le63p4a"
+                  data-oid="_yoou01"
                 />
               </SelectTrigger>
-              <SelectContent data-oid="xn6nt09">
+              <SelectContent data-oid="n.tdnj3">
                 {contacts.map((contact) => (
                   <SelectItem
                     key={contact.id}
                     value={contact.id}
-                    data-oid="7tthkww"
+                    data-oid="h7gckqk"
                   >
                     {contact.name}
                   </SelectItem>
@@ -80,17 +80,17 @@ export function RequestMoneyModal({ isOpen, onClose, onRequestMoney }) {
               </SelectContent>
             </Select>
             {selectedContact && (
-              <div className="space-y-2" data-oid="mwg6.g7">
-                <p className="text-sm font-medium" data-oid="6j7f1qx">
+              <div className="space-y-2" data-oid="yx7c2aw">
+                <p className="text-sm font-medium" data-oid="xi5w-wl">
                   Contact Details:
                 </p>
-                <p className="text-sm" data-oid="_jovx-x">
+                <p className="text-sm" data-oid="lg:::s0">
                   Name: {selectedContact.name}
                 </p>
-                <p className="text-sm" data-oid="82bic15">
+                <p className="text-sm" data-oid="2qher10">
                   ID: {selectedContact.id}
                 </p>
-                <p className="text-sm" data-oid="01xb3.c">
+                <p className="text-sm" data-oid="ponx9t5">
                   Phone: {selectedContact.phoneNumber}
                 </p>
               </div>
@@ -100,8 +100,8 @@ export function RequestMoneyModal({ isOpen, onClose, onRequestMoney }) {
 
       case 1:
         return (
-          <div className="space-y-4" data-oid="em458hz">
-            <Label htmlFor="amount" data-oid="xreh:2k">
+          <div className="space-y-4" data-oid="ih8_xuk">
+            <Label htmlFor="amount" data-oid="4flita6">
               Amount to Request
             </Label>
             <Input
@@ -110,38 +110,38 @@ export function RequestMoneyModal({ isOpen, onClose, onRequestMoney }) {
               placeholder="Enter amount"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              data-oid="e2j7bfl"
+              data-oid="m035p6:"
             />
           </div>
         );
 
       case 2:
         return (
-          <div className="space-y-4" data-oid="ohj4ylf">
-            <p className="text-sm text-muted-foreground" data-oid="e5ff4y3">
+          <div className="space-y-4" data-oid="f_g1mgh">
+            <p className="text-sm text-muted-foreground" data-oid="d3eb2rs">
               Enter the OTP sent to your registered mobile number
             </p>
             <Input
               placeholder="Enter OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              data-oid="t.sz-qh"
+              data-oid="pyq-39l"
             />
           </div>
         );
 
       case 3:
         return (
-          <div className="text-center space-y-4" data-oid="03lec.e">
+          <div className="text-center space-y-4" data-oid="p_sb-7.">
             <CheckCircle2
               className="mx-auto h-12 w-12 text-green-500"
-              data-oid="rgpkkvj"
+              data-oid="moobj9i"
             />
 
-            <p className="text-lg font-medium" data-oid="ul1qow8">
+            <p className="text-lg font-medium" data-oid="f9su5dt">
               Money Request Sent
             </p>
-            <p className="text-sm text-muted-foreground" data-oid="425g7hc">
+            <p className="text-sm text-muted-foreground" data-oid="4khfj.2">
               ${amount} has been requested from {selectedContact.name}.
             </p>
           </div>
@@ -150,19 +150,19 @@ export function RequestMoneyModal({ isOpen, onClose, onRequestMoney }) {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose} data-oid="zgsi4ld">
-      <DialogContent className="sm:max-w-[425px]" data-oid="socj8-s">
-        <DialogHeader data-oid="kt-rnhx">
-          <DialogTitle data-oid="sfiw_wr">{steps[currentStep]}</DialogTitle>
+    <Dialog open={isOpen} onOpenChange={onClose} data-oid="z2wtb3a">
+      <DialogContent className="sm:max-w-[425px]" data-oid="qoq4tyw">
+        <DialogHeader data-oid="jrvc9d_">
+          <DialogTitle data-oid="0oh_x7y">{steps[currentStep]}</DialogTitle>
         </DialogHeader>
-        <div className="mt-4 space-y-4" data-oid="di8.j85">
+        <div className="mt-4 space-y-4" data-oid="rypx:1i">
           {renderStepContent()}
-          <div className="flex justify-between" data-oid="t7xo0u1">
+          <div className="flex justify-between" data-oid="3l9krn.">
             {currentStep > 0 && currentStep < steps.length - 1 && (
               <Button
                 variant="outline"
                 onClick={() => setCurrentStep(currentStep - 1)}
-                data-oid="rjiudk7"
+                data-oid="s2oj.4v"
               >
                 Back
               </Button>
@@ -170,7 +170,7 @@ export function RequestMoneyModal({ isOpen, onClose, onRequestMoney }) {
             <Button
               onClick={handleContinue}
               className="ml-auto"
-              data-oid="k8yq:w8"
+              data-oid="oo5ixnh"
             >
               {currentStep === steps.length - 1 ? "Close" : "Continue"}
             </Button>

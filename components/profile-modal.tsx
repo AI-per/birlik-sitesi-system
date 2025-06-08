@@ -69,32 +69,32 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose} data-oid="56jj8j3">
-      <DialogContent className="sm:max-w-[600px]" data-oid="slwzy63">
-        <DialogHeader data-oid="rtb9_nw">
-          <DialogTitle data-oid="emagjw_">Profile</DialogTitle>
+    <Dialog open={isOpen} onOpenChange={onClose} data-oid="ztfmdfv">
+      <DialogContent className="sm:max-w-[600px]" data-oid="6-ey1_c">
+        <DialogHeader data-oid="c-.h1ag">
+          <DialogTitle data-oid="tr_fvd-">Profile</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4" data-oid="k.whytp">
-          <div className="flex items-center gap-4" data-oid="020y4fe">
-            <Avatar className="h-20 w-20" data-oid="gfdlqgu">
+        <div className="grid gap-4 py-4" data-oid="tjfbzms">
+          <div className="flex items-center gap-4" data-oid="emxh1d_">
+            <Avatar className="h-20 w-20" data-oid="9kc7ee6">
               <AvatarImage
                 src="https://github.com/shadcn.png"
                 alt={userProfile.name}
-                data-oid="t.skrt8"
+                data-oid="5oy5yc."
               />
 
-              <AvatarFallback data-oid="68izib9">
+              <AvatarFallback data-oid="92krwn.">
                 {userProfile.name
                   .split(" ")
                   .map((n) => n[0])
                   .join("")}
               </AvatarFallback>
             </Avatar>
-            <div data-oid="_qap:pe">
-              <h2 className="text-2xl font-bold" data-oid="jc-ijc4">
+            <div data-oid="24ptpkz">
+              <h2 className="text-2xl font-bold" data-oid="02ems5x">
                 {userProfile.name}
               </h2>
-              <p className="text-sm text-muted-foreground" data-oid="5_tow67">
+              <p className="text-sm text-muted-foreground" data-oid="-.yh-fj">
                 {userProfile.email}
               </p>
             </div>
@@ -103,19 +103,19 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
               size="icon"
               className="ml-auto"
               onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
-              data-oid="dxa:nf0"
+              data-oid="0c20nti"
             >
               {isEditing ? (
-                <Save className="h-4 w-4" data-oid="fpt4:h:" />
+                <Save className="h-4 w-4" data-oid="dhcqm05" />
               ) : (
-                <Edit2 className="h-4 w-4" data-oid="ote-6zo" />
+                <Edit2 className="h-4 w-4" data-oid="5cm1pop" />
               )}
             </Button>
           </div>
-          <div className="grid gap-4" data-oid="e8m6woi">
-            <div className="grid grid-cols-2 gap-4" data-oid="553k6.5">
-              <div data-oid="-vzbl:1">
-                <Label htmlFor="name" data-oid="1oq2j6k">
+          <div className="grid gap-4" data-oid="g7twn8x">
+            <div className="grid grid-cols-2 gap-4" data-oid="36l59iq">
+              <div data-oid="3bckhgm">
+                <Label htmlFor="name" data-oid="njk0dc5">
                   Name
                 </Label>
                 <Input
@@ -123,11 +123,11 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
                   value={userProfile.name}
                   readOnly={!isEditing}
                   onChange={(e) => handleInputChange("name", e.target.value)}
-                  data-oid="r7j40q3"
+                  data-oid="idth638"
                 />
               </div>
-              <div data-oid="-ua8.94">
-                <Label htmlFor="email" data-oid="2if_cl1">
+              <div data-oid="raima20">
+                <Label htmlFor="email" data-oid="zv8bl4-">
                   Email
                 </Label>
                 <Input
@@ -135,13 +135,13 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
                   value={userProfile.email}
                   readOnly={!isEditing}
                   onChange={(e) => handleInputChange("email", e.target.value)}
-                  data-oid="i42g3u7"
+                  data-oid=".petrjc"
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4" data-oid="renz46b">
-              <div data-oid="zm672rx">
-                <Label htmlFor="company" data-oid="fm4z8de">
+            <div className="grid grid-cols-2 gap-4" data-oid="-cmv2v5">
+              <div data-oid="e.nmpyg">
+                <Label htmlFor="company" data-oid="_xvhi7d">
                   Company
                 </Label>
                 <Input
@@ -149,11 +149,11 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
                   value={userProfile.company}
                   readOnly={!isEditing}
                   onChange={(e) => handleInputChange("company", e.target.value)}
-                  data-oid="b:apy::"
+                  data-oid="-614v5z"
                 />
               </div>
-              <div data-oid="v8kf3.3">
-                <Label htmlFor="phone" data-oid="-xxu6ao">
+              <div data-oid="wyfo.py">
+                <Label htmlFor="phone" data-oid="vpcaq72">
                   Phone
                 </Label>
                 <Input
@@ -161,60 +161,60 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
                   value={userProfile.phone}
                   readOnly={!isEditing}
                   onChange={(e) => handleInputChange("phone", e.target.value)}
-                  data-oid="go09-kd"
+                  data-oid="xm.5gke"
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4" data-oid="3j4_qb.">
-              <div data-oid="14oph24">
-                <Label htmlFor="accountNumber" data-oid="k:g7hd9">
+            <div className="grid grid-cols-2 gap-4" data-oid="jrk2ek6">
+              <div data-oid="ahve4sa">
+                <Label htmlFor="accountNumber" data-oid="6j8t9vd">
                   Account Number
                 </Label>
                 <Input
                   id="accountNumber"
                   value={userProfile.accountNumber}
                   readOnly
-                  data-oid="g6pb-w5"
+                  data-oid="lklo906"
                 />
               </div>
-              <div data-oid="ly7vrpq">
-                <Label htmlFor="bankName" data-oid="y3yu4.4">
+              <div data-oid="pt5soc.">
+                <Label htmlFor="bankName" data-oid="z6dr:ru">
                   Bank Name
                 </Label>
                 <Input
                   id="bankName"
                   value={userProfile.bankName}
                   readOnly
-                  data-oid="nbm67n0"
+                  data-oid=".5prv7d"
                 />
               </div>
             </div>
           </div>
-          <Card data-oid="ovumbx4">
-            <CardHeader data-oid="o977im-">
-              <CardTitle data-oid="n147025">Cards</CardTitle>
+          <Card data-oid="3vl9xe2">
+            <CardHeader data-oid="vsrgtsi">
+              <CardTitle data-oid="59ft35j">Cards</CardTitle>
             </CardHeader>
-            <CardContent data-oid="e.ddy3g">
-              <div className="space-y-4" data-oid="3vhczcy">
+            <CardContent data-oid="5es9ho-">
+              <div className="space-y-4" data-oid="55q7o:l">
                 {userProfile.cards.map((card, index) => (
                   <div
                     key={index}
                     className="flex items-center gap-4"
-                    data-oid="qwf.-5x"
+                    data-oid="7o-9qml"
                   >
-                    <CreditCard className="h-6 w-6" data-oid="63dhzg1" />
-                    <div data-oid="lr7-lbi">
-                      <p className="font-medium" data-oid="1wtczg4">
+                    <CreditCard className="h-6 w-6" data-oid="5aefv3d" />
+                    <div data-oid="1.57wik">
+                      <p className="font-medium" data-oid="x:pu6uh">
                         {card.type}
                       </p>
                       <p
                         className="text-sm text-muted-foreground"
-                        data-oid="5jh9sh7"
+                        data-oid="wsp0p2i"
                       >
                         {card.number}
                       </p>
                     </div>
-                    <p className="ml-auto text-sm" data-oid=".0:m8wa">
+                    <p className="ml-auto text-sm" data-oid="fn8oyh_">
                       Expires: {card.expiry}
                     </p>
                     {isEditing && (
@@ -222,9 +222,9 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
                         variant="destructive"
                         size="icon"
                         onClick={() => handleRemoveCard(index)}
-                        data-oid="31412tj"
+                        data-oid="i5jog4s"
                       >
-                        <Trash2 className="h-4 w-4" data-oid="y4ofwz6" />
+                        <Trash2 className="h-4 w-4" data-oid="i1-yujc" />
                       </Button>
                     )}
                   </div>

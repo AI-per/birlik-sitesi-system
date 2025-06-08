@@ -26,15 +26,15 @@ export function AccountGrowth() {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <Card className="border-none shadow-lg" data-oid="n_28_e7">
-          <CardContent className="p-2" data-oid="r69hjo3">
-            <p className="text-sm font-semibold" data-oid="xk0ibjy">
+        <Card className="border-none shadow-lg" data-oid="tzyb1yi">
+          <CardContent className="p-2" data-oid="rn:ysa5">
+            <p className="text-sm font-semibold" data-oid="5z_cdbi">
               {label}
             </p>
-            <p className="text-sm text-muted-foreground" data-oid=".npo27x">
+            <p className="text-sm text-muted-foreground" data-oid="s9512ey">
               New Accounts: {payload[0].value}
             </p>
-            <p className="text-sm text-muted-foreground" data-oid="vrerqwh">
+            <p className="text-sm text-muted-foreground" data-oid="jy3d14o">
               Total Accounts: {payload[1].value}
             </p>
           </CardContent>
@@ -45,15 +45,15 @@ export function AccountGrowth() {
   };
 
   return (
-    <ResponsiveContainer width="100%" height={350} data-oid="ovcebmq">
-      <BarChart data={data} data-oid="3488lcp">
+    <ResponsiveContainer width="100%" height={350} data-oid="22t-4i8">
+      <BarChart data={data} data-oid="rqmzt5v">
         <XAxis
           dataKey="month"
           stroke={theme === "dark" ? "#888888" : "#333333"}
           fontSize={12}
           tickLine={false}
           axisLine={false}
-          data-oid="tvi-80l"
+          data-oid="ib71ghc"
         />
 
         <YAxis
@@ -61,26 +61,26 @@ export function AccountGrowth() {
           fontSize={12}
           tickLine={false}
           axisLine={false}
-          data-oid="qtcz0ph"
+          data-oid="w817bv7"
         />
 
         <Tooltip
-          content={<CustomTooltip data-oid="mc9g74t" />}
-          data-oid="s0w1hvu"
+          content={<CustomTooltip data-oid="5zfgaf2" />}
+          data-oid="rx8q5n0"
         />
 
         <Bar
           dataKey="newAccounts"
           fill={theme === "dark" ? "#adfa1d" : "#0ea5e9"}
           radius={[4, 4, 0, 0]}
-          data-oid="j4cq6t7"
+          data-oid="oahq2rf"
         />
 
         <Bar
           dataKey="totalAccounts"
           fill={theme === "dark" ? "#1e40af" : "#3b82f6"}
           radius={[4, 4, 0, 0]}
-          data-oid="we77p13"
+          data-oid="o-0mmjz"
         />
       </BarChart>
     </ResponsiveContainer>

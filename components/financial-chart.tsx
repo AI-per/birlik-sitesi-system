@@ -21,21 +21,21 @@ const data = [
 
 export function FinancialChart() {
   return (
-    <Card data-oid="asb2d:g">
-      <CardHeader data-oid="r5zsf7-">
-        <CardTitle data-oid="5-m8.ya">Financial Overview</CardTitle>
+    <Card data-oid="nyq_0mm">
+      <CardHeader data-oid="tbw3z8k">
+        <CardTitle data-oid="k41g5w3">Financial Overview</CardTitle>
       </CardHeader>
-      <CardContent className="pb-4" data-oid="7797f5m">
-        <div className="h-[200px]" data-oid="kxll-n2">
-          <ResponsiveContainer width="100%" height="100%" data-oid="5fipqli">
-            <LineChart data={data} data-oid="szf4fb5">
+      <CardContent className="pb-4" data-oid="msphblk">
+        <div className="h-[200px]" data-oid="b9qphfo">
+          <ResponsiveContainer width="100%" height="100%" data-oid="3nf_g1f">
+            <LineChart data={data} data-oid="zbeea0o">
               <XAxis
                 dataKey="month"
                 stroke="#888888"
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
-                data-oid="_x_:9fl"
+                data-oid="749n13e"
               />
 
               <YAxis
@@ -44,16 +44,16 @@ export function FinancialChart() {
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(value) => `$${value}`}
-                data-oid="tg04fl_"
+                data-oid="txzkywf"
               />
 
-              <Tooltip data-oid="lg3lou0" />
+              <Tooltip data-oid="1u187e9" />
               <Line
                 type="monotone"
                 dataKey="income"
                 stroke="#8884d8"
                 strokeWidth={2}
-                data-oid="fy4qj4h"
+                data-oid="ohf72_g"
               />
 
               <Line
@@ -61,7 +61,7 @@ export function FinancialChart() {
                 dataKey="expenses"
                 stroke="#82ca9d"
                 strokeWidth={2}
-                data-oid="j-3wm81"
+                data-oid="j8c-7qo"
               />
             </LineChart>
           </ResponsiveContainer>

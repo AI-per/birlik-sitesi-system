@@ -6,5 +6,5 @@ export default function SettingsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <SettingsProvider data-oid="fvr.kw1">{children}</SettingsProvider>;
+  return <SettingsProvider data-oid="g070pft">{children}</SettingsProvider>;
 }

@@ -37,8 +37,8 @@ export function AddMoneyModal({ isOpen, onClose, onAddMoney }) {
     switch (currentStep) {
       case 0:
         return (
-          <div className="space-y-4" data-oid="5hx803o">
-            <Label htmlFor="amount" data-oid="s5vtr8:">
+          <div className="space-y-4" data-oid="istfb5j">
+            <Label htmlFor="amount" data-oid="yank5d6">
               Amount to Add
             </Label>
             <Input
@@ -47,16 +47,16 @@ export function AddMoneyModal({ isOpen, onClose, onAddMoney }) {
               placeholder="Enter amount"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              data-oid="un_iap2"
+              data-oid="qaaiyhn"
             />
           </div>
         );
 
       case 1:
         return (
-          <div className="space-y-4" data-oid="k8z.hl4">
-            <div className="space-y-2" data-oid="1.3r.lw">
-              <Label htmlFor="cardNumber" data-oid=".-el1un">
+          <div className="space-y-4" data-oid="gl8ma7a">
+            <div className="space-y-2" data-oid="oa9pbfz">
+              <Label htmlFor="cardNumber" data-oid=":j4i.e0">
                 Card Number
               </Label>
               <Input
@@ -66,12 +66,12 @@ export function AddMoneyModal({ isOpen, onClose, onAddMoney }) {
                 onChange={(e) =>
                   setCardDetails({ ...cardDetails, number: e.target.value })
                 }
-                data-oid="byw:x5q"
+                data-oid="5.9za.-"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4" data-oid="f.qsml-">
-              <div className="space-y-2" data-oid="ie-kxak">
-                <Label htmlFor="expiry" data-oid="yyarc-i">
+            <div className="grid grid-cols-2 gap-4" data-oid="pu2vbye">
+              <div className="space-y-2" data-oid="543oa7i">
+                <Label htmlFor="expiry" data-oid="c7-::13">
                   Expiry Date
                 </Label>
                 <Input
@@ -81,11 +81,11 @@ export function AddMoneyModal({ isOpen, onClose, onAddMoney }) {
                   onChange={(e) =>
                     setCardDetails({ ...cardDetails, expiry: e.target.value })
                   }
-                  data-oid="gw6o0o5"
+                  data-oid="vub_8sw"
                 />
               </div>
-              <div className="space-y-2" data-oid="hit2id4">
-                <Label htmlFor="cvv" data-oid="_ya2lk0">
+              <div className="space-y-2" data-oid="1kuvzef">
+                <Label htmlFor="cvv" data-oid="h2dji01">
                   CVV
                 </Label>
                 <Input
@@ -95,7 +95,7 @@ export function AddMoneyModal({ isOpen, onClose, onAddMoney }) {
                   onChange={(e) =>
                     setCardDetails({ ...cardDetails, cvv: e.target.value })
                   }
-                  data-oid="i-x0-7i"
+                  data-oid=".lgr15m"
                 />
               </div>
             </div>
@@ -104,31 +104,31 @@ export function AddMoneyModal({ isOpen, onClose, onAddMoney }) {
 
       case 2:
         return (
-          <div className="space-y-4" data-oid="bzd8su8">
-            <p className="text-sm text-muted-foreground" data-oid="-2dl-mi">
+          <div className="space-y-4" data-oid="ffg9cdl">
+            <p className="text-sm text-muted-foreground" data-oid="sxqj8cu">
               Enter the OTP sent to your registered mobile number
             </p>
             <Input
               placeholder="Enter OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              data-oid="wrui.i2"
+              data-oid="4gdxzhw"
             />
           </div>
         );
 
       case 3:
         return (
-          <div className="text-center space-y-4" data-oid="jez:oc3">
+          <div className="text-center space-y-4" data-oid="pc82xrq">
             <CheckCircle2
               className="mx-auto h-12 w-12 text-green-500"
-              data-oid="aduv36f"
+              data-oid="f_jr4p2"
             />
 
-            <p className="text-lg font-medium" data-oid="c4dk-2b">
+            <p className="text-lg font-medium" data-oid="kuvia82">
               Money Added Successfully
             </p>
-            <p className="text-sm text-muted-foreground" data-oid="xf_3r7y">
+            <p className="text-sm text-muted-foreground" data-oid="129kecr">
               ${amount} has been added to your Checking account.
             </p>
           </div>
@@ -137,19 +137,19 @@ export function AddMoneyModal({ isOpen, onClose, onAddMoney }) {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose} data-oid="_m-69hq">
-      <DialogContent className="sm:max-w-[425px]" data-oid="b7_k9o0">
-        <DialogHeader data-oid="ne4-0mk">
-          <DialogTitle data-oid="an.iflf">{steps[currentStep]}</DialogTitle>
+    <Dialog open={isOpen} onOpenChange={onClose} data-oid="obg0sh0">
+      <DialogContent className="sm:max-w-[425px]" data-oid="spqg_78">
+        <DialogHeader data-oid="er3.:ly">
+          <DialogTitle data-oid="dam.k:s">{steps[currentStep]}</DialogTitle>
         </DialogHeader>
-        <div className="mt-4 space-y-4" data-oid="lfjeksr">
+        <div className="mt-4 space-y-4" data-oid="a4mxa3p">
           {renderStepContent()}
-          <div className="flex justify-between" data-oid="bg_83g0">
+          <div className="flex justify-between" data-oid="px_nh4g">
             {currentStep > 0 && currentStep < steps.length - 1 && (
               <Button
                 variant="outline"
                 onClick={() => setCurrentStep(currentStep - 1)}
-                data-oid="av:pj-e"
+                data-oid="in4g8ig"
               >
                 Back
               </Button>
@@ -157,7 +157,7 @@ export function AddMoneyModal({ isOpen, onClose, onAddMoney }) {
             <Button
               onClick={handleContinue}
               className="ml-auto"
-              data-oid="fngeb.v"
+              data-oid="epdyy_4"
             >
               {currentStep === steps.length - 1 ? "Close" : "Continue"}
             </Button>

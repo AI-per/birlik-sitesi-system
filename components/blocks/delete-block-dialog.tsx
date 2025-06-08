@@ -37,20 +37,20 @@ export function DeleteBlockDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} data-oid="f:u5gk3">
-      <DialogContent className="sm:max-w-[425px]" data-oid="tmoliou">
-        <DialogHeader data-oid="tvcba.t">
-          <DialogTitle data-oid="piu1qdw">Blok Sil</DialogTitle>
-          <DialogDescription data-oid="4wjb:w6">
-            <strong data-oid=":enc5:9">{block.name}</strong> bloğunu silmek
+    <Dialog open={open} onOpenChange={onOpenChange} data-oid="qf9np4f">
+      <DialogContent className="sm:max-w-[425px]" data-oid="xwfc0ms">
+        <DialogHeader data-oid="-q98qt6">
+          <DialogTitle data-oid="x95vfkv">Blok Sil</DialogTitle>
+          <DialogDescription data-oid="j651t:b">
+            <strong data-oid=".rd1ymj">{block.name}</strong> bloğunu silmek
             istediğinizden emin misiniz? Bu işlem geri alınamaz.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter data-oid="5afikxi">
+        <DialogFooter data-oid="mqeiojh">
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            data-oid="4x-uyzu"
+            data-oid=".o-.l6j"
           >
             İptal
           </Button>
@@ -58,7 +58,7 @@ export function DeleteBlockDialog({
             variant="destructive"
             onClick={handleDelete}
             disabled={isLoading}
-            data-oid="v76vkua"
+            data-oid="xh5xj.s"
           >
             {isLoading ? "Siliniyor..." : "Sil"}
           </Button>

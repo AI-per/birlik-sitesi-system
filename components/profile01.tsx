@@ -11,25 +11,25 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function Profile01() {
   return (
-    <DropdownMenu data-oid="4_u0i06">
-      <DropdownMenuTrigger className="flex items-center" data-oid="vc7cmc_">
-        <Avatar className="h-8 w-8" data-oid="vb7zhwd">
+    <DropdownMenu data-oid=":n0ok6b">
+      <DropdownMenuTrigger className="flex items-center" data-oid=":00mqfe">
+        <Avatar className="h-8 w-8" data-oid="r24h1-z">
           <AvatarImage
             src="https://github.com/shadcn.png"
             alt="@shadcn"
-            data-oid="eg1uiv-"
+            data-oid="w4p1ygb"
           />
 
-          <AvatarFallback data-oid="z2_bh4x">CN</AvatarFallback>
+          <AvatarFallback data-oid="byhagn3">CN</AvatarFallback>
         </Avatar>
-        <ChevronDown className="ml-2 w-4 h-4" data-oid="my_6y3." />
+        <ChevronDown className="ml-2 w-4 h-4" data-oid="-rjlv.q" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" data-oid=":kauwbj">
-        <DropdownMenuLabel data-oid="rn3-li7">My Account</DropdownMenuLabel>
-        <DropdownMenuSeparator data-oid="wu59ut:" />
-        <DropdownMenuItem data-oid="t21ql5n">Profile</DropdownMenuItem>
-        <DropdownMenuItem data-oid="lj1zhi6">Settings</DropdownMenuItem>
-        <DropdownMenuItem data-oid="f1e:ncg">Logout</DropdownMenuItem>
+      <DropdownMenuContent align="end" data-oid="w0y_jan">
+        <DropdownMenuLabel data-oid="i7zmfkr">My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator data-oid="eb46l-j" />
+        <DropdownMenuItem data-oid="n0-f4jf">Profile</DropdownMenuItem>
+        <DropdownMenuItem data-oid="-2215wn">Settings</DropdownMenuItem>
+        <DropdownMenuItem data-oid="s6jxl2q">Logout</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -11,33 +11,33 @@ const savingsGoals = [
 
 export function SavingsGoals() {
   return (
-    <Card data-oid="692wuj1">
+    <Card data-oid="wa_4mlt">
       <CardHeader
         className="flex flex-row items-center justify-between space-y-0 pb-2"
-        data-oid="41-w1ze"
+        data-oid="ecuqnk5"
       >
-        <CardTitle className="text-md font-medium" data-oid="h_ocek0">
+        <CardTitle className="text-md font-medium" data-oid="m:_yi0o">
           Savings Goals
         </CardTitle>
-        <Button variant="outline" size="icon" data-oid="7-_pa73">
-          <PlusCircle className="h-4 w-4" data-oid="y.l0ezm" />
-          <span className="sr-only" data-oid="q-l2yiw">
+        <Button variant="outline" size="icon" data-oid=":k31tng">
+          <PlusCircle className="h-4 w-4" data-oid="b7ptgab" />
+          <span className="sr-only" data-oid="7jr4atz">
             Add new savings goal
           </span>
         </Button>
       </CardHeader>
-      <CardContent data-oid="lgjls9y">
-        <div className="space-y-4" data-oid="ol6xs61">
+      <CardContent data-oid="nvvit0z">
+        <div className="space-y-4" data-oid="a8e7a50">
           {savingsGoals.map((goal) => {
             const percentage = (goal.current / goal.target) * 100;
             return (
-              <div key={goal.name} className="space-y-2" data-oid="rjzxts_">
+              <div key={goal.name} className="space-y-2" data-oid="bz1-h-8">
                 <div
                   className="flex justify-between text-sm"
-                  data-oid="b_h6p-q"
+                  data-oid="kgcb1iq"
                 >
-                  <span data-oid="qeqzp55">{goal.name}</span>
-                  <span data-oid="v:a0ywv">
+                  <span data-oid="3w_t7at">{goal.name}</span>
+                  <span data-oid="xne55n_">
                     ${goal.current.toLocaleString()} / $
                     {goal.target.toLocaleString()}
                   </span>
@@ -45,12 +45,12 @@ export function SavingsGoals() {
                 <Progress
                   value={percentage}
                   className="h-2"
-                  data-oid="vmq.2hy"
+                  data-oid="om3b.je"
                 />
 
                 <p
                   className="text-xs text-right text-muted-foreground"
-                  data-oid="._:d2f5"
+                  data-oid="e4qzsr:"
                 >
                   {percentage.toFixed(1)}% complete
                 </p>

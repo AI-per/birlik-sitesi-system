@@ -24,38 +24,38 @@ function ActionDialog({
   actionText: string;
 }) {
   return (
-    <Dialog data-oid="4::o3fc">
-      <DialogTrigger asChild data-oid="etsi9n-">
+    <Dialog data-oid="7qstd-0">
+      <DialogTrigger asChild data-oid="-.duplg">
         <Button
           variant="outline"
           className="w-full justify-start"
-          data-oid="hkfo:uf"
+          data-oid=".i98m.u"
         >
           {title === "Add Funds" && (
-            <PlusCircle className="mr-2 h-4 w-4" data-oid="4jxauxd" />
+            <PlusCircle className="mr-2 h-4 w-4" data-oid="ktwohbl" />
           )}
           {title === "Send Money" && (
-            <SendHorizontal className="mr-2 h-4 w-4" data-oid="9lunvk3" />
+            <SendHorizontal className="mr-2 h-4 w-4" data-oid="onyec4a" />
           )}
           {title === "Top Up" && (
-            <CreditCard className="mr-2 h-4 w-4" data-oid="u-o5b4w" />
+            <CreditCard className="mr-2 h-4 w-4" data-oid="6seebep" />
           )}
           {title}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]" data-oid=".m3s4kf">
-        <DialogHeader data-oid="bhmpa0p">
-          <DialogTitle data-oid="9d48dy:">{title}</DialogTitle>
-          <DialogDescription data-oid="9mh3i2u">
+      <DialogContent className="sm:max-w-[425px]" data-oid="ql3aq5g">
+        <DialogHeader data-oid="91q9ri2">
+          <DialogTitle data-oid="e.e.aff">{title}</DialogTitle>
+          <DialogDescription data-oid="rr1r3al">
             {description}
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4" data-oid="k1txu-:">
+        <div className="grid gap-4 py-4" data-oid="ny.w1qm">
           <div
             className="grid grid-cols-4 items-center gap-4"
-            data-oid="19cmsjj"
+            data-oid="fn7fedg"
           >
-            <Label htmlFor="amount" className="text-right" data-oid="09d8emu">
+            <Label htmlFor="amount" className="text-right" data-oid="30dnnru">
               Amount
             </Label>
             <Input
@@ -63,11 +63,11 @@ function ActionDialog({
               type="number"
               placeholder="Enter amount"
               className="col-span-3"
-              data-oid="4siqkmx"
+              data-oid="-yi9u3c"
             />
           </div>
         </div>
-        <Button type="submit" data-oid="tpl:27s">
+        <Button type="submit" data-oid="y6w.783">
           {actionText}
         </Button>
       </DialogContent>
@@ -77,32 +77,32 @@ function ActionDialog({
 
 export function QuickActions() {
   return (
-    <Card className="border border-border" data-oid="oledh2d">
-      <CardHeader data-oid="r40o_30">
-        <CardTitle className="text-lg font-medium" data-oid="zmo26q8">
+    <Card className="border border-border" data-oid="__w_52g">
+      <CardHeader data-oid="ehcm9f.">
+        <CardTitle className="text-lg font-medium" data-oid="89kdcbe">
           Quick Actions
         </CardTitle>
       </CardHeader>
-      <CardContent className="grid gap-4" data-oid="tyf-.l5">
+      <CardContent className="grid gap-4" data-oid="j9juj6d">
         <ActionDialog
           title="Add Funds"
           description="Add funds to your account"
           actionText="Add Funds"
-          data-oid="yz3pl1v"
+          data-oid="d9s74b4"
         />
 
         <ActionDialog
           title="Send Money"
           description="Send money to another account"
           actionText="Send Money"
-          data-oid="6xl-1w9"
+          data-oid="gts6w:g"
         />
 
         <ActionDialog
           title="Top Up"
           description="Top up your account"
           actionText="Top Up"
-          data-oid="3a6denf"
+          data-oid="hntz1am"
         />
       </CardContent>
     </Card>

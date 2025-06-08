@@ -49,99 +49,99 @@ export function List03() {
   return (
     <div
       className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"
-      data-oid="9.ubcg_"
+      data-oid="vq1.wyd"
     >
       <div
         className="flex items-center justify-between mb-4"
-        data-oid="w3pi0qu"
+        data-oid="gi90ws3"
       >
         <h2
           className="text-lg font-semibold text-gray-900 dark:text-white flex items-center"
-          data-oid="u:r7_:r"
+          data-oid="2t62hlh"
         >
-          <Calendar className="h-5 w-5 mr-2" data-oid="03vkwxr" />
+          <Calendar className="h-5 w-5 mr-2" data-oid="qhtgxp-" />
           Upcoming Events
         </h2>
       </div>
-      <div className="space-x-4 overflow-x-auto flex pb-4" data-oid="x0qa9po">
+      <div className="space-x-4 overflow-x-auto flex pb-4" data-oid="wtn_qc5">
         {events.map((event) => (
           <div
             key={event.id}
             className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 w-72 flex-shrink-0"
-            data-oid="u13cafa"
+            data-oid="rlfnm_q"
           >
             <div
               className="flex items-center justify-between mb-4"
-              data-oid="461a8f3"
+              data-oid="nyym_p-"
             >
               <div
                 className="p-2 bg-gray-200 dark:bg-gray-600 rounded-full"
-                data-oid="z3.9qv9"
+                data-oid="butu930"
               >
                 <event.icon
                   className="h-5 w-5 text-gray-700 dark:text-gray-300"
-                  data-oid="l7tq9:."
+                  data-oid="ojn5rnb"
                 />
               </div>
               <span
                 className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[event.status]}`}
-                data-oid="ibzya_3"
+                data-oid="jj20p9w"
               >
                 {event.status}
               </span>
             </div>
             <h3
               className="text-sm font-medium text-gray-900 dark:text-white mb-1"
-              data-oid="5n.qw7n"
+              data-oid="h8x5avu"
             >
               {event.title}
             </h3>
             <p
               className="text-xs text-gray-500 dark:text-gray-400 mb-3"
-              data-oid=".691.ti"
+              data-oid="n.uyys5"
             >
               {event.subtitle}
             </p>
             <div
               className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-1.5 mb-3"
-              data-oid="t7f_yf6"
+              data-oid="3r5yevs"
             >
               <div
                 className="bg-blue-600 h-1.5 rounded-full"
                 style={{ width: `${event.progress}%` }}
-                data-oid="efezov-"
+                data-oid="3p2ai.0"
               ></div>
             </div>
             <div
               className="flex items-center justify-between mb-3"
-              data-oid="cgex123"
+              data-oid="cq7no:d"
             >
               <span
                 className="text-sm font-medium text-gray-900 dark:text-white"
-                data-oid="ynmr5ov"
+                data-oid="05_g9ua"
               >
                 ${event.target.toLocaleString()}
                 <span
                   className="text-xs text-gray-500 dark:text-gray-400 ml-1"
-                  data-oid="rsn5-u4"
+                  data-oid="ay_-rg0"
                 >
                   target
                 </span>
               </span>
               <span
                 className="flex items-center text-xs text-gray-500 dark:text-gray-400"
-                data-oid="0.5dv:5"
+                data-oid="my4tqzs"
               >
-                <Calendar className="h-3 w-3 mr-1" data-oid="32g2q-:" />
+                <Calendar className="h-3 w-3 mr-1" data-oid="4kydhqn" />
                 {event.date}
               </span>
             </div>
             <button
               className="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors flex items-center justify-center"
-              data-oid="phzc3om"
+              data-oid="6v4_b2w"
             >
               View Details
-              <ArrowRight className="h-4 w-4 ml-2" data-oid="ja_hz7q" />
+              <ArrowRight className="h-4 w-4 ml-2" data-oid="0gyhl5." />
             </button>
           </div>
         ))}

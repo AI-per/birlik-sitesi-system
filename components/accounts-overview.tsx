@@ -50,66 +50,66 @@ export function AccountsOverview() {
   };
 
   return (
-    <Card data-oid="0xnt8vz">
+    <Card data-oid="3fvq_8w">
       <CardHeader
         className="flex flex-row items-center justify-between space-y-0 pb-2"
-        data-oid="az9gftc"
+        data-oid="hxfxhti"
       >
-        <CardTitle className="text-sm font-medium" data-oid="-31aufp">
+        <CardTitle className="text-sm font-medium" data-oid="r6rms9c">
           Accounts Overview
         </CardTitle>
-        <Wallet className="h-4 w-4 text-muted-foreground" data-oid="47:fyrk" />
+        <Wallet className="h-4 w-4 text-muted-foreground" data-oid="1l2-vyn" />
       </CardHeader>
-      <CardContent data-oid="ymt5eo_">
-        <div className="text-2xl font-bold" data-oid="23a_97n">
+      <CardContent data-oid="7gdtkun">
+        <div className="text-2xl font-bold" data-oid="kx9ew:1">
           ${totalBalance.toLocaleString()}
         </div>
-        <p className="text-xs text-muted-foreground" data-oid="alxj110">
+        <p className="text-xs text-muted-foreground" data-oid="n-vsquv">
           Total balance across all accounts
         </p>
-        <div className="mt-4 space-y-2" data-oid="6l12x1h">
+        <div className="mt-4 space-y-2" data-oid="5xb238e">
           {accounts.map((account) => (
             <div
               key={account.name}
               className="flex justify-between items-center"
-              data-oid="-1dkmlc"
+              data-oid="v1sjv75"
             >
               <span
                 className="text-sm text-muted-foreground"
-                data-oid="6fi3tln"
+                data-oid="jp9q8lf"
               >
                 {account.name}
               </span>
-              <span className="text-sm font-medium" data-oid=".6h5__v">
+              <span className="text-sm font-medium" data-oid="9zngsd:">
                 ${account.balance.toLocaleString()}
               </span>
             </div>
           ))}
         </div>
-        <div className="mt-4 grid grid-cols-2 gap-2" data-oid="xcsq2:y">
+        <div className="mt-4 grid grid-cols-2 gap-2" data-oid="m8sq2ne">
           <Button
             size="sm"
             onClick={() => setIsAddMoneyModalOpen(true)}
-            data-oid=".78ny3m"
+            data-oid="ug4ww7c"
           >
-            <Plus className="mr-2 h-4 w-4" data-oid="givgs5j" /> Add
+            <Plus className="mr-2 h-4 w-4" data-oid="93ff8xe" /> Add
           </Button>
           <Button
             size="sm"
             onClick={() => setIsSendMoneyModalOpen(true)}
-            data-oid=".msbmlz"
+            data-oid="iv2cv.o"
           >
-            <Send className="mr-2 h-4 w-4" data-oid="yb05j39" /> Send
+            <Send className="mr-2 h-4 w-4" data-oid="29.glm7" /> Send
           </Button>
           <Button
             size="sm"
             onClick={() => setIsRequestMoneyModalOpen(true)}
-            data-oid="hvq-jxu"
+            data-oid="mrpzsrf"
           >
-            <CreditCard className="mr-2 h-4 w-4" data-oid=":v41qx0" /> Request
+            <CreditCard className="mr-2 h-4 w-4" data-oid="iel001z" /> Request
           </Button>
-          <Button size="sm" variant="outline" data-oid="ptmr-gh">
-            <MoreHorizontal className="mr-2 h-4 w-4" data-oid="jr.o92p" /> More
+          <Button size="sm" variant="outline" data-oid="0fzedmm">
+            <MoreHorizontal className="mr-2 h-4 w-4" data-oid="5tpbpvr" /> More
           </Button>
         </div>
       </CardContent>
@@ -117,7 +117,7 @@ export function AccountsOverview() {
         isOpen={isAddMoneyModalOpen}
         onClose={() => setIsAddMoneyModalOpen(false)}
         onAddMoney={handleAddMoney}
-        data-oid="6mrkdus"
+        data-oid="b0k2zp6"
       />
 
       <SendMoneyModal
@@ -125,14 +125,14 @@ export function AccountsOverview() {
         onClose={() => setIsSendMoneyModalOpen(false)}
         onSendMoney={handleSendMoney}
         accounts={accounts}
-        data-oid="py4f98w"
+        data-oid="pqcctvy"
       />
 
       <RequestMoneyModal
         isOpen={isRequestMoneyModalOpen}
         onClose={() => setIsRequestMoneyModalOpen(false)}
         onRequestMoney={handleRequestMoney}
-        data-oid="0ftc6g3"
+        data-oid="8uvr78z"
       />
     </Card>
   );

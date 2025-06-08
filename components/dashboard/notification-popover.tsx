@@ -48,40 +48,40 @@ export function NotificationPopover() {
   ];
 
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen} data-oid=".xvj.fe">
-      <PopoverTrigger asChild data-oid="8--z2p4">
+    <Popover open={isOpen} onOpenChange={setIsOpen} data-oid="zi.:an7">
+      <PopoverTrigger asChild data-oid="--4npg2">
         <Button
           variant="ghost"
           size="icon"
           className="relative"
-          data-oid="tzwenh1"
+          data-oid="3v1sihm"
         >
-          <Icons.bell className="h-5 w-5" data-oid="ut-rez8" />
+          <Icons.bell className="h-5 w-5" data-oid="4s72isa" />
           {notifications.some((n) => !n.read) && (
             <span
               className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500"
-              data-oid="ctro5ze"
+              data-oid="npoc.ha"
             />
           )}
-          <span className="sr-only" data-oid="jc192yk">
+          <span className="sr-only" data-oid="09dm4kt">
             Bildirimleri göster
           </span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 p-0" align="end" data-oid="tdsiusq">
+      <PopoverContent className="w-80 p-0" align="end" data-oid="adtf0l.">
         <div
           className="flex items-center justify-between border-b p-3"
-          data-oid="g8_ge9y"
+          data-oid="np_t1-."
         >
-          <h4 className="font-medium" data-oid="j4lulty">
+          <h4 className="font-medium" data-oid="kq37kut">
             Bildirimler
           </h4>
-          <Button variant="ghost" size="sm" data-oid="x90::go">
+          <Button variant="ghost" size="sm" data-oid="h:4-0o7">
             Tümünü okundu işaretle
           </Button>
         </div>
-        <ScrollArea className="h-80" data-oid="ci9wwev">
-          <div className="flex flex-col gap-1 p-1" data-oid="eys4yci">
+        <ScrollArea className="h-80" data-oid="ar8tme4">
+          <div className="flex flex-col gap-1 p-1" data-oid="nmi-mud">
             {notifications.length > 0 ? (
               notifications.map((notification) => (
                 <button
@@ -90,25 +90,25 @@ export function NotificationPopover() {
                     "flex flex-col gap-1 rounded-md p-3 text-left text-sm transition-colors hover:bg-accent",
                     !notification.read && "bg-muted",
                   )}
-                  data-oid="r9v95t:"
+                  data-oid="-s1r651"
                 >
                   <div
                     className="flex items-center justify-between"
-                    data-oid="6b1x68_"
+                    data-oid="vs5bq.l"
                   >
-                    <p className="font-medium" data-oid="oqwzir_">
+                    <p className="font-medium" data-oid="qmyu.m3">
                       {notification.title}
                     </p>
                     <p
                       className="text-xs text-muted-foreground"
-                      data-oid="hswkr:j"
+                      data-oid="x_x00sl"
                     >
                       {notification.time}
                     </p>
                   </div>
                   <p
                     className="text-xs text-muted-foreground"
-                    data-oid="hghf271"
+                    data-oid="1zmryi1"
                   >
                     {notification.description}
                   </p>
@@ -117,19 +117,19 @@ export function NotificationPopover() {
             ) : (
               <div
                 className="p-8 text-center text-muted-foreground"
-                data-oid="ea:quu_"
+                data-oid="mben6.2"
               >
                 Bildirim bulunmuyor
               </div>
             )}
           </div>
         </ScrollArea>
-        <div className="border-t p-2" data-oid="l3qnk07">
+        <div className="border-t p-2" data-oid="lhcmozk">
           <Button
             variant="ghost"
             size="sm"
             className="w-full justify-center"
-            data-oid="ejbqy4i"
+            data-oid="gjtnjj6"
           >
             Tüm bildirimleri gör
           </Button>

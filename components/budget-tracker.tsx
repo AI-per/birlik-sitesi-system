@@ -21,54 +21,54 @@ export function BudgetTracker() {
   const overallPercentage = (totalSpent / totalBudget) * 100;
 
   return (
-    <Card data-oid="z-0p4ng">
-      <CardHeader data-oid="u2e.x:m">
-        <CardTitle data-oid="umykp2b">Budget Overview</CardTitle>
+    <Card data-oid="pscez1x">
+      <CardHeader data-oid="0u_o399">
+        <CardTitle data-oid="55g4q:i">Budget Overview</CardTitle>
       </CardHeader>
-      <CardContent data-oid="g.qs8vh">
-        <div className="space-y-4" data-oid=".flpa1.">
-          <div className="flex justify-between items-center" data-oid="u4znc1:">
-            <span className="text-sm font-medium" data-oid="4gq26n5">
+      <CardContent data-oid="1aerv6s">
+        <div className="space-y-4" data-oid="rard:dl">
+          <div className="flex justify-between items-center" data-oid="xtrk85i">
+            <span className="text-sm font-medium" data-oid="ptmqs7a">
               Total Spent
             </span>
-            <span className="text-sm font-medium" data-oid="dzrc8z0">
+            <span className="text-sm font-medium" data-oid="r3hi.:o">
               ${totalSpent.toLocaleString()} / ${totalBudget.toLocaleString()}
             </span>
           </div>
           <Progress
             value={overallPercentage}
             className="h-2"
-            data-oid="8:--05s"
+            data-oid="gsnt157"
           />
 
           <p
             className="text-sm text-muted-foreground text-right"
-            data-oid=":ip9db8"
+            data-oid="zqaept9"
           >
             {overallPercentage.toFixed(1)}% of budget used
           </p>
 
-          <div className="space-y-2" data-oid="-lpdkl2">
+          <div className="space-y-2" data-oid="8c4-k9a">
             {budgetCategories.map((category) => {
               const percentage = (category.spent / category.budget) * 100;
               return (
                 <div
                   key={category.name}
                   className="grid grid-cols-3 gap-2 items-center"
-                  data-oid="kqe9qfa"
+                  data-oid="egafucy"
                 >
-                  <span className="text-sm font-medium" data-oid="o:crc4q">
+                  <span className="text-sm font-medium" data-oid="31j.a2a">
                     {category.name}
                   </span>
                   <Progress
                     value={percentage}
                     className="h-1.5"
-                    data-oid="ljh2t6f"
+                    data-oid="aqznb.7"
                   />
 
                   <span
                     className="text-sm text-muted-foreground text-right"
-                    data-oid="_jp3n7j"
+                    data-oid="qbiohm4"
                   >
                     {percentage.toFixed(0)}%
                   </span>

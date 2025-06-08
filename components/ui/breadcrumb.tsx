@@ -10,7 +10,7 @@ const Breadcrumb = React.forwardRef<
     separator?: React.ReactNode;
   }
 >(({ ...props }, ref) => (
-  <nav ref={ref} aria-label="breadcrumb" {...props} data-oid="ne_::d7" />
+  <nav ref={ref} aria-label="breadcrumb" {...props} data-oid="nbokzay" />
 ));
 Breadcrumb.displayName = "Breadcrumb";
 
@@ -25,7 +25,7 @@ const BreadcrumbList = React.forwardRef<
       className,
     )}
     {...props}
-    data-oid="y6lcsq4"
+    data-oid="tezzjfn"
   />
 ));
 BreadcrumbList.displayName = "BreadcrumbList";
@@ -38,7 +38,7 @@ const BreadcrumbItem = React.forwardRef<
     ref={ref}
     className={cn("inline-flex items-center gap-1.5", className)}
     {...props}
-    data-oid=":th2ezu"
+    data-oid="k9ippvh"
   />
 ));
 BreadcrumbItem.displayName = "BreadcrumbItem";
@@ -56,7 +56,7 @@ const BreadcrumbLink = React.forwardRef<
       ref={ref}
       className={cn("transition-colors hover:text-foreground", className)}
       {...props}
-      data-oid="wm80bz7"
+      data-oid="tilqb1m"
     />
   );
 });
@@ -73,7 +73,7 @@ const BreadcrumbPage = React.forwardRef<
     aria-current="page"
     className={cn("font-normal text-foreground", className)}
     {...props}
-    data-oid="89grqty"
+    data-oid="79a3fu0"
   />
 ));
 BreadcrumbPage.displayName = "BreadcrumbPage";
@@ -88,9 +88,9 @@ const BreadcrumbSeparator = ({
     aria-hidden="true"
     className={cn("[&>svg]:w-3.5 [&>svg]:h-3.5", className)}
     {...props}
-    data-oid="x496a1w"
+    data-oid="_3-3l60"
   >
-    {children ?? <ChevronRight data-oid="sxu7d2s" />}
+    {children ?? <ChevronRight data-oid="c-qnyiu" />}
   </li>
 );
 
@@ -105,10 +105,10 @@ const BreadcrumbEllipsis = ({
     aria-hidden="true"
     className={cn("flex h-9 w-9 items-center justify-center", className)}
     {...props}
-    data-oid="nk4pore"
+    data-oid="rm6cydz"
   >
-    <MoreHorizontal className="h-4 w-4" data-oid="7lz80-:" />
-    <span className="sr-only" data-oid="3:59.gk">
+    <MoreHorizontal className="h-4 w-4" data-oid="ow68lo_" />
+    <span className="sr-only" data-oid="yi4qms4">
       More
     </span>
   </span>

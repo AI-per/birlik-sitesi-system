@@ -10,7 +10,7 @@ const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
     aria-label="pagination"
     className={cn("mx-auto flex w-full justify-center", className)}
     {...props}
-    data-oid="2gr8380"
+    data-oid="tbnc8hv"
   />
 );
 
@@ -24,7 +24,7 @@ const PaginationContent = React.forwardRef<
     ref={ref}
     className={cn("flex flex-row items-center gap-1", className)}
     {...props}
-    data-oid="fal.7:i"
+    data-oid="rrodmkn"
   />
 ));
 PaginationContent.displayName = "PaginationContent";
@@ -33,7 +33,7 @@ const PaginationItem = React.forwardRef<
   HTMLLIElement,
   React.ComponentProps<"li">
 >(({ className, ...props }, ref) => (
-  <li ref={ref} className={cn("", className)} {...props} data-oid="-a6dpd2" />
+  <li ref={ref} className={cn("", className)} {...props} data-oid="ytynnld" />
 ));
 PaginationItem.displayName = "PaginationItem";
 
@@ -58,7 +58,7 @@ const PaginationLink = ({
       className,
     )}
     {...props}
-    data-oid="vo:l_24"
+    data-oid="2305vqh"
   />
 );
 
@@ -73,10 +73,10 @@ const PaginationPrevious = ({
     size="default"
     className={cn("gap-1 pl-2.5", className)}
     {...props}
-    data-oid="l3bkk8f"
+    data-oid="x0w9.-i"
   >
-    <ChevronLeft className="h-4 w-4" data-oid="rc5fzpd" />
-    <span data-oid="69wa84u">Previous</span>
+    <ChevronLeft className="h-4 w-4" data-oid="vqjf.h-" />
+    <span data-oid="icb-f:w">Previous</span>
   </PaginationLink>
 );
 
@@ -91,10 +91,10 @@ const PaginationNext = ({
     size="default"
     className={cn("gap-1 pr-2.5", className)}
     {...props}
-    data-oid="i67e-zs"
+    data-oid="c:d9bxi"
   >
-    <span data-oid="6j0eyiw">Next</span>
-    <ChevronRight className="h-4 w-4" data-oid="wbwhb82" />
+    <span data-oid="uh5fxnc">Next</span>
+    <ChevronRight className="h-4 w-4" data-oid="d_kmdiw" />
   </PaginationLink>
 );
 
@@ -108,10 +108,10 @@ const PaginationEllipsis = ({
     aria-hidden
     className={cn("flex h-9 w-9 items-center justify-center", className)}
     {...props}
-    data-oid="3:s4unl"
+    data-oid="7zqm_n8"
   >
-    <MoreHorizontal className="h-4 w-4" data-oid=".ntrenr" />
-    <span className="sr-only" data-oid="dqx2tj3">
+    <MoreHorizontal className="h-4 w-4" data-oid="3t1jbq7" />
+    <span className="sr-only" data-oid=".6gqrs.">
       More pages
     </span>
   </span>

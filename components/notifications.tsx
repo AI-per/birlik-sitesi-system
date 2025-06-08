@@ -61,28 +61,28 @@ export function Notifications() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="relative" data-oid="pabi9jd">
+    <div className="relative" data-oid=".gmfx0t">
       <Button
         variant="ghost"
         size="icon"
         className="relative"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Notifications"
-        data-oid="6mnuus7"
+        data-oid="_9xmryj"
       >
-        <Bell className="h-5 w-5" data-oid="9nzfe9g" />
+        <Bell className="h-5 w-5" data-oid="ji:gjdn" />
         <span
           className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"
-          data-oid="bxmiehl"
+          data-oid="0ig50l8"
         />
       </Button>
       {isOpen && (
-        <Card className="absolute right-0 mt-2 w-96 z-50" data-oid="-rz.9aa">
+        <Card className="absolute right-0 mt-2 w-96 z-50" data-oid="d-s2__p">
           <CardHeader
             className="flex flex-row items-center justify-between space-y-0 pb-2"
-            data-oid="owzidxl"
+            data-oid="it2mhks"
           >
-            <CardTitle className="text-sm font-medium" data-oid="hb7v7u:">
+            <CardTitle className="text-sm font-medium" data-oid="hlm6yxy">
               Notifications
             </CardTitle>
             <Button
@@ -90,49 +90,49 @@ export function Notifications() {
               size="icon"
               onClick={() => setIsOpen(false)}
               aria-label="Close notifications"
-              data-oid="bhlptps"
+              data-oid="sbm59bs"
             >
-              <X className="h-4 w-4" data-oid="lah4627" />
+              <X className="h-4 w-4" data-oid="n9lv8oa" />
             </Button>
           </CardHeader>
-          <CardContent data-oid=".k7qhrx">
-            <ScrollArea className="h-[400px] pr-4" data-oid="xct11t.">
+          <CardContent data-oid="m_0aiwx">
+            <ScrollArea className="h-[400px] pr-4" data-oid="vc9.9-w">
               {notifications.map((notification) => (
                 <Card
                   key={notification.id}
                   className="mb-4 last:mb-0 border shadow-sm"
-                  data-oid="hw4t7t7"
+                  data-oid="o.duf8f"
                 >
-                  <CardContent className="p-4" data-oid="rbz.x6p">
+                  <CardContent className="p-4" data-oid="83fn8jw">
                     <div
                       className="flex items-start space-x-4"
-                      data-oid="xad9qi0"
+                      data-oid="u.nhrpk"
                     >
                       <div
                         className={`${notification.color} p-2 rounded-full bg-opacity-10`}
-                        data-oid="52agdqf"
+                        data-oid="g.kw2qv"
                       >
                         <notification.icon
                           className={`h-5 w-5 ${notification.color}`}
-                          data-oid="pd-5u_5"
+                          data-oid="4lfazb_"
                         />
                       </div>
-                      <div className="flex-1 space-y-1" data-oid="m3ldgcm">
+                      <div className="flex-1 space-y-1" data-oid="9.ca2:8">
                         <p
                           className="text-sm font-medium leading-none"
-                          data-oid="p9cy_ni"
+                          data-oid="l2mo104"
                         >
                           {notification.title}
                         </p>
                         <p
                           className="text-sm text-muted-foreground"
-                          data-oid="u.5gk:6"
+                          data-oid="bkgbp2s"
                         >
                           {notification.message}
                         </p>
                         <p
                           className="text-xs text-muted-foreground"
-                          data-oid=":i33qig"
+                          data-oid="u3dh9as"
                         >
                           {notification.date}
                         </p>

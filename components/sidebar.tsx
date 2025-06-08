@@ -54,8 +54,8 @@ export function Sidebar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const NavItem = ({ item, isBottom = false }) => (
-    <Tooltip delayDuration={0} data-oid="b7in00a">
-      <TooltipTrigger asChild data-oid="trjfpk9">
+    <Tooltip delayDuration={0} data-oid="kblieix">
+      <TooltipTrigger asChild data-oid="-dmm7qh">
         <Link
           href={item.href}
           className={cn(
@@ -65,21 +65,21 @@ export function Sidebar() {
               : "text-muted-foreground hover:bg-secondary hover:text-secondary-foreground",
             isCollapsed && "justify-center px-2",
           )}
-          data-oid="a9liuet"
+          data-oid="-ol_5j6"
         >
           <item.icon
             className={cn("h-4 w-4", !isCollapsed && "mr-3")}
-            data-oid="p8uaf3d"
+            data-oid="_bql291"
           />
 
-          {!isCollapsed && <span data-oid="g5dr5x2">{item.name}</span>}
+          {!isCollapsed && <span data-oid="9uvoexa">{item.name}</span>}
         </Link>
       </TooltipTrigger>
       {isCollapsed && (
         <TooltipContent
           side="right"
           className="flex items-center gap-4"
-          data-oid="5c1vldy"
+          data-oid="1sij1lr"
         >
           {item.name}
         </TooltipContent>
@@ -88,15 +88,15 @@ export function Sidebar() {
   );
 
   return (
-    <TooltipProvider data-oid="t12qk0k">
+    <TooltipProvider data-oid="42q-v:e">
       <>
         <button
           className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-background rounded-md shadow-md"
           onClick={() => setIsMobileOpen(!isMobileOpen)}
           aria-label="Toggle sidebar"
-          data-oid="hz0enh6"
+          data-oid="akvjcpx"
         >
-          <Menu className="h-6 w-6" data-oid="y6943bv" />
+          <Menu className="h-6 w-6" data-oid="_elhxmm" />
         </button>
         <div
           className={cn(
@@ -106,23 +106,23 @@ export function Sidebar() {
               ? "translate-x-0"
               : "-translate-x-full lg:translate-x-0",
           )}
-          data-oid="bqsukqe"
+          data-oid="miznmeo"
         >
-          <div className="border-b border-border" data-oid="4-c8obb">
+          <div className="border-b border-border" data-oid="ach18-0">
             <div
               className={cn(
                 "flex h-16 items-center gap-2 px-4",
                 isCollapsed && "justify-center px-2",
               )}
-              data-oid="9szf8hr"
+              data-oid="aw5-m8c"
             >
               {!isCollapsed && (
                 <Link
                   href="/"
                   className="flex items-center font-semibold"
-                  data-oid="65v09l7"
+                  data-oid="k-p4wr3"
                 >
-                  <span className="text-lg" data-oid="-p_m4uj">
+                  <span className="text-lg" data-oid="iy6rs3z">
                     Flowers&Saints
                   </span>
                 </Link>
@@ -132,37 +132,37 @@ export function Sidebar() {
                 size="sm"
                 className={cn("ml-auto h-8 w-8", isCollapsed && "ml-0")}
                 onClick={() => setIsCollapsed(!isCollapsed)}
-                data-oid="2z4nnav"
+                data-oid="s8icjuk"
               >
                 <ChevronLeft
                   className={cn(
                     "h-4 w-4 transition-transform",
                     isCollapsed && "rotate-180",
                   )}
-                  data-oid="lz-nmdo"
+                  data-oid="sm:5ncg"
                 />
 
-                <span className="sr-only" data-oid="14wl-el">
+                <span className="sr-only" data-oid="r:oyc2p">
                   {isCollapsed ? "Expand" : "Collapse"} Sidebar
                 </span>
               </Button>
             </div>
           </div>
-          <div className="flex-1 overflow-auto" data-oid="93sxju3">
-            <nav className="flex-1 space-y-1 px-2 py-4" data-oid="5owfaky">
+          <div className="flex-1 overflow-auto" data-oid=".rhcv7i">
+            <nav className="flex-1 space-y-1 px-2 py-4" data-oid="k-j76xj">
               {navigation.map((item) => (
-                <NavItem key={item.name} item={item} data-oid=".y24qlr" />
+                <NavItem key={item.name} item={item} data-oid="g_3ka87" />
               ))}
             </nav>
           </div>
-          <div className="border-t border-border p-2" data-oid=".iy21t9">
-            <nav className="space-y-1" data-oid="keb:ltj">
+          <div className="border-t border-border p-2" data-oid="fgxvxjo">
+            <nav className="space-y-1" data-oid="_bnf_jk">
               {bottomNavigation.map((item) => (
                 <NavItem
                   key={item.name}
                   item={item}
                   isBottom
-                  data-oid="3onrnxx"
+                  data-oid="ncp_l13"
                 />
               ))}
             </nav>

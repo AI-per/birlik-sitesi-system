@@ -68,37 +68,37 @@ export function RecentPayments() {
   ];
 
   return (
-    <div className="space-y-8" data-oid="1:03:5w">
+    <div className="space-y-8" data-oid="s6gl1l6">
       {payments.map((payment) => (
-        <div key={payment.id} className="flex items-center" data-oid="o58o2bg">
-          <Avatar className="h-9 w-9" data-oid="2ly9ymn">
+        <div key={payment.id} className="flex items-center" data-oid="1l2uhct">
+          <Avatar className="h-9 w-9" data-oid="dn4a072">
             <AvatarImage
               src={payment.user.image || "/placeholder.svg"}
               alt={payment.user.name}
-              data-oid="o0bfzms"
+              data-oid="k17i8x8"
             />
 
-            <AvatarFallback data-oid="ghib5l5">
+            <AvatarFallback data-oid="n21lt24">
               {payment.user.name[0]}
             </AvatarFallback>
           </Avatar>
-          <div className="ml-4 space-y-1" data-oid="f-c-3t7">
-            <p className="text-sm font-medium leading-none" data-oid="14lcmiw">
+          <div className="ml-4 space-y-1" data-oid="mmowte.">
+            <p className="text-sm font-medium leading-none" data-oid="dd5yh2u">
               {payment.user.name}
             </p>
-            <p className="text-sm text-muted-foreground" data-oid="zf6uy9j">
+            <p className="text-sm text-muted-foreground" data-oid="1unplkz">
               {payment.apartment}
             </p>
           </div>
-          <div className="ml-auto text-right" data-oid="ryg1b25">
-            <p className="text-sm font-medium" data-oid="hs6jvdj">
+          <div className="ml-auto text-right" data-oid="8i6:2a:">
+            <p className="text-sm font-medium" data-oid="ka:q:uj">
               {payment.amount}
             </p>
-            <div className="text-xs text-muted-foreground" data-oid="92vbza:">
+            <div className="text-xs text-muted-foreground" data-oid="vvu5jj9">
               {payment.date}
             </div>
           </div>
-          <div className="ml-2" data-oid="ffs_oux">
+          <div className="ml-2" data-oid="oq5esfr">
             <Badge
               variant={
                 payment.status === "success"
@@ -107,7 +107,7 @@ export function RecentPayments() {
                     ? "outline"
                     : "destructive"
               }
-              data-oid="wtz8:xf"
+              data-oid="l8-q4so"
             >
               {payment.status === "success"
                 ? "Ödendi"

@@ -44,15 +44,15 @@ const data = [
 
 export function Overview() {
   return (
-    <ResponsiveContainer width="100%" height={350} data-oid="tnzk25t">
-      <BarChart data={data} data-oid="005:k:4">
+    <ResponsiveContainer width="100%" height={350} data-oid="4nh2spe">
+      <BarChart data={data} data-oid="p6otxq6">
         <XAxis
           dataKey="name"
           stroke="#888888"
           fontSize={12}
           tickLine={false}
           axisLine={false}
-          data-oid="jyuelqn"
+          data-oid="165ji37"
         />
 
         <YAxis
@@ -61,13 +61,13 @@ export function Overview() {
           tickLine={false}
           axisLine={false}
           tickFormatter={(value) => `₺${value}`}
-          data-oid="k9cdagn"
+          data-oid="iuf:gj."
         />
 
         <Tooltip
           formatter={(value) => [`₺${value}`, ""]}
           labelFormatter={(label) => `${label} 2023`}
-          data-oid="w1jubrc"
+          data-oid="1e.mg6:"
         />
 
         <Bar
@@ -75,7 +75,7 @@ export function Overview() {
           fill="#adfa1d"
           radius={[4, 4, 0, 0]}
           name="Toplam Aidat"
-          data-oid="j-_k.-l"
+          data-oid=".ef9ra5"
         />
 
         <Bar
@@ -83,7 +83,7 @@ export function Overview() {
           fill="#0ea5e9"
           radius={[4, 4, 0, 0]}
           name="Tahsil Edilen"
-          data-oid="6q_vh5s"
+          data-oid=":.gnsmo"
         />
       </BarChart>
     </ResponsiveContainer>

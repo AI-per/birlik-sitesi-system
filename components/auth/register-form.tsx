@@ -84,120 +84,120 @@ export function RegisterForm() {
   }
 
   return (
-    <Form {...form} data-oid="qi3igwi">
+    <Form {...form} data-oid="f3_j2cn">
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-4"
-        data-oid="mt7cjm5"
+        data-oid="3bd70ks"
       >
         <FormField
           control={form.control}
           name="fullName"
           render={({ field }) => (
-            <FormItem data-oid="_gljgn1">
-              <FormLabel data-oid="i6tzkbm">Ad Soyad</FormLabel>
-              <FormControl data-oid="7n:oiwr">
+            <FormItem data-oid=":z:mtwn">
+              <FormLabel data-oid="857vlld">Ad Soyad</FormLabel>
+              <FormControl data-oid="wpdahd9">
                 <Input
                   placeholder="Ahmet Yılmaz"
                   {...field}
-                  data-oid="_awlml4"
+                  data-oid="gzd_s.e"
                 />
               </FormControl>
-              <FormMessage data-oid="k3-dhq_" />
+              <FormMessage data-oid="2:2xkny" />
             </FormItem>
           )}
-          data-oid="31.5g00"
+          data-oid="hsfa8le"
         />
 
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem data-oid="h2nc8v2">
-              <FormLabel data-oid="7q8cx_c">E-posta</FormLabel>
-              <FormControl data-oid="azv-2z5">
+            <FormItem data-oid="ku5bjmw">
+              <FormLabel data-oid="snao52m">E-posta</FormLabel>
+              <FormControl data-oid="bfohjqq">
                 <Input
                   placeholder="ornek@email.com"
                   {...field}
-                  data-oid="5ud_-.n"
+                  data-oid="47tb1p:"
                 />
               </FormControl>
-              <FormMessage data-oid="j_s3.v1" />
+              <FormMessage data-oid="vp6fjti" />
             </FormItem>
           )}
-          data-oid="wfht4ow"
+          data-oid="5xid-0y"
         />
 
         <FormField
           control={form.control}
           name="phone"
           render={({ field }) => (
-            <FormItem data-oid="ia59j:h">
-              <FormLabel data-oid="ngfwr-3">Telefon (İsteğe bağlı)</FormLabel>
-              <FormControl data-oid="78aaha-">
+            <FormItem data-oid="a_t51pn">
+              <FormLabel data-oid="ywl-j7s">Telefon (İsteğe bağlı)</FormLabel>
+              <FormControl data-oid="3qjizk.">
                 <Input
                   placeholder="05XX XXX XX XX"
                   {...field}
-                  data-oid="60016f8"
+                  data-oid="1n1nheq"
                 />
               </FormControl>
-              <FormMessage data-oid="qt.bfld" />
+              <FormMessage data-oid="sdmnga9" />
             </FormItem>
           )}
-          data-oid="bs9p:_c"
+          data-oid=".a9ivi6"
         />
 
         <FormField
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem data-oid="8r4dx8z">
-              <FormLabel data-oid="cv:uxq5">Şifre</FormLabel>
-              <FormControl data-oid="yy2l5lf">
+            <FormItem data-oid="o8k4vhb">
+              <FormLabel data-oid="q.:njng">Şifre</FormLabel>
+              <FormControl data-oid="b:igw-:">
                 <Input
                   type="password"
                   placeholder="******"
                   {...field}
-                  data-oid="b6ntamr"
+                  data-oid="nduuykl"
                 />
               </FormControl>
-              <FormMessage data-oid="t.7-aow" />
+              <FormMessage data-oid="yi_sbg-" />
             </FormItem>
           )}
-          data-oid="6nh5occ"
+          data-oid="_:2ob.c"
         />
 
         <FormField
           control={form.control}
           name="confirmPassword"
           render={({ field }) => (
-            <FormItem data-oid="mr207nj">
-              <FormLabel data-oid="a5q6klu">Şifre Tekrar</FormLabel>
-              <FormControl data-oid="te7._4x">
+            <FormItem data-oid=".x0kej4">
+              <FormLabel data-oid="r-cpsp2">Şifre Tekrar</FormLabel>
+              <FormControl data-oid="t22r:y7">
                 <Input
                   type="password"
                   placeholder="******"
                   {...field}
-                  data-oid="kvaqv8o"
+                  data-oid="eecvs9z"
                 />
               </FormControl>
-              <FormMessage data-oid="kxy:0ns" />
+              <FormMessage data-oid=":bwxw27" />
             </FormItem>
           )}
-          data-oid="pq8v:3p"
+          data-oid="5zmlav3"
         />
 
         <Button
           type="submit"
           className="w-full"
           disabled={isLoading}
-          data-oid="ubashpd"
+          data-oid="o7gsz_."
         >
           {isLoading ? (
             <>
               <Icons.spinner
                 className="mr-2 h-4 w-4 animate-spin"
-                data-oid="nhsfmv3"
+                data-oid="yvb39yz"
               />
               Kayıt yapılıyor...
             </>

@@ -53,56 +53,56 @@ export function List02() {
   return (
     <div
       className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"
-      data-oid=":u8wht9"
+      data-oid="g4hv3:m"
     >
       <div
         className="flex items-center justify-between mb-4"
-        data-oid="76iepiw"
+        data-oid="3f6.t43"
       >
         <h2
           className="text-lg font-semibold text-gray-900 dark:text-white flex items-center"
-          data-oid="ni7j:ka"
+          data-oid="t77ccum"
         >
-          <CreditCard className="h-5 w-5 mr-2" data-oid="iqx39xc" />
+          <CreditCard className="h-5 w-5 mr-2" data-oid="1as.62a" />
           Recent Transactions
         </h2>
       </div>
-      <div className="space-y-4 mb-6" data-oid="5750ega">
+      <div className="space-y-4 mb-6" data-oid=".1ooq62">
         {transactions.map((transaction) => (
           <div
             key={transaction.id}
             className="flex items-center justify-between"
-            data-oid="trbi8n5"
+            data-oid="132_if1"
           >
-            <div className="flex items-center" data-oid="-h2_5di">
+            <div className="flex items-center" data-oid="8xl7f8g">
               <div
                 className={`p-2 rounded-full mr-3 ${transaction.type === "income" ? "bg-green-100" : "bg-red-100"}`}
-                data-oid="1djpbhj"
+                data-oid="t8ynhv4"
               >
                 <transaction.icon
                   className={`h-4 w-4 ${transaction.type === "income" ? "text-green-600" : "text-red-600"}`}
-                  data-oid="zew4.tu"
+                  data-oid="j93d9.9"
                 />
               </div>
-              <div data-oid="j2w43lq">
+              <div data-oid=".5wdyl-">
                 <p
                   className="text-sm font-medium text-gray-900 dark:text-white"
-                  data-oid="32w-nkw"
+                  data-oid="2m0h3yn"
                 >
                   {transaction.title}
                 </p>
                 <p
                   className="text-xs text-gray-500 dark:text-gray-400"
-                  data-oid=".:jl8v3"
+                  data-oid=".lhgs8b"
                 >
                   {transaction.date}
                 </p>
               </div>
             </div>
-            <div className="flex items-center" data-oid=".3tz-gi">
+            <div className="flex items-center" data-oid="u7ymptn">
               <span
                 className={`text-sm font-medium ${transaction.type === "income" ? "text-green-600" : "text-red-600"}`}
-                data-oid=".hu0ha2"
+                data-oid="lxmyqlc"
               >
                 {transaction.type === "income" ? "+" : "-"}$
                 {Math.abs(transaction.amount).toFixed(2)}
@@ -110,12 +110,12 @@ export function List02() {
               {transaction.type === "income" ? (
                 <ArrowUpRight
                   className="h-4 w-4 text-green-600 ml-1"
-                  data-oid="ii6zlhe"
+                  data-oid="zeo-hjk"
                 />
               ) : (
                 <ArrowDownRight
                   className="h-4 w-4 text-red-600 ml-1"
-                  data-oid="s83mllb"
+                  data-oid="9jzjl7c"
                 />
               )}
             </div>
@@ -124,7 +124,7 @@ export function List02() {
       </div>
       <button
         className="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-        data-oid="qj4ylwg"
+        data-oid="o_p075a"
       >
         View All Transactions
       </button>

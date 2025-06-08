@@ -44,21 +44,21 @@ export function EditBlockDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} data-oid="351ndig">
-      <DialogContent className="sm:max-w-[425px]" data-oid="1k:tadv">
-        <DialogHeader data-oid="g6:abx2">
-          <DialogTitle data-oid="yqq6fvs">Blok Düzenle</DialogTitle>
-          <DialogDescription data-oid="x41_dbi">
+    <Dialog open={open} onOpenChange={onOpenChange} data-oid="aq38uwx">
+      <DialogContent className="sm:max-w-[425px]" data-oid="fahldup">
+        <DialogHeader data-oid="vfpetj7">
+          <DialogTitle data-oid="t9g0e30">Blok Düzenle</DialogTitle>
+          <DialogDescription data-oid="pk97p2-">
             Blok bilgilerini düzenleyin. Değişiklikleri kaydetmek için kaydet
             butonuna tıklayın.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4" data-oid="x5lrftl">
+        <div className="grid gap-4 py-4" data-oid="85ai0xc">
           <div
             className="grid grid-cols-4 items-center gap-4"
-            data-oid="yiftd8l"
+            data-oid="-s-75qz"
           >
-            <Label htmlFor="name" className="text-right" data-oid="8djnnm7">
+            <Label htmlFor="name" className="text-right" data-oid="a.q.f7z">
               Blok Adı
             </Label>
             <Input
@@ -66,17 +66,17 @@ export function EditBlockDialog({
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="col-span-3"
-              data-oid="0vf3.:8"
+              data-oid="_1rz3cu"
             />
           </div>
           <div
             className="grid grid-cols-4 items-center gap-4"
-            data-oid="5qg6pec"
+            data-oid="aennswp"
           >
             <Label
               htmlFor="apartmentCount"
               className="text-right"
-              data-oid="wjjwv99"
+              data-oid="-zyxs17"
             >
               Daire Sayısı
             </Label>
@@ -86,19 +86,19 @@ export function EditBlockDialog({
               value={apartmentCount}
               onChange={(e) => setApartmentCount(e.target.value)}
               className="col-span-3"
-              data-oid="y.4r._n"
+              data-oid="9b1s0s8"
             />
           </div>
         </div>
-        <DialogFooter data-oid="26p8hb.">
+        <DialogFooter data-oid="y:obzv:">
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            data-oid="ln.ys-e"
+            data-oid="94m:owr"
           >
             İptal
           </Button>
-          <Button onClick={handleSave} disabled={isLoading} data-oid="o:7eg8i">
+          <Button onClick={handleSave} disabled={isLoading} data-oid="d1ue5ha">
             {isLoading ? "Kaydediliyor..." : "Kaydet"}
           </Button>
         </DialogFooter>

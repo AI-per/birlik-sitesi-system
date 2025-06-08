@@ -32,12 +32,12 @@ export function RevenueChart() {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <Card className="border-none shadow-lg" data-oid="21dpm8y">
-          <CardContent className="p-2" data-oid="rr2agb9">
-            <p className="text-sm font-semibold" data-oid="43xdg.r">
+        <Card className="border-none shadow-lg" data-oid="9ihyk3y">
+          <CardContent className="p-2" data-oid="g_8jqfl">
+            <p className="text-sm font-semibold" data-oid="j8d3eqo">
               {label}
             </p>
-            <p className="text-sm text-muted-foreground" data-oid="9doextf">
+            <p className="text-sm text-muted-foreground" data-oid=".yc:ntc">
               Revenue: ${payload[0].value.toLocaleString()}
             </p>
           </CardContent>
@@ -48,11 +48,11 @@ export function RevenueChart() {
   };
 
   return (
-    <ResponsiveContainer width="100%" height={350} data-oid=".k::ytl">
+    <ResponsiveContainer width="100%" height={350} data-oid="52av9:j">
       <LineChart
         data={data}
         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-        data-oid="2mes6b_"
+        data-oid="rbdefvr"
       >
         <XAxis
           dataKey="month"
@@ -60,7 +60,7 @@ export function RevenueChart() {
           fontSize={12}
           tickLine={false}
           axisLine={false}
-          data-oid="x-x13f6"
+          data-oid="f3oyn59"
         />
 
         <YAxis
@@ -69,12 +69,12 @@ export function RevenueChart() {
           tickLine={false}
           axisLine={false}
           tickFormatter={(value) => `$${value}`}
-          data-oid="hqgentg"
+          data-oid="0ugu0un"
         />
 
         <Tooltip
-          content={<CustomTooltip data-oid="ykjuag6" />}
-          data-oid=":v04qxo"
+          content={<CustomTooltip data-oid="e54:twh" />}
+          data-oid="8v0q8ym"
         />
 
         <Line
@@ -83,7 +83,7 @@ export function RevenueChart() {
           stroke={theme === "dark" ? "#adfa1d" : "#0ea5e9"}
           strokeWidth={2}
           dot={false}
-          data-oid="92w7pu2"
+          data-oid="z1iy8fd"
         />
       </LineChart>
     </ResponsiveContainer>

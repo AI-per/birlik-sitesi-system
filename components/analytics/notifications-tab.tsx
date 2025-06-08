@@ -37,102 +37,102 @@ export function NotificationsTab() {
   };
 
   return (
-    <div className="space-y-4" data-oid="u8ex08d">
-      <Card data-oid="5m2ilww">
-        <CardHeader data-oid="0rfn30e">
-          <CardTitle className="text-xl font-semibold" data-oid="1bpd7dw">
+    <div className="space-y-4" data-oid="_uhxiyx">
+      <Card data-oid="-mzprgn">
+        <CardHeader data-oid="2a62e.i">
+          <CardTitle className="text-xl font-semibold" data-oid="3brda-e">
             Notification Preferences
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4" data-oid="0ho6utb">
+        <CardContent className="space-y-4" data-oid="gucywwd">
           {notificationTypes.map((type) => (
             <div
               key={type.id}
               className="flex items-center justify-between"
-              data-oid="0p3yby7"
+              data-oid="8s96tq0"
             >
-              <div className="flex items-center space-x-4" data-oid="1rzw:kh">
+              <div className="flex items-center space-x-4" data-oid="-e::hvy">
                 <type.icon
                   className="h-5 w-5 text-muted-foreground"
-                  data-oid="zpivpso"
+                  data-oid="0co9cae"
                 />
 
-                <span className="text-sm font-medium" data-oid="p-z98u7">
+                <span className="text-sm font-medium" data-oid="2ik6ciz">
                   {type.label}
                 </span>
               </div>
               <Switch
                 checked={notifications[type.id]}
                 onCheckedChange={() => toggleNotification(type.id)}
-                data-oid="qtyhf3h"
+                data-oid="4dda.tx"
               />
             </div>
           ))}
         </CardContent>
       </Card>
-      <Card data-oid="cbgrc_i">
-        <CardHeader data-oid="8:ic0yh">
-          <CardTitle className="text-xl font-semibold" data-oid="6tbtkla">
+      <Card data-oid=":8u1xvi">
+        <CardHeader data-oid="wl7j8el">
+          <CardTitle className="text-xl font-semibold" data-oid="ta0ihz.">
             Recent Notifications
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4" data-oid="x1c54lx">
-          <div className="flex items-center space-x-4" data-oid="60ic1l5">
+        <CardContent className="space-y-4" data-oid="1mwhucu">
+          <div className="flex items-center space-x-4" data-oid="l_fiumt">
             <AlertTriangle
               className="h-5 w-5 text-yellow-500"
-              data-oid="59b--9a"
+              data-oid="6e.--wv"
             />
 
-            <div data-oid="9n-ojrd">
-              <p className="text-sm font-medium" data-oid="c.gor48">
+            <div data-oid="862af:8">
+              <p className="text-sm font-medium" data-oid="aaydfrg">
                 Unusual account activity detected
               </p>
-              <p className="text-xs text-muted-foreground" data-oid="mww:np-">
+              <p className="text-xs text-muted-foreground" data-oid=":d2xlzi">
                 2 hours ago
               </p>
             </div>
           </div>
-          <div className="flex items-center space-x-4" data-oid="9v3bqvk">
-            <TrendingUp className="h-5 w-5 text-green-500" data-oid="kgq_276" />
-            <div data-oid="0wu0yfu">
-              <p className="text-sm font-medium" data-oid="72gjac6">
+          <div className="flex items-center space-x-4" data-oid="5zqr65.">
+            <TrendingUp className="h-5 w-5 text-green-500" data-oid="cc0ab8d" />
+            <div data-oid="nt8dr3n">
+              <p className="text-sm font-medium" data-oid="rou9qk:">
                 Your portfolio has grown by 5% this week
               </p>
-              <p className="text-xs text-muted-foreground" data-oid="n5ea4ku">
+              <p className="text-xs text-muted-foreground" data-oid="mwbnghn">
                 1 day ago
               </p>
             </div>
           </div>
-          <div className="flex items-center space-x-4" data-oid="uls5x6_">
-            <Bell className="h-5 w-5 text-blue-500" data-oid="z3m367n" />
-            <div data-oid="9you9b-">
-              <p className="text-sm font-medium" data-oid="6-gq:_y">
+          <div className="flex items-center space-x-4" data-oid="zv96nll">
+            <Bell className="h-5 w-5 text-blue-500" data-oid="vbh5_nx" />
+            <div data-oid="13l-z6c">
+              <p className="text-sm font-medium" data-oid="a1r4_no">
                 New feature: Advanced analytics now available
               </p>
-              <p className="text-xs text-muted-foreground" data-oid="hii19ep">
+              <p className="text-xs text-muted-foreground" data-oid="za4-gzv">
                 3 days ago
               </p>
             </div>
           </div>
-          <div className="flex items-center space-x-4" data-oid="oof8b25">
+          <div className="flex items-center space-x-4" data-oid="7j62zwj">
             <DollarSign
               className="h-5 w-5 text-purple-500"
-              data-oid="n95-dw6"
+              data-oid="ct0zt60"
             />
 
-            <div data-oid="etsrhs6">
-              <p className="text-sm font-medium" data-oid="c.-fj..">
+            <div data-oid="uygdvt1">
+              <p className="text-sm font-medium" data-oid="frl2b4q">
                 Monthly financial report is ready for review
               </p>
-              <p className="text-xs text-muted-foreground" data-oid="yx4bsjn">
+              <p className="text-xs text-muted-foreground" data-oid="-g00b2w">
                 5 days ago
               </p>
             </div>
           </div>
         </CardContent>
       </Card>
-      <div className="flex justify-end" data-oid="gc_8bqs">
-        <Button variant="outline" className="text-sm" data-oid="hptoecn">
+      <div className="flex justify-end" data-oid="a61ro7w">
+        <Button variant="outline" className="text-sm" data-oid="n_sysj7">
           View All Notifications
         </Button>
       </div>

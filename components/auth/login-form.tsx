@@ -66,62 +66,62 @@ export function LoginForm() {
   }
 
   return (
-    <Form {...form} data-oid=".ryx3oc">
+    <Form {...form} data-oid="otfzwiy">
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-4"
-        data-oid="84k8cj7"
+        data-oid="w9pgk0n"
       >
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem data-oid="3f7b42b">
-              <FormLabel data-oid="yj10tjl">E-posta</FormLabel>
-              <FormControl data-oid="n.01l73">
+            <FormItem data-oid="5bycslp">
+              <FormLabel data-oid="l2u6zls">E-posta</FormLabel>
+              <FormControl data-oid="rlgs9qg">
                 <Input
                   placeholder="ornek@email.com"
                   {...field}
-                  data-oid="lt-is3k"
+                  data-oid="4p6z43p"
                 />
               </FormControl>
-              <FormMessage data-oid="ecd9x4_" />
+              <FormMessage data-oid="lrz2977" />
             </FormItem>
           )}
-          data-oid="zu1_31i"
+          data-oid="_r2kdyk"
         />
 
         <FormField
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem data-oid="-n6gtzq">
-              <FormLabel data-oid="ug4gibe">Şifre</FormLabel>
-              <FormControl data-oid="bpfq_7e">
+            <FormItem data-oid="8j98109">
+              <FormLabel data-oid="574sngx">Şifre</FormLabel>
+              <FormControl data-oid="b8l-mgp">
                 <Input
                   type="password"
                   placeholder="******"
                   {...field}
-                  data-oid="ip12ogk"
+                  data-oid="m1pyynf"
                 />
               </FormControl>
-              <FormMessage data-oid="xuj01o_" />
+              <FormMessage data-oid="7ywwbno" />
             </FormItem>
           )}
-          data-oid="y-kn5-w"
+          data-oid="jilac-:"
         />
 
         <Button
           type="submit"
           className="w-full"
           disabled={isLoading}
-          data-oid="pzc4trj"
+          data-oid="tg6a6f0"
         >
           {isLoading ? (
             <>
               <Icons.spinner
                 className="mr-2 h-4 w-4 animate-spin"
-                data-oid="ld4xgf_"
+                data-oid="9pr0n3o"
               />
               Giriş yapılıyor...
             </>
@@ -130,8 +130,8 @@ export function LoginForm() {
           )}
         </Button>
       </form>
-      <div className="mt-4 text-center text-sm" data-oid="217e9.c">
-        <a href="#" className="text-primary hover:underline" data-oid="pf.ed_m">
+      <div className="mt-4 text-center text-sm" data-oid="e6v22hq">
+        <a href="#" className="text-primary hover:underline" data-oid="3.w3ddx">
           Şifremi unuttum
         </a>
       </div>

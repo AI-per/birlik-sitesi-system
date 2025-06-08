@@ -37,14 +37,14 @@ export function DuesSummary() {
   ];
 
   return (
-    <div className="space-y-4" data-oid="f3mx4sp">
+    <div className="space-y-4" data-oid="bkk6g_k">
       {duesData.map((data) => (
-        <div key={data.month} className="space-y-2" data-oid="a69jq6w">
-          <div className="flex items-center justify-between" data-oid="u3z_ccm">
-            <span className="text-sm font-medium" data-oid="ih63-.l">
+        <div key={data.month} className="space-y-2" data-oid="7rsc5d-">
+          <div className="flex items-center justify-between" data-oid="qx:fqk.">
+            <span className="text-sm font-medium" data-oid="fqww65q">
               {data.month}
             </span>
-            <span className="text-sm font-medium" data-oid="66ia5eu">
+            <span className="text-sm font-medium" data-oid="q56e84:">
               ₺{data.collected.toLocaleString()} / ₺
               {data.total.toLocaleString()}
             </span>
@@ -52,15 +52,15 @@ export function DuesSummary() {
           <Progress
             value={data.percentage}
             className="h-2"
-            data-oid="iwl9-fi"
+            data-oid="s9o04ru"
           />
 
           <div
             className="flex items-center justify-between text-xs text-muted-foreground"
-            data-oid="eaze5a8"
+            data-oid="0e4lf_0"
           >
-            <span data-oid="ujlivw8">Tahsilat Oranı</span>
-            <span data-oid="5saj-8f">%{data.percentage}</span>
+            <span data-oid="m7pmd3n">Tahsilat Oranı</span>
+            <span data-oid="2oz--j:">%{data.percentage}</span>
           </div>
         </div>
       ))}

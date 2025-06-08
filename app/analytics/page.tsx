@@ -16,56 +16,56 @@ export default function AnalyticsPage() {
   };
 
   return (
-    <div className="flex-1 space-y-4 p-8 pt-6" data-oid="v:yizyn">
+    <div className="flex-1 space-y-4 p-8 pt-6" data-oid="i5w0kwf">
       <div
         className="flex items-center justify-between space-y-2"
-        data-oid="ou-mu7b"
+        data-oid=":y5-mqn"
       >
-        <h2 className="text-3xl font-bold tracking-tight" data-oid="akopfgm">
+        <h2 className="text-3xl font-bold tracking-tight" data-oid="il:3eb.">
           Analytics
         </h2>
-        <div className="flex items-center space-x-2" data-oid="xbu6jed">
-          <DateRangePicker data-oid=".h_wkw7" />
+        <div className="flex items-center space-x-2" data-oid="60ix.7l">
+          <DateRangePicker data-oid="w6gvz-8" />
           <Button
             onClick={handleExportData}
             className="flex items-center gap-2"
-            data-oid="ef7:6hx"
+            data-oid="j5x6h8v"
           >
-            <Download className="h-4 w-4" data-oid="xlgd3__" />
+            <Download className="h-4 w-4" data-oid="357m9q-" />
             Export Data
           </Button>
         </div>
       </div>
-      <Tabs defaultValue="overview" className="space-y-4" data-oid="hzqb500">
-        <TabsList className="grid w-full grid-cols-4" data-oid="rc4w-3c">
-          <TabsTrigger value="overview" data-oid="fyx78ha">
+      <Tabs defaultValue="overview" className="space-y-4" data-oid="x51xbx.">
+        <TabsList className="grid w-full grid-cols-4" data-oid="f.:fujx">
+          <TabsTrigger value="overview" data-oid="3jyz9qr">
             Overview
           </TabsTrigger>
-          <TabsTrigger value="analytics" data-oid="ps-nie:">
+          <TabsTrigger value="analytics" data-oid="h1-infx">
             Analytics
           </TabsTrigger>
-          <TabsTrigger value="reports" data-oid="tfoaj6x">
+          <TabsTrigger value="reports" data-oid="crv9d09">
             Reports
           </TabsTrigger>
-          <TabsTrigger value="notifications" data-oid="qtq0v9o">
+          <TabsTrigger value="notifications" data-oid="9d0z76s">
             Notifications
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="overview" className="space-y-4" data-oid="yfa-1ox">
-          <OverviewTab data-oid="cc0msek" />
+        <TabsContent value="overview" className="space-y-4" data-oid="9nuyskz">
+          <OverviewTab data-oid="aw-bv__" />
         </TabsContent>
-        <TabsContent value="analytics" className="space-y-4" data-oid="ge7-3su">
-          <AnalyticsTab data-oid="2b3s2.q" />
+        <TabsContent value="analytics" className="space-y-4" data-oid="8enwn41">
+          <AnalyticsTab data-oid="r8z8uce" />
         </TabsContent>
-        <TabsContent value="reports" className="space-y-4" data-oid="5ttdmj1">
-          <ReportsTab data-oid="jp-f4py" />
+        <TabsContent value="reports" className="space-y-4" data-oid="-mdisz:">
+          <ReportsTab data-oid="o1fhf6t" />
         </TabsContent>
         <TabsContent
           value="notifications"
           className="space-y-4"
-          data-oid="8.107rt"
+          data-oid="--6y3m8"
         >
-          <NotificationsTab data-oid="p7sfco:" />
+          <NotificationsTab data-oid="9mva9b8" />
         </TabsContent>
       </Tabs>
     </div>

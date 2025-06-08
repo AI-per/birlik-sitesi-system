@@ -42,36 +42,36 @@ const transactions = [
 
 export function RecentTransactions() {
   return (
-    <Card data-oid="c8294ie">
-      <CardHeader data-oid="vd.ibsy">
-        <CardTitle className="text-lg font-medium" data-oid="qumticp">
+    <Card data-oid="l-cuwxx">
+      <CardHeader data-oid="15gw7lw">
+        <CardTitle className="text-lg font-medium" data-oid="dcobiei">
           Recent Transactions
         </CardTitle>
       </CardHeader>
-      <CardContent data-oid="_lrn7oq">
-        <div className="space-y-4" data-oid="7-em38_">
+      <CardContent data-oid="q1vqyx.">
+        <div className="space-y-4" data-oid="__4o84a">
           {transactions.slice(0, 3).map((transaction) => (
             <div
               key={transaction.id}
               className="flex items-center"
-              data-oid="b52izdg"
+              data-oid="vghg6ce"
             >
-              <div className="flex-1" data-oid="giwm6v0">
-                <p className="text-sm font-medium" data-oid="un:te8w">
+              <div className="flex-1" data-oid=".1y1v0s">
+                <p className="text-sm font-medium" data-oid="u5u0wvo">
                   {transaction.name}
                 </p>
-                <p className="text-xs text-muted-foreground" data-oid="8iyfs08">
+                <p className="text-xs text-muted-foreground" data-oid="0y8mjf7">
                   {transaction.date}
                 </p>
               </div>
-              <div className="flex items-center" data-oid="i6ej2c.">
+              <div className="flex items-center" data-oid="lbcl6.g">
                 <span
                   className={`text-sm font-medium ${
                     transaction.type === "income"
                       ? "text-green-600 dark:text-green-400"
                       : "text-red-600 dark:text-red-400"
                   }`}
-                  data-oid="9g-wid2"
+                  data-oid="-s-6o1l"
                 >
                   {transaction.type === "income" ? "+" : "-"}$
                   {Math.abs(transaction.amount).toFixed(2)}
@@ -79,19 +79,19 @@ export function RecentTransactions() {
                 {transaction.type === "income" ? (
                   <ArrowUpRight
                     className="h-4 w-4 text-green-600 dark:text-green-400 ml-1"
-                    data-oid="y5i4694"
+                    data-oid="tojlqfi"
                   />
                 ) : (
                   <ArrowDownRight
                     className="h-4 w-4 text-red-600 dark:text-red-400 ml-1"
-                    data-oid="0t1v3xp"
+                    data-oid="kzc-a-e"
                   />
                 )}
               </div>
             </div>
           ))}
         </div>
-        <Button className="w-full mt-4" variant="outline" data-oid="t9dj0ku">
+        <Button className="w-full mt-4" variant="outline" data-oid="yij_b4i">
           View All Transactions
         </Button>
       </CardContent>

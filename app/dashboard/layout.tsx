@@ -9,17 +9,17 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SettingsProvider data-oid="lcre772">
-      <div className="flex h-screen overflow-hidden" data-oid="oc:1jvt">
-        <Sidebar data-oid="olhi3.y" />
+    <SettingsProvider data-oid="nn0enkd">
+      <div className="flex h-screen overflow-hidden" data-oid="gzwu_sx">
+        <Sidebar data-oid="_.kva84" />
         <div
           className="flex flex-col flex-1 overflow-hidden"
-          data-oid="b-u_51q"
+          data-oid="xo.vlqs"
         >
-          <Header data-oid="010-ny8" />
+          <Header data-oid="mxjnaew" />
           <main
             className="flex-1 overflow-y-auto p-4 md:p-6 bg-background"
-            data-oid="4lurpf3"
+            data-oid="gwpfc_7"
           >
             {children}
           </main>

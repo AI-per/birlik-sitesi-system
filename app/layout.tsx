@@ -14,19 +14,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="tr" suppressHydrationWarning data-oid="qs4xyje">
-      <body className="" data-oid="ft62k_t">
+    <html lang="tr" suppressHydrationWarning data-oid="ts0o7kw">
+      <body className="" data-oid="es-.f32">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
-          data-oid="uo-qh8w"
+          data-oid="e_roh.-"
         >
-          <SidebarProvider data-oid="gbs1awt">
-            <div className="min-h-screen" data-oid="7_os988">
+          <SidebarProvider data-oid="a9gx8wj">
+            <div className="min-h-screen" data-oid="j5:556o">
               {children}
             </div>
-            <Toaster data-oid="tpmyme4" />
+            <Toaster data-oid="-mw9gqu" />
           </SidebarProvider>
         </ThemeProvider>
       </body>

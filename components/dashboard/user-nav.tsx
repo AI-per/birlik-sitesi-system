@@ -23,21 +23,21 @@ export function UserNav() {
   };
 
   return (
-    <DropdownMenu data-oid="w0tkn7n">
-      <DropdownMenuTrigger asChild data-oid="rj_w.02">
+    <DropdownMenu data-oid=".hwx52m">
+      <DropdownMenuTrigger asChild data-oid="16l0w8b">
         <Button
           variant="ghost"
           className="relative h-8 w-8 rounded-full"
-          data-oid="euccv4o"
+          data-oid="auw3xdn"
         >
-          <Avatar className="h-8 w-8" data-oid="x8s7gxg">
+          <Avatar className="h-8 w-8" data-oid="wh29ndf">
             <AvatarImage
               src={user.image || "/placeholder.svg"}
               alt={user.name}
-              data-oid="z8djgi_"
+              data-oid="1i5:qmr"
             />
 
-            <AvatarFallback data-oid="z7pxdrq">
+            <AvatarFallback data-oid="ttnsdqp">
               {user.name.charAt(0)}
             </AvatarFallback>
           </Avatar>
@@ -47,41 +47,41 @@ export function UserNav() {
         className="w-56"
         align="end"
         forceMount
-        data-oid="cz_xuw6"
+        data-oid="wdkbjy7"
       >
-        <DropdownMenuLabel className="font-normal" data-oid="k1tdhm.">
-          <div className="flex flex-col space-y-1" data-oid="_wc3491">
-            <p className="text-sm font-medium leading-none" data-oid="qpf5:0u">
+        <DropdownMenuLabel className="font-normal" data-oid="2y28po:">
+          <div className="flex flex-col space-y-1" data-oid="qm-hxzm">
+            <p className="text-sm font-medium leading-none" data-oid="d-.:t0k">
               {user.name}
             </p>
             <p
               className="text-xs leading-none text-muted-foreground"
-              data-oid="ejy2ojh"
+              data-oid="-ranztj"
             >
               {user.email}
             </p>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator data-oid="w5zwia4" />
-        <DropdownMenuGroup data-oid=":5wrflh">
-          <DropdownMenuItem asChild data-oid="sxtsx-:">
-            <Link href="/dashboard/profile" data-oid="r2m0m7a">
-              <Icons.user className="mr-2 h-4 w-4" data-oid="y0q:-jz" />
-              <span data-oid=".l0vbjt">Profil</span>
+        <DropdownMenuSeparator data-oid="ahkmbnh" />
+        <DropdownMenuGroup data-oid="36w0a__">
+          <DropdownMenuItem asChild data-oid="whr2k2x">
+            <Link href="/dashboard/profile" data-oid="r894_4a">
+              <Icons.user className="mr-2 h-4 w-4" data-oid=":xfj2c2" />
+              <span data-oid="hlnur-2">Profil</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild data-oid="hd80tmd">
-            <Link href="/dashboard/settings" data-oid="s6ifi4k">
-              <Icons.settings className="mr-2 h-4 w-4" data-oid="8rkqtvv" />
-              <span data-oid="7g1mg4j">Ayarlar</span>
+          <DropdownMenuItem asChild data-oid="gej_nef">
+            <Link href="/dashboard/settings" data-oid="ehuwc.m">
+              <Icons.settings className="mr-2 h-4 w-4" data-oid="rpt59l3" />
+              <span data-oid="yza486v">Ayarlar</span>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
-        <DropdownMenuSeparator data-oid="d-2xh_1" />
-        <DropdownMenuItem asChild data-oid="o0mlr88">
-          <Link href="/" data-oid="g3lz9nn">
-            <Icons.logout className="mr-2 h-4 w-4" data-oid="bt:yl6e" />
-            <span data-oid="v7mc:x8">Çıkış Yap</span>
+        <DropdownMenuSeparator data-oid="8i1e8jk" />
+        <DropdownMenuItem asChild data-oid="aolcaez">
+          <Link href="/" data-oid="1k6lnja">
+            <Icons.logout className="mr-2 h-4 w-4" data-oid="i_34rcy" />
+            <span data-oid="p6v.x2f">Çıkış Yap</span>
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>

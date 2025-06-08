@@ -42,106 +42,106 @@ export function BlockList() {
   );
 
   return (
-    <div className="space-y-4" data-oid="s0frstf">
-      <div className="flex items-center gap-2" data-oid="si6q8a4">
+    <div className="space-y-4" data-oid="_g750a-">
+      <div className="flex items-center gap-2" data-oid=".6qgf9-">
         <Input
           placeholder="Blok ara..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="max-w-sm"
-          data-oid="gv8hw1."
+          data-oid="d6enja:"
         />
       </div>
-      <div className="rounded-md border" data-oid=":70ya95">
-        <Table data-oid="aa7.1cc">
-          <TableHeader data-oid="lo4uq.z">
-            <TableRow data-oid="fl4:22v">
-              <TableHead data-oid="mm855ga">Blok Adı</TableHead>
-              <TableHead data-oid="8ah5zr8">Oluşturulma Tarihi</TableHead>
-              <TableHead data-oid="ulu5qpe">Daire Sayısı</TableHead>
-              <TableHead className="text-right" data-oid="ylk10s:">
+      <div className="rounded-md border" data-oid="2x:8v2x">
+        <Table data-oid="_sd.xi3">
+          <TableHeader data-oid="rysjibb">
+            <TableRow data-oid="90w_o7k">
+              <TableHead data-oid="6hc:r.z">Blok Adı</TableHead>
+              <TableHead data-oid="5-i8bgb">Oluşturulma Tarihi</TableHead>
+              <TableHead data-oid="h91kcyx">Daire Sayısı</TableHead>
+              <TableHead className="text-right" data-oid="mk5cm-.">
                 İşlemler
               </TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody data-oid="1uldkyc">
+          <TableBody data-oid="wloc_cj">
             {filteredBlocks.length === 0 ? (
-              <TableRow data-oid="egcy9w4">
+              <TableRow data-oid="mw6z7vo">
                 <TableCell
                   colSpan={4}
                   className="h-24 text-center"
-                  data-oid="kz2i:hk"
+                  data-oid="07b:d_."
                 >
                   Sonuç bulunamadı.
                 </TableCell>
               </TableRow>
             ) : (
               filteredBlocks.map((block) => (
-                <TableRow key={block.id} data-oid="geei4vx">
-                  <TableCell className="font-medium" data-oid="wx1pl2q">
+                <TableRow key={block.id} data-oid="9hn99:b">
+                  <TableCell className="font-medium" data-oid="bje.4kv">
                     {block.name}
                   </TableCell>
-                  <TableCell data-oid="t035:b.">{block.createdAt}</TableCell>
-                  <TableCell data-oid="ov25ybd">
+                  <TableCell data-oid="b5.jd3n">{block.createdAt}</TableCell>
+                  <TableCell data-oid="ijnqhjr">
                     {block.apartmentCount}
                   </TableCell>
-                  <TableCell className="text-right" data-oid="-ktib.-">
-                    <DropdownMenu data-oid="rsuoyj-">
-                      <DropdownMenuTrigger asChild data-oid="_f34fzv">
+                  <TableCell className="text-right" data-oid="un481q8">
+                    <DropdownMenu data-oid="z0jrmj9">
+                      <DropdownMenuTrigger asChild data-oid="h1hj42r">
                         <Button
                           variant="ghost"
                           className="h-8 w-8 p-0"
-                          data-oid="bc328o4"
+                          data-oid="5qik7vy"
                         >
-                          <span className="sr-only" data-oid="a-oe.64">
+                          <span className="sr-only" data-oid=".xdfx3a">
                             Menüyü aç
                           </span>
                           <Icons.ellipsis
                             className="h-4 w-4"
-                            data-oid="f5155-c"
+                            data-oid="2uh-1xz"
                           />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" data-oid="azsii3y">
-                        <DropdownMenuLabel data-oid="1:obu9o">
+                      <DropdownMenuContent align="end" data-oid="zbu2x:f">
+                        <DropdownMenuLabel data-oid="bn7itt-">
                           İşlemler
                         </DropdownMenuLabel>
                         <DropdownMenuItem
                           onClick={() =>
                             (window.location.href = `/dashboard/blocks/${block.id}`)
                           }
-                          data-oid="-:cx5bh"
+                          data-oid="f5.9:pb"
                         >
                           <Icons.fileText
                             className="mr-2 h-4 w-4"
-                            data-oid="-uglm.v"
+                            data-oid="y4g56he"
                           />
 
-                          <span data-oid="hcu_19w">Detaylar</span>
+                          <span data-oid="n9qh2pv">Detaylar</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => setEditingBlock(block)}
-                          data-oid="4f77h6l"
+                          data-oid="spt6r93"
                         >
                           <Icons.settings
                             className="mr-2 h-4 w-4"
-                            data-oid="nv95ef2"
+                            data-oid="qta1vjs"
                           />
 
-                          <span data-oid="iv-2hil">Düzenle</span>
+                          <span data-oid="ihgmwtk">Düzenle</span>
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator data-oid="thvh-be" />
+                        <DropdownMenuSeparator data-oid="ciq091-" />
                         <DropdownMenuItem
                           onClick={() => setDeletingBlock(block)}
                           className="text-red-600"
-                          data-oid="6j0mj:."
+                          data-oid="7h4gi2m"
                         >
                           <Icons.trash
                             className="mr-2 h-4 w-4"
-                            data-oid="05j9x_5"
+                            data-oid="7-.nk3i"
                           />
 
-                          <span data-oid="h1wc2-p">Sil</span>
+                          <span data-oid="obd0riq">Sil</span>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -157,7 +157,7 @@ export function BlockList() {
           block={editingBlock}
           open={!!editingBlock}
           onOpenChange={() => setEditingBlock(null)}
-          data-oid="xbuzu85"
+          data-oid="7s4._53"
         />
       )}
       {deletingBlock && (
@@ -165,7 +165,7 @@ export function BlockList() {
           block={deletingBlock}
           open={!!deletingBlock}
           onOpenChange={() => setDeletingBlock(null)}
-          data-oid="wklb3c4"
+          data-oid="uev8_6:"
         />
       )}
     </div>

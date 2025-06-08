@@ -13,30 +13,30 @@ export function AccountOverview() {
   );
 
   return (
-    <Card className="border border-border" data-oid="j45zzed">
-      <CardHeader data-oid="yfkshrp">
-        <CardTitle className="text-lg font-medium" data-oid="k2fk28v">
+    <Card className="border border-border" data-oid="8qvi_x.">
+      <CardHeader data-oid="xmm97re">
+        <CardTitle className="text-lg font-medium" data-oid="h3fs8z9">
           Account Overview
         </CardTitle>
       </CardHeader>
-      <CardContent data-oid="3.sdk0-">
-        <div className="text-2xl font-semibold mb-4" data-oid="3p:2uu_">
+      <CardContent data-oid="dz8bm05">
+        <div className="text-2xl font-semibold mb-4" data-oid="p:h1xsk">
           ${totalBalance.toFixed(2)}
         </div>
-        <div className="space-y-2" data-oid="io36g.o">
+        <div className="space-y-2" data-oid="p6we39u">
           {accounts.map((account) => (
             <div
               key={account.name}
               className="flex justify-between items-center"
-              data-oid="2ii7o9h"
+              data-oid="acg6m9r"
             >
               <span
                 className="text-sm text-muted-foreground"
-                data-oid="f7r1d:_"
+                data-oid="lm0u8vr"
               >
                 {account.name}
               </span>
-              <span className="font-medium" data-oid="sw-g.tv">
+              <span className="font-medium" data-oid="kjnx00k">
                 ${account.balance.toFixed(2)}
               </span>
             </div>

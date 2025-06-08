@@ -65,76 +65,76 @@ export function ReportsTab() {
   };
 
   return (
-    <div className="space-y-4" data-oid="62_l_9q">
-      <Card data-oid="2_f.hy-">
-        <CardHeader data-oid="nj2-rok">
-          <CardTitle className="text-xl font-semibold" data-oid="c7dw2__">
+    <div className="space-y-4" data-oid="jekry:e">
+      <Card data-oid="f93a4up">
+        <CardHeader data-oid="z8qp6b:">
+          <CardTitle className="text-xl font-semibold" data-oid="e5lkj-6">
             Generate Report
           </CardTitle>
         </CardHeader>
-        <CardContent className="flex items-center space-x-4" data-oid="dlwwnul">
+        <CardContent className="flex items-center space-x-4" data-oid="svf-9.b">
           <Select
             value={selectedReport}
             onValueChange={setSelectedReport}
-            data-oid="6z7u062"
+            data-oid=":eozln3"
           >
-            <SelectTrigger className="w-[240px]" data-oid="c7igjai">
+            <SelectTrigger className="w-[240px]" data-oid="ioos3u2">
               <SelectValue
                 placeholder="Select report type"
-                data-oid="2uo6r3u"
+                data-oid="ke0vpk4"
               />
             </SelectTrigger>
-            <SelectContent data-oid="643g.q6">
+            <SelectContent data-oid=":3hiajp">
               {reportTypes.map((type) => (
-                <SelectItem key={type} value={type} data-oid="xp2_pt7">
+                <SelectItem key={type} value={type} data-oid="o4w:_63">
                   {type}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          <Button onClick={handleGenerateReport} data-oid=".psktzh">
+          <Button onClick={handleGenerateReport} data-oid="w:q37:e">
             Generate Report
           </Button>
         </CardContent>
       </Card>
-      <Card data-oid="l_eld87">
-        <CardHeader data-oid="08.sd8_">
-          <CardTitle className="text-xl font-semibold" data-oid="gfgf_dp">
+      <Card data-oid="w9fyvw6">
+        <CardHeader data-oid="ch45jug">
+          <CardTitle className="text-xl font-semibold" data-oid="u_cdc37">
             {selectedReport} Report
           </CardTitle>
         </CardHeader>
-        <CardContent data-oid="r7kf0n2">
-          <Table data-oid="m7m3o-p">
-            <TableHeader data-oid="thb.b0p">
-              <TableRow data-oid="k5ez879">
-                <TableHead data-oid="tu68mtp">Metric</TableHead>
-                <TableHead data-oid="56g2zlf">Value</TableHead>
+        <CardContent data-oid=":tizgit">
+          <Table data-oid="yn2zbxh">
+            <TableHeader data-oid="fp3i.1m">
+              <TableRow data-oid="7aqzjk0">
+                <TableHead data-oid="-g5rcha">Metric</TableHead>
+                <TableHead data-oid="_ugg1nw">Value</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody data-oid="hessi6h">
+            <TableBody data-oid="k38ao90">
               {dummyReportData[selectedReport]?.map((row) => (
-                <TableRow key={row.id} data-oid="mblwmj8">
-                  <TableCell data-oid="kchzcic">{row.metric}</TableCell>
-                  <TableCell data-oid="0mzpfxh">{row.value}</TableCell>
+                <TableRow key={row.id} data-oid="ctksk1y">
+                  <TableCell data-oid="yec4-68">{row.metric}</TableCell>
+                  <TableCell data-oid="fmnzkk6">{row.value}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-          <div className="flex justify-end space-x-2 mt-4" data-oid="n7s2bf9">
+          <div className="flex justify-end space-x-2 mt-4" data-oid="._v4g:1">
             <Button
               variant="outline"
               onClick={handleDownloadReport}
-              data-oid="u1exgt9"
+              data-oid="lhq_f86"
             >
-              <Download className="mr-2 h-4 w-4" data-oid="q138.c1" />
+              <Download className="mr-2 h-4 w-4" data-oid="xavdk_7" />
               Download
             </Button>
             <Button
               variant="outline"
               onClick={handlePrintReport}
-              data-oid="uxjd.ts"
+              data-oid="-d_j717"
             >
-              <Printer className="mr-2 h-4 w-4" data-oid="qhr3gg0" />
+              <Printer className="mr-2 h-4 w-4" data-oid="xplowz4" />
               Print
             </Button>
           </div>
