@@ -84,8 +84,26 @@ model Announcement {
   // İlişkiler
   authorId    String
   author      User     @relation(fields: [authorId], references: [id])
+  attachments AnnouncementAttachment[] // Duyuru ekleri
 
   @@map("announcements")
+}
+
+// Duyuru Ekleri modeli
+model AnnouncementAttachment {
+  id           String   @id @default(uuid())
+  originalName String   // Orijinal dosya adı
+  fileName     String   // Sunucuda saklanan dosya adı
+  filePath     String   // Dosya yolu
+  fileSize     Int      // Dosya boyutu (bytes)
+  fileType     String   // MIME type
+  createdAt    DateTime @default(now())
+
+  // İlişkiler
+  announcementId String
+  announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+
+  @@map("announcement_attachments")
 }
 
 // Aidat modeli

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -22,57 +22,88 @@ import {
 import { Icons } from "@/components/icons";
 import { EditBlockDialog } from "@/components/blocks/edit-block-dialog";
 import { DeleteBlockDialog } from "@/components/blocks/delete-block-dialog";
+import { AddBlockDialog } from "@/components/blocks/add-block-dialog";
+import { toast } from "sonner";
+
+interface Block {
+  id: string;
+  name: string;
+  createdAt: string;
+  apartmentCount: number;
+}
 
 export function BlockList() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [editingBlock, setEditingBlock] = useState<any | null>(null);
-  const [deletingBlock, setDeletingBlock] = useState<any | null>(null);
+  const [editingBlock, setEditingBlock] = useState<Block | null>(null);
+  const [deletingBlock, setDeletingBlock] = useState<Block | null>(null);
+  const [addingBlock, setAddingBlock] = useState(false);
+  const [blocks, setBlocks] = useState<Block[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Örnek blok verileri
-  const blocks = [
-    { id: "1", name: "A Blok", createdAt: "2023-01-15", apartmentCount: 30 },
-    { id: "2", name: "B Blok", createdAt: "2023-01-15", apartmentCount: 25 },
-    { id: "3", name: "C Blok", createdAt: "2023-02-20", apartmentCount: 20 },
-    { id: "4", name: "D Blok", createdAt: "2023-03-10", apartmentCount: 30 },
-    { id: "5", name: "E Blok", createdAt: "2023-04-05", apartmentCount: 15 },
-  ];
+  // Blokları yükle
+  const fetchBlocks = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch("/api/blocks");
+      if (!response.ok) {
+        throw new Error("Bloklar yüklenirken hata oluştu");
+      }
+      const data = await response.json();
+      setBlocks(data);
+    } catch (error) {
+      console.error("Error fetching blocks:", error);
+      toast.error("Bloklar yüklenirken hata oluştu");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Component mount olduğunda blokları yükle
+  useEffect(() => {
+    fetchBlocks();
+  }, []);
 
   const filteredBlocks = blocks.filter((block) =>
     block.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
-    <div className="space-y-4" data-oid="_g750a-">
-      <div className="flex items-center gap-2" data-oid=".6qgf9-">
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
         <Input
           placeholder="Blok ara..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="max-w-sm"
-          data-oid="d6enja:"
         />
+        <Button onClick={() => setAddingBlock(true)}>
+          <Icons.plus className="mr-2 h-4 w-4" />
+          Yeni Blok
+        </Button>
       </div>
       <div className="rounded-md border" data-oid="2x:8v2x">
-        <Table data-oid="_sd.xi3">
-          <TableHeader data-oid="rysjibb">
-            <TableRow data-oid="90w_o7k">
-              <TableHead data-oid="6hc:r.z">Blok Adı</TableHead>
-              <TableHead data-oid="5-i8bgb">Oluşturulma Tarihi</TableHead>
-              <TableHead data-oid="h91kcyx">Daire Sayısı</TableHead>
-              <TableHead className="text-right" data-oid="mk5cm-.">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Blok Adı</TableHead>
+              <TableHead>Oluşturulma Tarihi</TableHead>
+              <TableHead>Daire Sayısı</TableHead>
+              <TableHead className="text-right">
                 İşlemler
               </TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody data-oid="wloc_cj">
-            {filteredBlocks.length === 0 ? (
-              <TableRow data-oid="mw6z7vo">
-                <TableCell
-                  colSpan={4}
-                  className="h-24 text-center"
-                  data-oid="07b:d_."
-                >
-                  Sonuç bulunamadı.
+          <TableBody>
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={4} className="h-24 text-center">
+                  Yükleniyor...
+                </TableCell>
+              </TableRow>
+            ) : filteredBlocks.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={4} className="h-24 text-center">
+                  {blocks.length === 0 ? "Henüz blok eklenmemiş." : "Sonuç bulunamadı."}
                 </TableCell>
               </TableRow>
             ) : (
@@ -157,7 +188,7 @@ export function BlockList() {
           block={editingBlock}
           open={!!editingBlock}
           onOpenChange={() => setEditingBlock(null)}
-          data-oid="7s4._53"
+          onBlockUpdated={fetchBlocks}
         />
       )}
       {deletingBlock && (
@@ -165,9 +196,14 @@ export function BlockList() {
           block={deletingBlock}
           open={!!deletingBlock}
           onOpenChange={() => setDeletingBlock(null)}
-          data-oid="uev8_6:"
+          onBlockDeleted={fetchBlocks}
         />
       )}
+      <AddBlockDialog
+        open={addingBlock}
+        onOpenChange={setAddingBlock}
+        onBlockAdded={fetchBlocks}
+      />
     </div>
   );
 }

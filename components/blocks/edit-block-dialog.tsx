@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 interface EditBlockDialogProps {
   block: {
@@ -21,26 +22,60 @@ interface EditBlockDialogProps {
   };
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onBlockUpdated: () => void;
 }
 
 export function EditBlockDialog({
   block,
   open,
   onOpenChange,
+  onBlockUpdated,
 }: EditBlockDialogProps) {
   const [name, setName] = useState(block.name);
-  const [apartmentCount, setApartmentCount] = useState(
-    block.apartmentCount.toString(),
-  );
   const [isLoading, setIsLoading] = useState(false);
 
+  // Block değiştiğinde form'u güncelle
+  useEffect(() => {
+    setName(block.name);
+  }, [block]);
+
   const handleSave = async () => {
-    setIsLoading(true);
-    // TODO: Implement save logic
-    setTimeout(() => {
-      setIsLoading(false);
+    if (!name.trim()) {
+      toast.error("Blok adı gereklidir");
+      return;
+    }
+
+    if (name.trim() === block.name) {
+      toast.info("Herhangi bir değişiklik yapılmadı");
       onOpenChange(false);
-    }, 1000);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/blocks/${block.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name: name.trim() }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Blok güncellenirken hata oluştu");
+      }
+
+      toast.success("Blok başarıyla güncellendi");
+      onOpenChange(false);
+      onBlockUpdated();
+    } catch (error) {
+      console.error("Error updating block:", error);
+      toast.error(error instanceof Error ? error.message : "Blok güncellenirken hata oluştu");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -69,25 +104,13 @@ export function EditBlockDialog({
               data-oid="_1rz3cu"
             />
           </div>
-          <div
-            className="grid grid-cols-4 items-center gap-4"
-            data-oid="aennswp"
-          >
-            <Label
-              htmlFor="apartmentCount"
-              className="text-right"
-              data-oid="-zyxs17"
-            >
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label className="text-right">
               Daire Sayısı
             </Label>
-            <Input
-              id="apartmentCount"
-              type="number"
-              value={apartmentCount}
-              onChange={(e) => setApartmentCount(e.target.value)}
-              className="col-span-3"
-              data-oid="9b1s0s8"
-            />
+            <div className="col-span-3 text-sm text-muted-foreground">
+              {block.apartmentCount} daire (otomatik hesaplanır)
+            </div>
           </div>
         </div>
         <DialogFooter data-oid="y:obzv:">

@@ -1,6 +1,7 @@
 import {
   AlertTriangle,
   ArrowRight,
+  ArrowLeft,
   Check,
   ChevronLeft,
   ChevronRight,
@@ -14,6 +15,7 @@ import {
   Loader2,
   Moon,
   MoreVertical,
+  MoreHorizontal,
   Pizza,
   Plus,
   Settings,
@@ -32,6 +34,11 @@ import {
   BarChart,
   LogOut,
   Menu,
+  Eye,
+  Edit,
+  Shield,
+  Clock,
+  Hash,
   type LucideIcon,
 } from "lucide-react";
 
@@ -47,6 +54,7 @@ export const Icons = {
   settings: Settings,
   user: User,
   arrowRight: ArrowRight,
+  arrowLeft: ArrowLeft,
   help: HelpCircle,
   pizza: Pizza,
   sun: SunMedium,
@@ -54,6 +62,7 @@ export const Icons = {
   laptop: Laptop,
   billing: CreditCard,
   ellipsis: MoreVertical,
+  moreHorizontal: MoreHorizontal,
   warning: AlertTriangle,
   file: File,
   fileText: FileText,
@@ -71,4 +80,9 @@ export const Icons = {
   logout: LogOut,
   menu: Menu,
   twitter: Twitter,
+  eye: Eye,
+  edit: Edit,
+  shield: Shield,
+  clock: Clock,
+  hash: Hash,
 };

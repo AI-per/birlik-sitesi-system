@@ -30,7 +30,9 @@ import {
 } from "@/components/ui/tooltip";
 
 const navigation = [
-  { name: "Dashboard", href: "/", icon: Home },
+  { name: "Dashboard", href: "/dashboard", icon: Home },
+  { name: "Bloklar", href: "/dashboard/blocks", icon: Building2 },
+  { name: "Daireler", href: "/dashboard/apartments", icon: Home },
   { name: "Analytics", href: "/analytics", icon: BarChart2 },
   { name: "Organization", href: "/organization", icon: Building2 },
   { name: "Projects", href: "/projects", icon: Folder },
@@ -53,7 +55,7 @@ export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  const NavItem = ({ item, isBottom = false }) => (
+  const NavItem = ({ item, isBottom = false }: { item: any; isBottom?: boolean }) => (
     <Tooltip delayDuration={0} data-oid="kblieix">
       <TooltipTrigger asChild data-oid="-dmm7qh">
         <Link

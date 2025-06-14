@@ -10,6 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { toast } from "sonner";
 
 interface DeleteBlockDialogProps {
   block: {
@@ -18,22 +19,39 @@ interface DeleteBlockDialogProps {
   };
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onBlockDeleted: () => void;
 }
 
 export function DeleteBlockDialog({
   block,
   open,
   onOpenChange,
+  onBlockDeleted,
 }: DeleteBlockDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleDelete = async () => {
     setIsLoading(true);
-    // TODO: Implement delete logic
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const response = await fetch(`/api/blocks/${block.id}`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Blok silinirken hata oluştu");
+      }
+
+      toast.success("Blok başarıyla silindi");
       onOpenChange(false);
-    }, 1000);
+      onBlockDeleted();
+    } catch (error) {
+      console.error("Error deleting block:", error);
+      toast.error(error instanceof Error ? error.message : "Blok silinirken hata oluştu");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
