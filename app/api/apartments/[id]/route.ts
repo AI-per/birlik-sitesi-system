@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { formatDate } from "@/lib/utils";
 
-// GET /api/apartments/[id] - Tek daire detayı
+// GET /api/apartments/[id] - Daire detaylarını getir
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -11,15 +12,7 @@ export async function GET(
       where: { id: params.id },
       include: {
         block: true,
-        residents: {
-          select: {
-            id: true,
-            fullName: true,
-            email: true,
-            phone: true,
-            role: true,
-          },
-        },
+        residents: true,
         dues: {
           include: {
             payment: true,
@@ -38,29 +31,17 @@ export async function GET(
       );
     }
 
-    const apartmentWithDetails = {
-      id: apartment.id,
-      number: apartment.number,
-      floor: apartment.floor,
-      type: apartment.type,
-      squareMeters: apartment.squareMeters,
-      blockId: apartment.blockId,
-      blockName: apartment.block.name,
-      createdAt: apartment.createdAt.toISOString().split('T')[0],
-      residents: apartment.residents,
+    const formattedApartment = {
+      ...apartment,
+      createdAt: formatDate(new Date(apartment.createdAt)),
       dues: apartment.dues.map((due: any) => ({
-        id: due.id,
-        amount: Number(due.amount),
-        dueDate: due.dueDate.toISOString().split('T')[0],
-        month: due.month,
-        year: due.year,
-        description: due.description,
-        isPaid: !!due.payment,
-        paymentDate: due.payment?.paymentDate?.toISOString().split('T')[0] || null,
+        ...due,
+        dueDate: formatDate(new Date(due.dueDate)),
+        paymentDate: due.payment?.paymentDate ? formatDate(new Date(due.payment.paymentDate)) : null,
       })),
     };
 
-    return NextResponse.json(apartmentWithDetails);
+    return NextResponse.json(formattedApartment);
   } catch (error) {
     console.error("Error fetching apartment:", error);
     return NextResponse.json(
@@ -79,30 +60,19 @@ export async function PUT(
     const body = await request.json();
     const { number, floor, type, squareMeters, blockId } = body;
 
-    // Validasyon
-    if (!number || floor === undefined || !blockId) {
+    // Gerekli alanları kontrol et
+    if (!number || !floor || !blockId) {
       return NextResponse.json(
-        { error: "Daire numarası, kat ve blok bilgisi gereklidir" },
+        { error: "Daire numarası, kat ve blok gereklidir" },
         { status: 400 }
       );
     }
 
-    if (typeof floor !== 'number' || floor < 0) {
+    const floorNum = parseInt(floor);
+    if (isNaN(floorNum) || floorNum < 0) {
       return NextResponse.json(
         { error: "Kat numarası geçerli bir sayı olmalıdır" },
         { status: 400 }
-      );
-    }
-
-    // Mevcut daire var mı kontrol et
-    const existingApartment = await db.apartment.findUnique({
-      where: { id: params.id },
-    });
-
-    if (!existingApartment) {
-      return NextResponse.json(
-        { error: "Daire bulunamadı" },
-        { status: 404 }
       );
     }
 
@@ -118,18 +88,20 @@ export async function PUT(
       );
     }
 
-    // Aynı blokta aynı numaralı başka daire var mı kontrol et (kendisi hariç)
-    const duplicateApartment = await db.apartment.findFirst({
+    // Aynı blokta aynı numaralı başka daire var mı kontrol et
+    const existingApartment = await db.apartment.findFirst({
       where: {
         blockId,
-        number: number.toString(),
-        id: { not: params.id },
+        number: number.trim(),
+        NOT: {
+          id: params.id
+        }
       },
     });
 
-    if (duplicateApartment) {
+    if (existingApartment) {
       return NextResponse.json(
-        { error: "Bu blokta aynı numaralı daire zaten mevcut" },
+        { error: "Bu blokta aynı numaralı bir daire zaten mevcut" },
         { status: 400 }
       );
     }
@@ -137,10 +109,10 @@ export async function PUT(
     const updatedApartment = await db.apartment.update({
       where: { id: params.id },
       data: {
-        number: number.toString(),
-        floor: parseInt(floor.toString()),
-        type: type || null,
-        squareMeters: squareMeters ? parseInt(squareMeters.toString()) : null,
+        number: number.trim(),
+        floor: floorNum,
+        type: type?.trim() || null,
+        squareMeters: squareMeters ? parseInt(squareMeters) : null,
         blockId,
       },
       include: {
@@ -150,16 +122,8 @@ export async function PUT(
     });
 
     return NextResponse.json({
-      id: updatedApartment.id,
-      number: updatedApartment.number,
-      floor: updatedApartment.floor,
-      type: updatedApartment.type,
-      squareMeters: updatedApartment.squareMeters,
-      blockId: updatedApartment.blockId,
-      blockName: updatedApartment.block.name,
-      createdAt: updatedApartment.createdAt.toISOString().split('T')[0],
-      residentCount: updatedApartment.residents.length,
-      residents: updatedApartment.residents,
+      ...updatedApartment,
+      createdAt: formatDate(new Date(updatedApartment.createdAt)),
     });
   } catch (error) {
     console.error("Error updating apartment:", error);
@@ -176,44 +140,13 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Mevcut daire var mı kontrol et
-    const existingApartment = await db.apartment.findUnique({
-      where: { id: params.id },
-      include: {
-        residents: true,
-        dues: true,
-      },
-    });
-
-    if (!existingApartment) {
-      return NextResponse.json(
-        { error: "Daire bulunamadı" },
-        { status: 404 }
-      );
-    }
-
-    // Dairede sakin var mı kontrol et
-    if (existingApartment.residents.length > 0) {
-      return NextResponse.json(
-        { error: "Bu dairede sakinler bulunduğu için silinemez. Önce sakini kaldırın." },
-        { status: 400 }
-      );
-    }
-
-    // Ödenmemiş aidat var mı kontrol et
-    const unpaidDues = existingApartment.dues.filter((due: any) => !due.payment);
-    if (unpaidDues.length > 0) {
-      return NextResponse.json(
-        { error: "Bu dairenin ödenmemiş aidatları bulunduğu için silinemez." },
-        { status: 400 }
-      );
-    }
-
     await db.apartment.delete({
       where: { id: params.id },
     });
 
-    return NextResponse.json({ message: "Daire başarıyla silindi" });
+    return NextResponse.json({
+      message: "Daire başarıyla silindi",
+    });
   } catch (error) {
     console.error("Error deleting apartment:", error);
     return NextResponse.json(

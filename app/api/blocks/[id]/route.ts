@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { formatDate } from "@/lib/utils";
 
-// GET /api/blocks/[id] - Tek blok detayı
+// GET /api/blocks/[id] - Blok detaylarını getir
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -10,7 +11,14 @@ export async function GET(
     const block = await db.block.findUnique({
       where: { id: params.id },
       include: {
-        apartments: true,
+        apartments: {
+          include: {
+            residents: true,
+          },
+          orderBy: {
+            number: 'asc',
+          },
+        },
       },
     });
 
@@ -24,13 +32,26 @@ export async function GET(
     return NextResponse.json({
       id: block.id,
       name: block.name,
-      createdAt: block.createdAt.toISOString().split('T')[0],
+      createdAt: formatDate(new Date(block.createdAt)),
       apartmentCount: block.apartments.length,
+      apartments: block.apartments.map((apartment: any) => ({
+        id: apartment.id,
+        number: apartment.number,
+        floor: apartment.floor,
+        type: apartment.type,
+        squareMeters: apartment.squareMeters,
+        residents: apartment.residents.map((resident: any) => ({
+          id: resident.id,
+          fullName: resident.fullName,
+          email: resident.email,
+          phone: resident.phone,
+        })),
+      })),
     });
   } catch (error) {
-    console.error("Error fetching block:", error);
+    console.error("Error fetching block details:", error);
     return NextResponse.json(
-      { error: "Blok yüklenirken hata oluştu" },
+      { error: "Blok detayları yüklenirken hata oluştu" },
       { status: 500 }
     );
   }
@@ -52,27 +73,17 @@ export async function PUT(
       );
     }
 
-    // Mevcut blok var mı kontrol et
-    const existingBlock = await db.block.findUnique({
-      where: { id: params.id },
-    });
-
-    if (!existingBlock) {
-      return NextResponse.json(
-        { error: "Blok bulunamadı" },
-        { status: 404 }
-      );
-    }
-
-    // Aynı isimde başka blok var mı kontrol et (kendisi hariç)
-    const duplicateBlock = await db.block.findFirst({
-      where: {
+    // Aynı isimde başka blok var mı kontrol et
+    const existingBlock = await db.block.findFirst({
+      where: { 
         name: name.trim(),
-        id: { not: params.id },
+        NOT: {
+          id: params.id
+        }
       },
     });
 
-    if (duplicateBlock) {
+    if (existingBlock) {
       return NextResponse.json(
         { error: "Bu isimde bir blok zaten mevcut" },
         { status: 400 }
@@ -81,7 +92,9 @@ export async function PUT(
 
     const updatedBlock = await db.block.update({
       where: { id: params.id },
-      data: { name: name.trim() },
+      data: {
+        name: name.trim(),
+      },
       include: {
         apartments: true,
       },
@@ -90,7 +103,7 @@ export async function PUT(
     return NextResponse.json({
       id: updatedBlock.id,
       name: updatedBlock.name,
-      createdAt: updatedBlock.createdAt.toISOString().split('T')[0],
+      createdAt: formatDate(new Date(updatedBlock.createdAt)),
       apartmentCount: updatedBlock.apartments.length,
     });
   } catch (error) {
@@ -108,39 +121,13 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Mevcut blok var mı kontrol et
-    const existingBlock = await db.block.findUnique({
-      where: { id: params.id },
-      include: {
-        apartments: {
-          include: {
-            residents: true,
-            dues: true,
-          },
-        },
-      },
-    });
-
-    if (!existingBlock) {
-      return NextResponse.json(
-        { error: "Blok bulunamadı" },
-        { status: 404 }
-      );
-    }
-
-    // Blokta daire var mı kontrol et
-    if (existingBlock.apartments.length > 0) {
-      return NextResponse.json(
-        { error: "Bu blokta daireler bulunduğu için silinemez. Önce daireleri silin." },
-        { status: 400 }
-      );
-    }
-
     await db.block.delete({
       where: { id: params.id },
     });
 
-    return NextResponse.json({ message: "Blok başarıyla silindi" });
+    return NextResponse.json({
+      message: "Blok başarıyla silindi",
+    });
   } catch (error) {
     console.error("Error deleting block:", error);
     return NextResponse.json(

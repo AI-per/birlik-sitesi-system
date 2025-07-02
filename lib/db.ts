@@ -6,11 +6,26 @@ declare global {
 }
 
 let prisma: PrismaClient
+
 if (process.env.NODE_ENV === 'production') {
-  prisma = new PrismaClient()
+  prisma = new PrismaClient({
+    log: ['query', 'info', 'warn', 'error'],
+    datasources: {
+      db: {
+        url: process.env.DATABASE_URL
+      }
+    }
+  })
 } else {
   if (!global.cachedPrisma) {
-    global.cachedPrisma = new PrismaClient()
+    global.cachedPrisma = new PrismaClient({
+      log: ['query', 'info', 'warn', 'error'],
+      datasources: {
+        db: {
+          url: process.env.DATABASE_URL || process.env.DATABASE_URL || "postgresql://postgres:password@localhost:5432/birlik_sitesi?schema=public"
+        }
+      }
+    })
   }
   prisma = global.cachedPrisma
 }

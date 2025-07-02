@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import bcrypt from "bcrypt";
+import { formatDate } from "@/lib/utils";
+import bcrypt from "bcryptjs";
 
-// GET /api/users/[id] - Tek kullanıcı detayı
+// GET /api/users/[id] - Kullanıcı detaylarını getir
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -34,35 +35,23 @@ export async function GET(
       );
     }
 
-    const userWithDetails = {
-      id: user.id,
-      fullName: user.fullName,
-      email: user.email,
-      phone: user.phone,
-      role: user.role,
-      isActive: user.isActive,
-      createdAt: user.createdAt.toISOString().split('T')[0],
+    // Şifreyi response'tan çıkar
+    const { password, ...userWithoutPassword } = user;
+
+    const formattedUser = {
+      ...userWithoutPassword,
+      createdAt: formatDate(new Date(user.createdAt)),
       apartment: user.apartment ? {
-        id: user.apartment.id,
-        number: user.apartment.number,
-        floor: user.apartment.floor,
-        type: user.apartment.type,
-        squareMeters: user.apartment.squareMeters,
-        blockName: user.apartment.block.name,
+        ...user.apartment,
+        dues: user.apartment.dues.map((due: any) => ({
+          ...due,
+          dueDate: formatDate(new Date(due.dueDate)),
+          paymentDate: due.payment?.paymentDate ? formatDate(new Date(due.payment.paymentDate)) : null,
+        })),
       } : null,
-      dues: user.apartment?.dues?.map((due: any) => ({
-        id: due.id,
-        amount: Number(due.amount),
-        dueDate: due.dueDate.toISOString().split('T')[0],
-        month: due.month,
-        year: due.year,
-        description: due.description,
-        isPaid: !!due.payment,
-        paymentDate: due.payment?.paymentDate?.toISOString().split('T')[0] || null,
-      })) || [],
     };
 
-    return NextResponse.json(userWithDetails);
+    return NextResponse.json(formattedUser);
   } catch (error) {
     console.error("Error fetching user:", error);
     return NextResponse.json(
@@ -79,7 +68,24 @@ export async function PUT(
 ) {
   try {
     const body = await request.json();
-    const { fullName, email, phone, role, apartmentId, isActive, password } = body;
+    const { email, password, fullName, phone, role, apartmentId, isActive } = body;
+
+    // Gerekli alanları kontrol et
+    if (!email || !fullName) {
+      return NextResponse.json(
+        { error: "Email ve tam ad gereklidir" },
+        { status: 400 }
+      );
+    }
+
+    // Email formatını kontrol et
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { error: "Geçerli bir email adresi girin" },
+        { status: 400 }
+      );
+    }
 
     // Mevcut kullanıcı var mı kontrol et
     const existingUser = await db.user.findUnique({
@@ -93,48 +99,25 @@ export async function PUT(
       );
     }
 
-    // Validasyon
-    if (!fullName || !email || !role) {
+    // Email başka kullanıcıda kullanılıyor mu kontrol et
+    const emailExists = await db.user.findFirst({
+      where: { 
+        email,
+        NOT: {
+          id: params.id
+        }
+      },
+    });
+
+    if (emailExists) {
       return NextResponse.json(
-        { error: "Ad soyad, e-posta ve rol bilgisi gereklidir" },
+        { error: "Bu email adresi başka bir kullanıcı tarafından kullanılıyor" },
         { status: 400 }
       );
     }
 
-    // E-posta formatı kontrolü
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: "Geçerli bir e-posta adresi giriniz" },
-        { status: 400 }
-      );
-    }
-
-    // Rol kontrolü
-    const validRoles = ['RESIDENT', 'MANAGER', 'ADMIN'];
-    if (!validRoles.includes(role)) {
-      return NextResponse.json(
-        { error: "Geçersiz rol seçimi" },
-        { status: 400 }
-      );
-    }
-
-    // E-posta benzersizlik kontrolü (kendi e-postası hariç)
-    if (email !== existingUser.email) {
-      const emailExists = await db.user.findUnique({
-        where: { email },
-      });
-
-      if (emailExists) {
-        return NextResponse.json(
-          { error: "Bu e-posta adresi zaten kullanılıyor" },
-          { status: 400 }
-        );
-      }
-    }
-
-    // Daire kontrolü (eğer belirtilmişse)
-    if (apartmentId) {
+    // Apartment ID varsa kontrol et
+    if (apartmentId && apartmentId !== existingUser.apartmentId) {
       const apartment = await db.apartment.findUnique({
         where: { id: apartmentId },
       });
@@ -145,20 +128,38 @@ export async function PUT(
           { status: 400 }
         );
       }
+
+      // Bu daireye başka resident atanmış mı kontrol et
+      const existingResident = await db.user.findFirst({
+        where: { 
+          apartmentId: apartmentId,
+          role: 'RESIDENT',
+          NOT: {
+            id: params.id
+          }
+        },
+      });
+
+      if (existingResident) {
+        return NextResponse.json(
+          { error: "Bu dairede zaten başka bir sakin kayıtlı" },
+          { status: 400 }
+        );
+      }
     }
 
-    // Güncelleme verisi hazırla
+    // Update verilerini hazırla
     const updateData: any = {
-      fullName,
       email,
+      fullName,
       phone: phone || null,
-      role,
+      role: role || existingUser.role,
       apartmentId: apartmentId || null,
-      isActive: isActive !== undefined ? isActive : true,
+      isActive: isActive !== undefined ? isActive : existingUser.isActive,
     };
 
-    // Şifre güncellemesi varsa hash'le
-    if (password && password.trim()) {
+    // Şifre varsa hashle ve ekle
+    if (password && password.trim() !== '') {
       updateData.password = await bcrypt.hash(password, 12);
     }
 
@@ -174,22 +175,21 @@ export async function PUT(
       },
     });
 
+    // Şifreyi response'tan çıkar
+    const { password: _, ...userWithoutPassword } = updatedUser;
+
     return NextResponse.json({
-      id: updatedUser.id,
-      fullName: updatedUser.fullName,
-      email: updatedUser.email,
-      phone: updatedUser.phone,
-      role: updatedUser.role,
-      isActive: updatedUser.isActive,
-      createdAt: updatedUser.createdAt.toISOString().split('T')[0],
+      ...userWithoutPassword,
+      createdAt: formatDate(new Date(updatedUser.createdAt)),
       apartment: updatedUser.apartment ? {
         id: updatedUser.apartment.id,
         number: updatedUser.apartment.number,
         floor: updatedUser.apartment.floor,
-        blockName: updatedUser.apartment.block.name,
+        block: {
+          id: updatedUser.apartment.block.id,
+          name: updatedUser.apartment.block.name,
+        },
       } : null,
-      unpaidDuesCount: 0,
-      totalUnpaidAmount: 0,
     });
   } catch (error) {
     console.error("Error updating user:", error);
@@ -206,51 +206,13 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Mevcut kullanıcı var mı kontrol et
-    const existingUser = await db.user.findUnique({
-      where: { id: params.id },
-      include: {
-        apartment: {
-          include: {
-            dues: {
-              include: {
-                payment: true,
-              },
-            },
-          },
-        },
-      },
-    });
-
-    if (!existingUser) {
-      return NextResponse.json(
-        { error: "Kullanıcı bulunamadı" },
-        { status: 404 }
-      );
-    }
-
-    // Admin kullanıcı silinmesin
-    if (existingUser.role === 'ADMIN') {
-      return NextResponse.json(
-        { error: "Admin kullanıcıları silinemez" },
-        { status: 400 }
-      );
-    }
-
-    // Ödenmemiş aidat var mı kontrol et
-    const unpaidDues = existingUser.apartment?.dues?.filter((due: any) => !due.payment) || [];
-    if (unpaidDues.length > 0) {
-      return NextResponse.json(
-        { error: "Bu kullanıcının ödenmemiş aidatları bulunduğu için silinemez." },
-        { status: 400 }
-      );
-    }
-
     await db.user.delete({
       where: { id: params.id },
     });
 
-    return NextResponse.json({ message: "Kullanıcı başarıyla silindi" });
+    return NextResponse.json({
+      message: "Kullanıcı başarıyla silindi",
+    });
   } catch (error) {
     console.error("Error deleting user:", error);
     return NextResponse.json(

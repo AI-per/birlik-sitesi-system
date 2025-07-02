@@ -1,5 +1,76 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
+// import { db } from "@/lib/db";
+
+// Mock data for testing
+const mockApartments = [
+  {
+    id: "apt-1",
+    number: "A-101",
+    floor: 1,
+    type: "2+1",
+    squareMeters: 85,
+    blockId: "block-1",
+    block: {
+      id: "block-1",
+      name: "A Blok"
+    },
+    resident: {
+      id: "user-1",
+      fullName: "Ali Kaya",
+      email: "ali.kaya@email.com",
+      phone: "0532 123 45 67"
+    }
+  },
+  {
+    id: "apt-2",
+    number: "A-102",
+    floor: 1,
+    type: "3+1",
+    squareMeters: 110,
+    blockId: "block-1",
+    block: {
+      id: "block-1",
+      name: "A Blok"
+    },
+    resident: {
+      id: "user-2",
+      fullName: "Ayşe Demir",
+      email: "ayse.demir@email.com",
+      phone: "0533 234 56 78"
+    }
+  },
+  {
+    id: "apt-3",
+    number: "B-201",
+    floor: 2,
+    type: "2+1",
+    squareMeters: 90,
+    blockId: "block-2",
+    block: {
+      id: "block-2",
+      name: "B Blok"
+    },
+    resident: {
+      id: "user-3",
+      fullName: "Mehmet Özkan",
+      email: "mehmet.ozkan@email.com",
+      phone: "0534 345 67 89"
+    }
+  },
+  {
+    id: "apt-4",
+    number: "B-202",
+    floor: 2,
+    type: "3+1",
+    squareMeters: 120,
+    blockId: "block-2",
+    block: {
+      id: "block-2",
+      name: "B Blok"
+    },
+    resident: null
+  }
+];
 
 // GET /api/apartments - Tüm daireleri listele
 export async function GET(request: NextRequest) {
@@ -7,56 +78,13 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const blockId = searchParams.get('blockId');
 
-    const whereClause = blockId ? { blockId } : {};
+    let filteredApartments = [...mockApartments];
+    
+    if (blockId) {
+      filteredApartments = filteredApartments.filter(apt => apt.blockId === blockId);
+    }
 
-    const apartments = await db.apartment.findMany({
-      where: whereClause,
-      include: {
-        block: true,
-        residents: {
-          select: {
-            id: true,
-            fullName: true,
-            email: true,
-            phone: true,
-          },
-        },
-        dues: {
-          where: {
-            payment: null, // Ödenmemiş aidatlar
-          },
-          select: {
-            id: true,
-            amount: true,
-            dueDate: true,
-            month: true,
-            year: true,
-          },
-        },
-      },
-      orderBy: [
-        { block: { name: 'asc' } },
-        { floor: 'asc' },
-        { number: 'asc' },
-      ],
-    });
-
-    const apartmentsWithDetails = apartments.map((apartment: any) => ({
-      id: apartment.id,
-      number: apartment.number,
-      floor: apartment.floor,
-      type: apartment.type,
-      squareMeters: apartment.squareMeters,
-      blockId: apartment.blockId,
-      blockName: apartment.block.name,
-      createdAt: apartment.createdAt.toISOString().split('T')[0],
-      residentCount: apartment.residents.length,
-      residents: apartment.residents,
-      unpaidDuesCount: apartment.dues.length,
-      totalUnpaidAmount: apartment.dues.reduce((sum: number, due: any) => sum + Number(due.amount), 0),
-    }));
-
-    return NextResponse.json(apartmentsWithDetails);
+    return NextResponse.json(filteredApartments);
   } catch (error) {
     console.error("Error fetching apartments:", error);
     return NextResponse.json(
@@ -87,27 +115,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Blok var mı kontrol et
-    const block = await db.block.findUnique({
-      where: { id: blockId },
-    });
-
-    if (!block) {
-      return NextResponse.json(
-        { error: "Seçilen blok bulunamadı" },
-        { status: 400 }
-      );
-    }
-
     // Aynı blokta aynı numaralı daire var mı kontrol et
-    const existingApartment = await db.apartment.findUnique({
-      where: {
-        blockId_number: {
-          blockId,
-          number: number.toString(),
-        },
-      },
-    });
+    const existingApartment = mockApartments.find(apt => 
+      apt.blockId === blockId && apt.number === number.toString()
+    );
 
     if (existingApartment) {
       return NextResponse.json(
@@ -116,34 +127,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const apartment = await db.apartment.create({
-      data: {
-        number: number.toString(),
-        floor: parseInt(floor.toString()),
-        type: type || null,
-        squareMeters: squareMeters ? parseInt(squareMeters.toString()) : null,
-        blockId,
+    // Yeni daire oluştur
+    const newApartment = {
+      id: `apt-${mockApartments.length + 1}`,
+      number: number.toString(),
+      floor: parseInt(floor.toString()),
+      type: type || "2+1",
+      squareMeters: squareMeters ? parseInt(squareMeters.toString()) : 85,
+      blockId,
+      block: {
+        id: blockId,
+        name: blockId === "block-1" ? "A Blok" : "B Blok"
       },
-      include: {
-        block: true,
-        residents: true,
-      },
-    });
+      resident: null
+    };
 
-    return NextResponse.json({
-      id: apartment.id,
-      number: apartment.number,
-      floor: apartment.floor,
-      type: apartment.type,
-      squareMeters: apartment.squareMeters,
-      blockId: apartment.blockId,
-      blockName: apartment.block.name,
-      createdAt: apartment.createdAt.toISOString().split('T')[0],
-      residentCount: apartment.residents.length,
-      residents: apartment.residents,
-      unpaidDuesCount: 0,
-      totalUnpaidAmount: 0,
-    }, { status: 201 });
+    // Mock data'ya ekle (type assertion kullanarak)
+    (mockApartments as any[]).push(newApartment);
+
+    return NextResponse.json(newApartment, { status: 201 });
   } catch (error) {
     console.error("Error creating apartment:", error);
     return NextResponse.json(
