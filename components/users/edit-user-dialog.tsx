@@ -103,7 +103,7 @@ export function EditUserDialog({
   };
 
   const handleSave = async () => {
-    if (!fullName.trim() || !email.trim() || !role) {
+    if (!fullName.trim() || !phone.trim() || !role) {
       toast.error("Lütfen gerekli alanları doldurun");
       return;
     }
@@ -122,8 +122,8 @@ export function EditUserDialog({
         },
         body: JSON.stringify({
           fullName: fullName.trim(),
-          email: email.trim(),
-          phone: phone.trim() || null,
+          email: email.trim() || null,
+          phone: phone.trim(),
           role,
           apartmentId: apartmentId || null,
           isActive,
@@ -152,6 +152,8 @@ export function EditUserDialog({
     switch (roleValue) {
       case 'RESIDENT':
         return 'Sakin';
+      case 'LANDLORD':
+        return 'Daire Sahibi';
       case 'MANAGER':
         return 'Yönetici';
       case 'ADMIN':
@@ -185,7 +187,7 @@ export function EditUserDialog({
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="email" className="text-right">
-              E-posta *
+              E-posta
             </Label>
             <Input
               id="email"
@@ -193,12 +195,12 @@ export function EditUserDialog({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="col-span-3"
-              placeholder="Örn: ahmet@example.com"
+              placeholder="Örn: ahmet@example.com (opsiyonel)"
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="phone" className="text-right">
-              Telefon
+              Telefon *
             </Label>
             <Input
               id="phone"
@@ -218,6 +220,7 @@ export function EditUserDialog({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="RESIDENT">Sakin</SelectItem>
+                <SelectItem value="LANDLORD">Daire Sahibi</SelectItem>
                 <SelectItem value="MANAGER">Yönetici</SelectItem>
                 <SelectItem value="ADMIN">Admin</SelectItem>
               </SelectContent>
@@ -291,7 +294,7 @@ export function EditUserDialog({
           </Button>
           <Button 
             onClick={handleSave} 
-            disabled={isLoading || !fullName.trim() || !email.trim() || !role}
+            disabled={isLoading || !fullName.trim() || !phone.trim() || !role}
           >
             {isLoading ? "Güncelleniyor..." : "Kaydet"}
           </Button>

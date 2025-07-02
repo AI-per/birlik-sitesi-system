@@ -32,11 +32,23 @@ export async function GET(
     }
 
     const formattedApartment = {
-      ...apartment,
+      id: apartment.id,
+      number: apartment.number,
+      floor: apartment.floor,
+      type: apartment.type,
+      squareMeters: apartment.squareMeters,
+      blockId: apartment.blockId,
+      blockName: apartment.block.name,
       createdAt: formatDate(new Date(apartment.createdAt)),
+      residents: apartment.residents,
       dues: apartment.dues.map((due: any) => ({
-        ...due,
+        id: due.id,
+        amount: Number(due.amount),
+        month: due.month,
+        year: due.year,
+        description: due.description,
         dueDate: formatDate(new Date(due.dueDate)),
+        isPaid: !!due.payment,
         paymentDate: due.payment?.paymentDate ? formatDate(new Date(due.payment.paymentDate)) : null,
       })),
     };

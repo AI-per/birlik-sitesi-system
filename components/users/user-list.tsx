@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -39,6 +40,7 @@ interface User {
   role: string;
   isActive: boolean;
   createdAt: string;
+  detail_url?: string;
   apartment: {
     id: string;
     number: string;
@@ -50,6 +52,7 @@ interface User {
 }
 
 export function UserList() {
+  const router = useRouter();
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -101,6 +104,8 @@ export function UserList() {
     switch (role) {
       case 'RESIDENT':
         return 'Sakin';
+      case 'LANDLORD':
+        return 'Daire Sahibi';
       case 'MANAGER':
         return 'Yönetici';
       case 'ADMIN':
@@ -116,6 +121,8 @@ export function UserList() {
         return 'destructive';
       case 'MANAGER':
         return 'default';
+      case 'LANDLORD':
+        return 'outline';
       case 'RESIDENT':
         return 'secondary';
       default:
@@ -128,6 +135,23 @@ export function UserList() {
       style: 'currency',
       currency: 'TRY',
     }).format(amount);
+  };
+
+  // Handle row click for navigation
+  const handleRowClick = (user: User, event: React.MouseEvent) => {
+    // Don't navigate if detail_url is not available or empty
+    if (!user.detail_url || user.detail_url.trim() === '') {
+      return;
+    }
+
+    // Don't navigate if clicking on links or dropdown menu trigger
+    const target = event.target as HTMLElement;
+    if (target.closest('a') || target.closest('[role="button"]') || target.closest('button')) {
+      return;
+    }
+
+    // Navigate to detail page
+    router.push(user.detail_url);
   };
 
   return (
@@ -147,6 +171,7 @@ export function UserList() {
             <SelectContent>
               <SelectItem value="all">Tüm Roller</SelectItem>
               <SelectItem value="RESIDENT">Sakin</SelectItem>
+              <SelectItem value="LANDLORD">Daire Sahibi</SelectItem>
               <SelectItem value="MANAGER">Yönetici</SelectItem>
               <SelectItem value="ADMIN">Admin</SelectItem>
             </SelectContent>
@@ -197,7 +222,15 @@ export function UserList() {
               </TableRow>
             ) :
               filteredUsers.map((user) => (
-                <TableRow key={user.id}>
+                <TableRow 
+                  key={user.id}
+                  className={
+                    user.detail_url && user.detail_url.trim() !== ''
+                      ? "cursor-pointer hover:bg-muted/50 transition-colors"
+                      : "cursor-default"
+                  }
+                  onClick={(event) => handleRowClick(user, event)}
+                >
                   <TableCell className="font-medium">
                     <Link 
                       href={`/dashboard/users/${user.id}`}
@@ -255,7 +288,11 @@ export function UserList() {
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
+                        <Button 
+                          variant="ghost" 
+                          className="h-8 w-8 p-0"
+                          onClick={(event) => event.stopPropagation()}
+                        >
                           <span className="sr-only">Menüyü aç</span>
                           <Icons.moreHorizontal className="h-4 w-4" />
                         </Button>
@@ -267,12 +304,18 @@ export function UserList() {
                             Detay
                           </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => setEditingUser(user)}>
+                        <DropdownMenuItem onClick={(event) => {
+                          event.stopPropagation();
+                          setEditingUser(user);
+                        }}>
                           <Icons.edit className="mr-2 h-4 w-4" />
                           Düzenle
                         </DropdownMenuItem>
                         <DropdownMenuItem 
-                          onClick={() => setDeletingUser(user)}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            setDeletingUser(user);
+                          }}
                           className="text-red-600"
                           disabled={user.role === 'ADMIN'}
                         >

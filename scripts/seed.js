@@ -25,6 +25,7 @@ async function main() {
         email: email,
         password: hashedPassword,
         fullName: username,
+        phone: '0532 123 45 67',
         role: 'ADMIN', // Enum yerine doğrudan string olarak
       },
     });

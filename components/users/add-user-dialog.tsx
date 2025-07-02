@@ -19,6 +19,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 interface AddUserDialogProps {
@@ -48,6 +62,7 @@ export function AddUserDialog({
   const [isLoading, setIsLoading] = useState(false);
   const [apartments, setApartments] = useState<Apartment[]>([]);
   const [isLoadingApartments, setIsLoadingApartments] = useState(false);
+  const [openApartmentSelector, setOpenApartmentSelector] = useState(false);
 
   // Daireleri yükle
   useEffect(() => {
@@ -85,7 +100,7 @@ export function AddUserDialog({
   };
 
   const handleSave = async () => {
-    if (!fullName.trim() || !email.trim() || !role) {
+    if (!fullName.trim() || !phone.trim() || !role) {
       toast.error("Lütfen gerekli alanları doldurun");
       return;
     }
@@ -99,8 +114,8 @@ export function AddUserDialog({
         },
         body: JSON.stringify({
           fullName: fullName.trim(),
-          email: email.trim(),
-          phone: phone.trim() || null,
+          email: email.trim() || null,
+          phone: phone.trim(),
           role,
           apartmentId: apartmentId || null,
           password: password.trim() || null,
@@ -128,6 +143,8 @@ export function AddUserDialog({
     switch (roleValue) {
       case 'RESIDENT':
         return 'Sakin';
+      case 'LANDLORD':
+        return 'Daire Sahibi';
       case 'MANAGER':
         return 'Yönetici';
       case 'ADMIN':
@@ -161,7 +178,7 @@ export function AddUserDialog({
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="email" className="text-right">
-              E-posta *
+              E-posta
             </Label>
             <Input
               id="email"
@@ -169,12 +186,12 @@ export function AddUserDialog({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="col-span-3"
-              placeholder="Örn: ahmet@example.com"
+              placeholder="Örn: ahmet@example.com (opsiyonel)"
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="phone" className="text-right">
-              Telefon
+              Telefon *
             </Label>
             <Input
               id="phone"
@@ -194,6 +211,7 @@ export function AddUserDialog({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="RESIDENT">Sakin</SelectItem>
+                <SelectItem value="LANDLORD">Daire Sahibi</SelectItem>
                 <SelectItem value="MANAGER">Yönetici</SelectItem>
                 <SelectItem value="ADMIN">Admin</SelectItem>
               </SelectContent>
@@ -203,23 +221,65 @@ export function AddUserDialog({
             <Label htmlFor="apartment" className="text-right">
               Daire
             </Label>
-            <Select 
-              value={apartmentId || "none"} 
-              onValueChange={(value) => setApartmentId(value === "none" ? "" : value)}
-              disabled={isLoadingApartments}
-            >
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder={isLoadingApartments ? "Yükleniyor..." : "Daire seçin (opsiyonel)"} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">Daire seçilmedi</SelectItem>
-                {apartments.map((apartment) => (
-                  <SelectItem key={apartment.id} value={apartment.id}>
-                    {apartment.blockName} - Daire {apartment.number} ({apartment.floor}. Kat)
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Popover open={openApartmentSelector} onOpenChange={setOpenApartmentSelector}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={openApartmentSelector}
+                  className="col-span-3 justify-between"
+                  disabled={isLoadingApartments}
+                >
+                  {apartmentId
+                    ? apartments.find((apartment) => apartment.id === apartmentId)
+                        ? `${apartments.find((apartment) => apartment.id === apartmentId)?.blockName} - Daire ${apartments.find((apartment) => apartment.id === apartmentId)?.number}`
+                        : "Daire seçin..."
+                    : "Daire seçin (opsiyonel)"}
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-full p-0">
+                <Command>
+                  <CommandInput placeholder="Daire ara..." />
+                  <CommandEmpty>Daire bulunamadı.</CommandEmpty>
+                  <CommandGroup>
+                    <CommandItem
+                      value="none"
+                      onSelect={() => {
+                        setApartmentId("");
+                        setOpenApartmentSelector(false);
+                      }}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          !apartmentId ? "opacity-100" : "opacity-0"
+                        )}
+                      />
+                      Daire seçilmedi
+                    </CommandItem>
+                    {apartments.map((apartment) => (
+                      <CommandItem
+                        key={apartment.id}
+                        value={`${apartment.blockName}-${apartment.number}-${apartment.floor}`}
+                        onSelect={() => {
+                          setApartmentId(apartment.id);
+                          setOpenApartmentSelector(false);
+                        }}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            apartmentId === apartment.id ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                        {apartment.blockName} - Daire {apartment.number} ({apartment.floor}. Kat)
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </Command>
+              </PopoverContent>
+            </Popover>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="password" className="text-right">
@@ -252,7 +312,7 @@ export function AddUserDialog({
           </Button>
           <Button 
             onClick={handleSave} 
-            disabled={isLoading || !fullName.trim() || !email.trim() || !role}
+            disabled={isLoading || !fullName.trim() || !phone.trim() || !role}
           >
             {isLoading ? "Oluşturuluyor..." : "Kaydet"}
           </Button>

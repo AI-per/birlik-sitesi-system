@@ -105,6 +105,8 @@ export function AnnouncementList({ currentUserId, currentUserRole }: Announcemen
     switch (role) {
       case 'RESIDENT':
         return 'Sakin';
+      case 'LANDLORD':
+        return 'Daire Sahibi';
       case 'MANAGER':
         return 'Yönetici';
       case 'ADMIN':
@@ -120,6 +122,8 @@ export function AnnouncementList({ currentUserId, currentUserRole }: Announcemen
         return 'destructive';
       case 'MANAGER':
         return 'default';
+      case 'LANDLORD':
+        return 'outline';
       case 'RESIDENT':
         return 'secondary';
       default:

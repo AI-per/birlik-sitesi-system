@@ -39,6 +39,8 @@ import {
   Shield,
   Clock,
   Hash,
+  Download,
+  Upload,
   type LucideIcon,
 } from "lucide-react";
 
@@ -85,4 +87,7 @@ export const Icons = {
   shield: Shield,
   clock: Clock,
   hash: Hash,
+  download: Download,
+  upload: Upload,
+  alertTriangle: AlertTriangle,
 };

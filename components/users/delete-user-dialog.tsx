@@ -66,6 +66,8 @@ export function DeleteUserDialog({
     switch (role) {
       case 'RESIDENT':
         return 'Sakin';
+      case 'LANDLORD':
+        return 'Daire Sahibi';
       case 'MANAGER':
         return 'Yönetici';
       case 'ADMIN':

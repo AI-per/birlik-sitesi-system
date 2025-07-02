@@ -12,7 +12,8 @@ datasource db {
 
 // Kullanıcı rolleri için enum
 enum Role {
-  RESIDENT      // Daire Sahibi
+  RESIDENT      // Sakin
+  LANDLORD     // Daire Sahibi
   MANAGER       // Site Yöneticisi
   ADMIN         // Sistem Yöneticisi (Ana Yönetici)
 }
@@ -53,10 +54,10 @@ model Apartment {
 // Kullanıcı modeli
 model User {
   id            String   @id @default(uuid())
-  email         String   @unique
+  email         String?  @unique
   password      String
   fullName      String
-  phone         String?
+  phone         String
   role          Role     @default(RESIDENT)
   isActive      Boolean  @default(true)
   createdAt     DateTime @default(now())

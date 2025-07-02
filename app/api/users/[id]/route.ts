@@ -3,26 +3,28 @@ import { db } from "@/lib/db";
 import { formatDate } from "@/lib/utils";
 import bcrypt from "bcryptjs";
 
-// GET /api/users/[id] - Kullanıcı detaylarını getir
+// GET /api/users/[id] - Kullanıcı detayını getir
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
     const user = await db.user.findUnique({
-      where: { id: params.id },
+      where: {
+        id: params.id,
+      },
       include: {
         apartment: {
           include: {
             block: true,
-            dues: {
-              include: {
-                payment: true,
-              },
-              orderBy: {
-                dueDate: 'desc',
-              },
-            },
+          },
+        },
+        payments: {
+          include: {
+            due: true,
+          },
+          orderBy: {
+            paymentDate: 'desc',
           },
         },
       },
@@ -35,23 +37,54 @@ export async function GET(
       );
     }
 
-    // Şifreyi response'tan çıkar
-    const { password, ...userWithoutPassword } = user;
+    // Ödenmemiş aidatları getir
+    const unpaidDues = user.apartmentId ? await db.due.findMany({
+      where: {
+        apartmentId: user.apartmentId,
+        payment: null, // Ödenmemiş olanlar
+      },
+      include: {
+        apartment: {
+          include: {
+            block: true,
+          },
+        },
+      },
+      orderBy: [
+        { year: 'desc' },
+        { month: 'desc' },
+      ],
+    }) : [];
 
-    const formattedUser = {
+    const totalUnpaidAmount = unpaidDues.reduce((sum, due) => sum + Number(due.amount), 0);
+
+    const { password: _, ...userWithoutPassword } = user;
+
+    return NextResponse.json({
       ...userWithoutPassword,
       createdAt: formatDate(new Date(user.createdAt)),
       apartment: user.apartment ? {
-        ...user.apartment,
-        dues: user.apartment.dues.map((due: any) => ({
-          ...due,
-          dueDate: formatDate(new Date(due.dueDate)),
-          paymentDate: due.payment?.paymentDate ? formatDate(new Date(due.payment.paymentDate)) : null,
-        })),
+        id: user.apartment.id,
+        number: user.apartment.number,
+        floor: user.apartment.floor,
+        blockName: user.apartment.block.name,
+        block: {
+          id: user.apartment.block.id,
+          name: user.apartment.block.name,
+        },
       } : null,
-    };
-
-    return NextResponse.json(formattedUser);
+      dues: unpaidDues.map((due) => ({
+        id: due.id,
+        amount: Number(due.amount),
+        month: due.month,
+        year: due.year,
+        dueDate: due.dueDate.toISOString(),
+        description: due.description,
+        paymentDate: null,
+        isPaid: false,
+      })),
+      totalUnpaidAmount,
+    });
   } catch (error) {
     console.error("Error fetching user:", error);
     return NextResponse.json(
@@ -61,7 +94,7 @@ export async function GET(
   }
 }
 
-// PUT /api/users/[id] - Kullanıcı güncelle
+// PUT /api/users/[id] - Kullanıcıyı güncelle
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -71,23 +104,14 @@ export async function PUT(
     const { email, password, fullName, phone, role, apartmentId, isActive } = body;
 
     // Gerekli alanları kontrol et
-    if (!email || !fullName) {
+    if (!fullName || !phone) {
       return NextResponse.json(
-        { error: "Email ve tam ad gereklidir" },
+        { error: "Tam ad ve telefon numarası gereklidir" },
         { status: 400 }
       );
     }
 
-    // Email formatını kontrol et
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: "Geçerli bir email adresi girin" },
-        { status: 400 }
-      );
-    }
-
-    // Mevcut kullanıcı var mı kontrol et
+    // Mevcut kullanıcıyı kontrol et
     const existingUser = await db.user.findUnique({
       where: { id: params.id },
     });
@@ -99,25 +123,31 @@ export async function PUT(
       );
     }
 
-    // Email başka kullanıcıda kullanılıyor mu kontrol et
-    const emailExists = await db.user.findFirst({
-      where: { 
-        email,
-        NOT: {
-          id: params.id
-        }
-      },
-    });
+    // Email varsa formatını ve benzersizliğini kontrol et
+    if (email && email.trim()) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email.trim())) {
+        return NextResponse.json(
+          { error: "Geçerli bir email adresi girin" },
+          { status: 400 }
+        );
+      }
 
-    if (emailExists) {
-      return NextResponse.json(
-        { error: "Bu email adresi başka bir kullanıcı tarafından kullanılıyor" },
-        { status: 400 }
-      );
+      // Başka kullanıcı aynı email'i kullanıyor mu kontrol et
+      const emailUser = await db.user.findUnique({
+        where: { email: email.trim() },
+      });
+
+      if (emailUser && emailUser.id !== params.id) {
+        return NextResponse.json(
+          { error: "Bu email adresi zaten kullanılıyor" },
+          { status: 400 }
+        );
+      }
     }
 
     // Apartment ID varsa kontrol et
-    if (apartmentId && apartmentId !== existingUser.apartmentId) {
+    if (apartmentId) {
       const apartment = await db.apartment.findUnique({
         where: { id: apartmentId },
       });
@@ -129,41 +159,40 @@ export async function PUT(
         );
       }
 
-      // Bu daireye başka resident atanmış mı kontrol et
+      // Bu daireye başka resident atanmış mı kontrol et (kendisi hariç)
       const existingResident = await db.user.findFirst({
         where: { 
           apartmentId: apartmentId,
           role: 'RESIDENT',
-          NOT: {
-            id: params.id
-          }
+          id: { not: params.id }
         },
       });
 
       if (existingResident) {
         return NextResponse.json(
-          { error: "Bu dairede zaten başka bir sakin kayıtlı" },
+          { error: "Bu dairede zaten bir sakin kayıtlı" },
           { status: 400 }
         );
       }
     }
 
-    // Update verilerini hazırla
-    const updateData: any = {
-      email,
-      fullName,
-      phone: phone || null,
-      role: role || existingUser.role,
+    // Güncelleme verisini hazırla
+    let updateData: any = {
+      email: email?.trim() || null,
+      fullName: fullName.trim(),
+      phone: phone.trim(),
+      role: role || 'RESIDENT',
       apartmentId: apartmentId || null,
-      isActive: isActive !== undefined ? isActive : existingUser.isActive,
+      isActive: isActive !== undefined ? isActive : true,
     };
 
-    // Şifre varsa hashle ve ekle
-    if (password && password.trim() !== '') {
-      updateData.password = await bcrypt.hash(password, 12);
+    // Şifre verilmişse hashle ve ekle
+    if (password && password.trim()) {
+      const hashedPassword = await bcrypt.hash(password.trim(), 12);
+      updateData.password = hashedPassword;
     }
 
-    const updatedUser = await db.user.update({
+    const user = await db.user.update({
       where: { id: params.id },
       data: updateData,
       include: {
@@ -176,18 +205,19 @@ export async function PUT(
     });
 
     // Şifreyi response'tan çıkar
-    const { password: _, ...userWithoutPassword } = updatedUser;
+    const { password: _, ...userWithoutPassword } = user;
 
     return NextResponse.json({
       ...userWithoutPassword,
-      createdAt: formatDate(new Date(updatedUser.createdAt)),
-      apartment: updatedUser.apartment ? {
-        id: updatedUser.apartment.id,
-        number: updatedUser.apartment.number,
-        floor: updatedUser.apartment.floor,
+      createdAt: formatDate(new Date(user.createdAt)),
+      detail_url: `/dashboard/users/${user.id}`,
+      apartment: user.apartment ? {
+        id: user.apartment.id,
+        number: user.apartment.number,
+        floor: user.apartment.floor,
         block: {
-          id: updatedUser.apartment.block.id,
-          name: updatedUser.apartment.block.name,
+          id: user.apartment.block.id,
+          name: user.apartment.block.name,
         },
       } : null,
     });
@@ -200,19 +230,37 @@ export async function PUT(
   }
 }
 
-// DELETE /api/users/[id] - Kullanıcı sil
+// DELETE /api/users/[id] - Kullanıcıyı sil
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    // Kullanıcıyı kontrol et
+    const user = await db.user.findUnique({
+      where: { id: params.id },
+    });
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "Kullanıcı bulunamadı" },
+        { status: 404 }
+      );
+    }
+
+    // Admin kullanıcıları silinemez
+    if (user.role === 'ADMIN') {
+      return NextResponse.json(
+        { error: "Admin kullanıcıları silinemez" },
+        { status: 400 }
+      );
+    }
+
     await db.user.delete({
       where: { id: params.id },
     });
 
-    return NextResponse.json({
-      message: "Kullanıcı başarıyla silindi",
-    });
+    return NextResponse.json({ message: "Kullanıcı başarıyla silindi" });
   } catch (error) {
     console.error("Error deleting user:", error);
     return NextResponse.json(

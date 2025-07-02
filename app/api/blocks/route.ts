@@ -25,6 +25,7 @@ export async function GET() {
       name: block.name,
       createdAt: formatDate(new Date(block.createdAt)),
       apartmentCount: block.apartments.length,
+      detail_url: `/dashboard/blocks/${block.id}`,
     }));
 
     return NextResponse.json(blocksWithApartmentCount);
@@ -83,6 +84,7 @@ export async function POST(request: NextRequest) {
       name: block.name,
       createdAt: formatDate(new Date(block.createdAt)),
       apartmentCount: block.apartments.length,
+      detail_url: `/dashboard/blocks/${block.id}`,
     }, { status: 201 });
   } catch (error) {
     console.error("Detailed error creating block:", error);

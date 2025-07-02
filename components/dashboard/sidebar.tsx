@@ -54,6 +54,12 @@ export function Sidebar({ className }: SidebarProps) {
       color: "text-blue-500",
     },
     {
+      label: "Toplu İçe Aktarım",
+      icon: Icons.upload,
+      href: "/dashboard/bulk-import",
+      color: "text-purple-500",
+    },
+    {
       label: "Ödemeler",
       icon: Icons.billing,
       href: "/dashboard/payments",

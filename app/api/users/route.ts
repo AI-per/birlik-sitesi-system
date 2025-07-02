@@ -27,6 +27,7 @@ export async function GET() {
       role: user.role,
       isActive: user.isActive,
       createdAt: formatDate(new Date(user.createdAt)),
+      detail_url: `/dashboard/users/${user.id}`,
       apartment: user.apartment ? {
         id: user.apartment.id,
         number: user.apartment.number,
@@ -55,32 +56,34 @@ export async function POST(request: NextRequest) {
     const { email, password, fullName, phone, role, apartmentId } = body;
 
     // Gerekli alanları kontrol et
-    if (!email || !password || !fullName) {
+    if (!fullName || !phone) {
       return NextResponse.json(
-        { error: "Email, şifre ve tam ad gereklidir" },
+        { error: "Tam ad ve telefon numarası gereklidir" },
         { status: 400 }
       );
     }
 
-    // Email formatını kontrol et
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: "Geçerli bir email adresi girin" },
-        { status: 400 }
-      );
-    }
+    // Email varsa formatını kontrol et
+    if (email && email.trim()) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email.trim())) {
+        return NextResponse.json(
+          { error: "Geçerli bir email adresi girin" },
+          { status: 400 }
+        );
+      }
 
-    // Mevcut email kontrolü
-    const existingUser = await db.user.findUnique({
-      where: { email },
-    });
+      // Mevcut email kontrolü (sadece email verilmişse)
+      const existingUser = await db.user.findUnique({
+        where: { email: email.trim() },
+      });
 
-    if (existingUser) {
-      return NextResponse.json(
-        { error: "Bu email adresi zaten kullanılıyor" },
-        { status: 400 }
-      );
+      if (existingUser) {
+        return NextResponse.json(
+          { error: "Bu email adresi zaten kullanılıyor" },
+          { status: 400 }
+        );
+      }
     }
 
     // Şifreyi hashle
@@ -117,10 +120,10 @@ export async function POST(request: NextRequest) {
 
     const user = await db.user.create({
       data: {
-        email,
+        email: email?.trim() || null,
         password: hashedPassword,
         fullName,
-        phone: phone || null,
+        phone: phone.trim(),
         role: role || 'RESIDENT',
         apartmentId: apartmentId || null,
       },
@@ -139,6 +142,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       ...userWithoutPassword,
       createdAt: formatDate(new Date(user.createdAt)),
+      detail_url: `/dashboard/users/${user.id}`,
       apartment: user.apartment ? {
         id: user.apartment.id,
         number: user.apartment.number,

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -30,15 +31,34 @@ interface Block {
   name: string;
   createdAt: string;
   apartmentCount: number;
+  detail_url?: string;
 }
 
 export function BlockList() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [editingBlock, setEditingBlock] = useState<Block | null>(null);
   const [deletingBlock, setDeletingBlock] = useState<Block | null>(null);
   const [addingBlock, setAddingBlock] = useState(false);
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Handle row click for navigation
+  const handleRowClick = (block: Block, event: React.MouseEvent) => {
+    // Don't navigate if detail_url is not available or empty
+    if (!block.detail_url || block.detail_url.trim() === '') {
+      return;
+    }
+
+    // Don't navigate if clicking on dropdown menu trigger
+    const target = event.target as HTMLElement;
+    if (target.closest('[role="button"]') || target.closest('button')) {
+      return;
+    }
+
+    // Navigate to detail page
+    router.push(block.detail_url);
+  };
 
   // Blokları yükle
   const fetchBlocks = async () => {
@@ -108,7 +128,16 @@ export function BlockList() {
               </TableRow>
             ) : (
               filteredBlocks.map((block) => (
-                <TableRow key={block.id} data-oid="9hn99:b">
+                <TableRow 
+                  key={block.id} 
+                  data-oid="9hn99:b"
+                  className={
+                    block.detail_url && block.detail_url.trim() !== ''
+                      ? "cursor-pointer hover:bg-muted/50 transition-colors"
+                      : "cursor-default"
+                  }
+                  onClick={(event) => handleRowClick(block, event)}
+                >
                   <TableCell className="font-medium" data-oid="bje.4kv">
                     {block.name}
                   </TableCell>
@@ -123,6 +152,7 @@ export function BlockList() {
                           variant="ghost"
                           className="h-8 w-8 p-0"
                           data-oid="5qik7vy"
+                          onClick={(event) => event.stopPropagation()}
                         >
                           <span className="sr-only" data-oid=".xdfx3a">
                             Menüyü aç
@@ -138,9 +168,10 @@ export function BlockList() {
                           İşlemler
                         </DropdownMenuLabel>
                         <DropdownMenuItem
-                          onClick={() =>
-                            (window.location.href = `/dashboard/blocks/${block.id}`)
-                          }
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            router.push(`/dashboard/blocks/${block.id}`);
+                          }}
                           data-oid="f5.9:pb"
                         >
                           <Icons.fileText
@@ -151,7 +182,10 @@ export function BlockList() {
                           <span data-oid="n9qh2pv">Detaylar</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => setEditingBlock(block)}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            setEditingBlock(block);
+                          }}
                           data-oid="spt6r93"
                         >
                           <Icons.settings
@@ -163,7 +197,10 @@ export function BlockList() {
                         </DropdownMenuItem>
                         <DropdownMenuSeparator data-oid="ciq091-" />
                         <DropdownMenuItem
-                          onClick={() => setDeletingBlock(block)}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            setDeletingBlock(block);
+                          }}
                           className="text-red-600"
                           data-oid="7h4gi2m"
                         >

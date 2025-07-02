@@ -115,6 +115,8 @@ export default function UserDetailPage() {
     switch (role) {
       case 'RESIDENT':
         return 'Sakin';
+      case 'LANDLORD':
+        return 'Daire Sahibi';
       case 'MANAGER':
         return 'Yönetici';
       case 'ADMIN':
@@ -130,6 +132,8 @@ export default function UserDetailPage() {
         return 'destructive';
       case 'MANAGER':
         return 'default';
+      case 'LANDLORD':
+        return 'outline';
       case 'RESIDENT':
         return 'secondary';
       default:

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -51,6 +52,7 @@ interface Apartment {
   }>;
   unpaidDuesCount: number;
   totalUnpaidAmount: number;
+  detail_url?: string;
 }
 
 interface Block {
@@ -59,6 +61,7 @@ interface Block {
 }
 
 export function ApartmentList() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBlock, setSelectedBlock] = useState<string>("all");
   const [editingApartment, setEditingApartment] = useState<Apartment | null>(null);
@@ -68,6 +71,23 @@ export function ApartmentList() {
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBlocks, setIsLoadingBlocks] = useState(false);
+
+  // Handle row click for navigation
+  const handleRowClick = (apartment: Apartment, event: React.MouseEvent) => {
+    // Don't navigate if detail_url is not available or empty
+    if (!apartment.detail_url || apartment.detail_url.trim() === '') {
+      return;
+    }
+
+    // Don't navigate if clicking on dropdown menu trigger
+    const target = event.target as HTMLElement;
+    if (target.closest('[role="button"]') || target.closest('button')) {
+      return;
+    }
+
+    // Navigate to detail page
+    router.push(apartment.detail_url);
+  };
 
   // Daireleri yükle
   const fetchApartments = async () => {
@@ -196,7 +216,15 @@ export function ApartmentList() {
               </TableRow>
             ) : (
               filteredApartments.map((apartment) => (
-                <TableRow key={apartment.id}>
+                <TableRow 
+                  key={apartment.id}
+                  className={
+                    apartment.detail_url && apartment.detail_url.trim() !== ''
+                      ? "cursor-pointer hover:bg-muted/50 transition-colors"
+                      : "cursor-default"
+                  }
+                  onClick={(event) => handleRowClick(apartment, event)}
+                >
                   <TableCell className="font-medium">
                     {apartment.blockName}
                   </TableCell>
@@ -248,7 +276,11 @@ export function ApartmentList() {
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
+                        <Button 
+                          variant="ghost" 
+                          className="h-8 w-8 p-0"
+                          onClick={(event) => event.stopPropagation()}
+                        >
                           <span className="sr-only">Menüyü aç</span>
                           <Icons.ellipsis className="h-4 w-4" />
                         </Button>
@@ -256,20 +288,27 @@ export function ApartmentList() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>İşlemler</DropdownMenuLabel>
                         <DropdownMenuItem
-                          onClick={() =>
-                            (window.location.href = `/dashboard/apartments/${apartment.id}`)
-                          }
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            router.push(`/dashboard/apartments/${apartment.id}`);
+                          }}
                         >
                           <Icons.fileText className="mr-2 h-4 w-4" />
                           Detaylar
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => setEditingApartment(apartment)}>
+                        <DropdownMenuItem onClick={(event) => {
+                          event.stopPropagation();
+                          setEditingApartment(apartment);
+                        }}>
                           <Icons.settings className="mr-2 h-4 w-4" />
                           Düzenle
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
-                          onClick={() => setDeletingApartment(apartment)}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            setDeletingApartment(apartment);
+                          }}
                           className="text-red-600"
                         >
                           <Icons.trash className="mr-2 h-4 w-4" />
