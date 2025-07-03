@@ -11,8 +11,8 @@ import { useState, useEffect } from "react";
 
 // Mock user data
 const MOCK_CURRENT_USER = {
-  id: "1be6f3b1-97e7-4910-8b6b-cd03f633b11a",
-  role: "MANAGER"
+  id: "d6468359-5825-4d7a-8f59-768e2382608e", // Real user ID from database (alper - ADMIN)
+  role: "ADMIN"
 };
 
 interface Announcement {

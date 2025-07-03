@@ -3,8 +3,8 @@ import { AnnouncementList } from "@/components/announcements/announcement-list";
 // Şimdilik mock user data kullanıyoruz
 // Gerçek uygulamada bu bilgiler authentication context'inden gelecek
 const MOCK_CURRENT_USER = {
-  id: "1be6f3b1-97e7-4910-8b6b-cd03f633b11a", // Ali Kaya'nın ID'si
-  role: "MANAGER"
+  id: "d6468359-5825-4d7a-8f59-768e2382608e", // Real user ID from database (alper - ADMIN)
+  role: "ADMIN"
 };
 
 export default function AnnouncementsPage() {

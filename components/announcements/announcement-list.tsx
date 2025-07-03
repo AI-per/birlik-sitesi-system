@@ -26,6 +26,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Icons } from "@/components/icons";
+import { DataTable, DataTableColumn } from "@/components/ui/data-table";
 import { AddAnnouncementDialog } from "./add-announcement-dialog";
 import { EditAnnouncementDialog } from "./edit-announcement-dialog";
 import { DeleteAnnouncementDialog } from "./delete-announcement-dialog";
@@ -149,6 +150,166 @@ export function AnnouncementList({ currentUserId, currentUserRole }: Announcemen
   // Yetki kontrolü
   const canCreateAnnouncement = currentUserRole === 'MANAGER' || currentUserRole === 'ADMIN';
 
+  // Handle dialog events
+  const handleAnnouncementAdded = () => {
+    fetchAnnouncements();
+    setAddingAnnouncement(false);
+  };
+
+  const handleAnnouncementUpdated = () => {
+    fetchAnnouncements();
+    setEditingAnnouncement(null);
+  };
+
+  const handleAnnouncementDeleted = () => {
+    fetchAnnouncements();
+    setDeletingAnnouncement(null);
+  };
+
+  // Define table columns
+  const columns: DataTableColumn<Announcement>[] = [
+    {
+      id: "title",
+      header: "Başlık",
+      accessorKey: "title",
+      sortable: true,
+      sortType: "text",
+      className: "max-w-[200px]",
+      cell: (value, row) => (
+        <Link 
+          href={`/dashboard/announcements/${row.id}`}
+          className="font-medium hover:underline"
+        >
+          {value}
+        </Link>
+      ),
+    },
+    {
+      id: "content",
+      header: "İçerik",
+      accessorKey: "content",
+      sortable: true,
+      sortType: "text",
+      className: "max-w-[300px]",
+      cell: (value) => (
+        <div className="text-sm text-muted-foreground">
+          {truncateContent(value)}
+        </div>
+      ),
+    },
+    {
+      id: "author",
+      header: "Yazar",
+      accessorFn: (row) => row.author.fullName,
+      sortable: true,
+      sortType: "text",
+      cell: (value, row) => (
+        <div className="flex flex-col">
+          <span className="font-medium">{value}</span>
+          <Badge variant={getRoleBadgeVariant(row.author.role) as any} className="text-xs w-fit mt-1">
+            {getRoleLabel(row.author.role)}
+          </Badge>
+        </div>
+      ),
+    },
+    {
+      id: "status",
+      header: "Durum",
+      accessorKey: "isPublished",
+      sortable: true,
+      sortType: "text",
+      searchable: false,
+      cell: (value) => (
+        <Badge variant={value ? "default" : "secondary"}>
+          {value ? "Yayında" : "Taslak"}
+        </Badge>
+      ),
+    },
+    {
+      id: "createdAt",
+      header: "Oluşturulma",
+      accessorKey: "createdAt",
+      sortable: true,
+      sortType: "date",
+      searchable: false,
+      cell: (value) => (
+        <div className="text-sm text-muted-foreground">
+          {formatDate(value)}
+        </div>
+      ),
+    },
+  ];
+
+  // Render actions for each row
+  const renderActions = (announcement: Announcement) => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0" onClick={(e) => e.stopPropagation()}>
+          <span className="sr-only">Menüyü aç</span>
+          <Icons.moreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem asChild>
+          <Link href={`/dashboard/announcements/${announcement.id}`} onClick={(e) => e.stopPropagation()}>
+            <Icons.eye className="mr-2 h-4 w-4" />
+            Detay
+          </Link>
+        </DropdownMenuItem>
+        {(announcement.author.id === currentUserId || currentUserRole === 'ADMIN') && (
+          <>
+            <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setEditingAnnouncement(announcement); }}>
+              <Icons.edit className="mr-2 h-4 w-4" />
+              Düzenle
+            </DropdownMenuItem>
+            <DropdownMenuItem 
+              onClick={(e) => { e.stopPropagation(); setDeletingAnnouncement(announcement); }}
+              className="text-destructive focus:text-destructive"
+            >
+              <Icons.trash className="mr-2 h-4 w-4" />
+              Sil
+            </DropdownMenuItem>
+          </>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
+  // Top actions (filters and add button)
+  const topActions = (
+    <>
+      <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+        <SelectTrigger className="w-40">
+          <SelectValue placeholder="Tüm Durumlar" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">Tüm Durumlar</SelectItem>
+          <SelectItem value="published">Yayında</SelectItem>
+          <SelectItem value="draft">Taslak</SelectItem>
+        </SelectContent>
+      </Select>
+      <Select value={selectedAuthor} onValueChange={setSelectedAuthor}>
+        <SelectTrigger className="w-40">
+          <SelectValue placeholder="Tüm Yazarlar" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">Tüm Yazarlar</SelectItem>
+          {uniqueAuthors.map((author) => (
+            <SelectItem key={author.id} value={author.id}>
+              {author.fullName}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      {canCreateAnnouncement && (
+        <Button onClick={() => setAddingAnnouncement(true)}>
+          <Icons.plus className="mr-2 h-4 w-4" />
+          Yeni Duyuru
+        </Button>
+      )}
+    </>
+  );
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-4">
@@ -159,143 +320,25 @@ export function AnnouncementList({ currentUserId, currentUserRole }: Announcemen
             onChange={(e) => setSearchQuery(e.target.value)}
             className="max-w-sm"
           />
-          <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="Tüm Durumlar" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Tüm Durumlar</SelectItem>
-              <SelectItem value="published">Yayında</SelectItem>
-              <SelectItem value="draft">Taslak</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select value={selectedAuthor} onValueChange={setSelectedAuthor}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="Tüm Yazarlar" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Tüm Yazarlar</SelectItem>
-              {uniqueAuthors.map((author) => (
-                <SelectItem key={author.id} value={author.id}>
-                  {author.fullName}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
         </div>
-        {canCreateAnnouncement && (
-          <Button onClick={() => setAddingAnnouncement(true)}>
-            <Icons.plus className="mr-2 h-4 w-4" />
-            Yeni Duyuru
-          </Button>
-        )}
       </div>
 
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Başlık</TableHead>
-              <TableHead>İçerik</TableHead>
-              <TableHead>Yazar</TableHead>
-              <TableHead>Durum</TableHead>
-              <TableHead>Oluşturulma</TableHead>
-              <TableHead className="text-right">İşlemler</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center">
-                  Yükleniyor...
-                </TableCell>
-              </TableRow>
-            ) : filteredAnnouncements.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center">
-                  {announcements.length === 0 ? "Henüz duyuru eklenmemiş." : "Sonuç bulunamadı."}
-                </TableCell>
-              </TableRow>
-            ) :
-              filteredAnnouncements.map((announcement) => (
-                <TableRow key={announcement.id}>
-                  <TableCell className="font-medium max-w-[200px]">
-                    <Link 
-                      href={`/dashboard/announcements/${announcement.id}`}
-                      className="hover:underline"
-                    >
-                      {announcement.title}
-                    </Link>
-                  </TableCell>
-                  <TableCell className="max-w-[300px]">
-                    <div className="text-sm text-muted-foreground">
-                      {truncateContent(announcement.content)}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-col gap-1">
-                      <span className="text-sm font-medium">
-                        {announcement.author.fullName}
-                      </span>
-                      <Badge variant={getRoleBadgeVariant(announcement.author.role)} className="w-fit text-xs">
-                        {getRoleLabel(announcement.author.role)}
-                      </Badge>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={announcement.isPublished ? "default" : "secondary"}>
-                      {announcement.isPublished ? "Yayında" : "Taslak"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="text-sm">
-                      {formatDate(announcement.createdAt)}
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          <span className="sr-only">Menüyü aç</span>
-                          <Icons.moreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem asChild>
-                          <Link href={`/dashboard/announcements/${announcement.id}`}>
-                            <Icons.eye className="mr-2 h-4 w-4" />
-                            Detay
-                          </Link>
-                        </DropdownMenuItem>
-                        {(announcement.author.id === currentUserId || currentUserRole === 'ADMIN') && (
-                          <>
-                            <DropdownMenuItem onClick={() => setEditingAnnouncement(announcement)}>
-                              <Icons.edit className="mr-2 h-4 w-4" />
-                              Düzenle
-                            </DropdownMenuItem>
-                            <DropdownMenuItem 
-                              onClick={() => setDeletingAnnouncement(announcement)}
-                              className="text-red-600"
-                            >
-                              <Icons.trash className="mr-2 h-4 w-4" />
-                              Sil
-                            </DropdownMenuItem>
-                          </>
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </div>
+      <DataTable<Announcement>
+        data={filteredAnnouncements}
+        columns={columns}
+        isLoading={isLoading}
+        searchPlaceholder="Duyuru ara (başlık, içerik, yazar)..."
+        emptyMessage="Henüz duyuru eklenmemiş."
+        actions={renderActions}
+        topActions={topActions}
+      />
 
-      {canCreateAnnouncement && (
+      {/* Dialogs */}
+      {addingAnnouncement && (
         <AddAnnouncementDialog
           open={addingAnnouncement}
           onOpenChange={setAddingAnnouncement}
-          onAnnouncementAdded={fetchAnnouncements}
+          onAnnouncementAdded={handleAnnouncementAdded}
           currentUserId={currentUserId}
         />
       )}
@@ -304,8 +347,8 @@ export function AnnouncementList({ currentUserId, currentUserRole }: Announcemen
         <EditAnnouncementDialog
           announcement={editingAnnouncement}
           open={!!editingAnnouncement}
-          onOpenChange={(open) => !open && setEditingAnnouncement(null)}
-          onAnnouncementUpdated={fetchAnnouncements}
+          onOpenChange={() => setEditingAnnouncement(null)}
+          onAnnouncementUpdated={handleAnnouncementUpdated}
           currentUserId={currentUserId}
           currentUserRole={currentUserRole}
         />
@@ -315,8 +358,8 @@ export function AnnouncementList({ currentUserId, currentUserRole }: Announcemen
         <DeleteAnnouncementDialog
           announcement={deletingAnnouncement}
           open={!!deletingAnnouncement}
-          onOpenChange={(open) => !open && setDeletingAnnouncement(null)}
-          onAnnouncementDeleted={fetchAnnouncements}
+          onOpenChange={() => setDeletingAnnouncement(null)}
+          onAnnouncementDeleted={handleAnnouncementDeleted}
           currentUserId={currentUserId}
           currentUserRole={currentUserRole}
         />

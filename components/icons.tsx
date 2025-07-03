@@ -5,6 +5,8 @@ import {
   Check,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
+  ChevronDown,
   Command,
   CreditCard,
   File,
@@ -41,6 +43,7 @@ import {
   Hash,
   Download,
   Upload,
+  Search,
   type LucideIcon,
 } from "lucide-react";
 
@@ -90,4 +93,7 @@ export const Icons = {
   download: Download,
   upload: Upload,
   alertTriangle: AlertTriangle,
+  chevronUp: ChevronUp,
+  chevronDown: ChevronDown,
+  search: Search,
 };

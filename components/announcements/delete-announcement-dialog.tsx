@@ -43,7 +43,7 @@ export function DeleteAnnouncementDialog({
   const handleDelete = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/announcements/${announcement.id}?deleterId=${currentUserId}`, {
+      const response = await fetch(`/api/announcements/${announcement.id}?currentUserId=${currentUserId}&currentUserRole=${currentUserRole}`, {
         method: 'DELETE',
       });
 

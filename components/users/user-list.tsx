@@ -27,6 +27,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Icons } from "@/components/icons";
+import { DataTable, DataTableColumn } from "@/components/ui/data-table";
 import { AddUserDialog } from "./add-user-dialog";
 import { EditUserDialog } from "./edit-user-dialog";
 import { DeleteUserDialog } from "./delete-user-dialog";
@@ -55,7 +56,6 @@ export function UserList() {
   const router = useRouter();
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
   const [selectedRole, setSelectedRole] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [addingUser, setAddingUser] = useState(false);
@@ -81,23 +81,14 @@ export function UserList() {
     }
   };
 
-  // Filtreleme
+  // Filter data based on selected filters
   const filteredUsers = users.filter((user) => {
-    const matchesSearch = 
-      user.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (user.phone && user.phone.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (user.apartment && (
-        user.apartment.blockName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        user.apartment.number.toLowerCase().includes(searchQuery.toLowerCase())
-      ));
-    
     const matchesRole = selectedRole === "all" || user.role === selectedRole;
     const matchesStatus = selectedStatus === "all" || 
       (selectedStatus === "active" && user.isActive) ||
       (selectedStatus === "inactive" && !user.isActive);
     
-    return matchesSearch && matchesRole && matchesStatus;
+    return matchesRole && matchesStatus;
   });
 
   const getRoleLabel = (role: string) => {
@@ -139,210 +130,234 @@ export function UserList() {
 
   // Handle row click for navigation
   const handleRowClick = (user: User, event: React.MouseEvent) => {
-    // Don't navigate if detail_url is not available or empty
-    if (!user.detail_url || user.detail_url.trim() === '') {
-      return;
+    if (user.detail_url && user.detail_url.trim() !== '') {
+      router.push(user.detail_url);
     }
-
-    // Don't navigate if clicking on links or dropdown menu trigger
-    const target = event.target as HTMLElement;
-    if (target.closest('a') || target.closest('[role="button"]') || target.closest('button')) {
-      return;
-    }
-
-    // Navigate to detail page
-    router.push(user.detail_url);
   };
 
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-2 flex-1">
-          <Input
-            placeholder="Kullanıcı ara (ad, e-posta, telefon, daire)..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="max-w-sm"
-          />
-          <Select value={selectedRole} onValueChange={setSelectedRole}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="Tüm Roller" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Tüm Roller</SelectItem>
-              <SelectItem value="RESIDENT">Sakin</SelectItem>
-              <SelectItem value="LANDLORD">Daire Sahibi</SelectItem>
-              <SelectItem value="MANAGER">Yönetici</SelectItem>
-              <SelectItem value="ADMIN">Admin</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="Tüm Durumlar" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Tüm Durumlar</SelectItem>
-              <SelectItem value="active">Aktif</SelectItem>
-              <SelectItem value="inactive">Pasif</SelectItem>
-            </SelectContent>
-          </Select>
+  // Check if row is clickable
+  const isRowClickable = (user: User) => {
+    return !!(user.detail_url && user.detail_url.trim() !== '');
+  };
+
+  // Handle dialog events
+  const handleUserAdded = () => {
+    fetchUsers();
+    setAddingUser(false);
+  };
+
+  const handleUserUpdated = () => {
+    fetchUsers();
+    setEditingUser(null);
+  };
+
+  const handleUserDeleted = () => {
+    fetchUsers();
+    setDeletingUser(null);
+  };
+
+  // Define table columns
+  const columns: DataTableColumn<User>[] = [
+    {
+      id: "fullName",
+      header: "Ad Soyad",
+      accessorKey: "fullName",
+      sortable: true,
+      sortType: "text",
+      cell: (value, row) => (
+        <Link 
+          href={`/dashboard/users/${row.id}`}
+          className="font-medium hover:underline"
+        >
+          {value}
+        </Link>
+      ),
+    },
+    {
+      id: "email",
+      header: "E-posta",
+      accessorKey: "email",
+      sortable: true,
+      sortType: "text",
+      cell: (value) => value || <span className="text-muted-foreground">-</span>,
+    },
+    {
+      id: "phone",
+      header: "Telefon",
+      accessorKey: "phone",
+      sortable: true,
+      sortType: "text",
+      cell: (value) => value || <span className="text-muted-foreground">-</span>,
+    },
+    {
+      id: "role",
+      header: "Rol",
+      accessorKey: "role",
+      sortable: true,
+      sortType: "text",
+      searchable: false, // Don't include role in text search, use filter instead
+      cell: (value) => (
+        <Badge variant={getRoleBadgeVariant(value) as any}>
+          {getRoleLabel(value)}
+        </Badge>
+      ),
+    },
+    {
+      id: "apartment",
+      header: "Daire",
+      accessorFn: (row) => row.apartment ? `${row.apartment.blockName} - Daire ${row.apartment.number}` : null,
+      sortable: true,
+      sortType: "text",
+      cell: (value, row) => 
+        row.apartment ? (
+          <Link 
+            href={`/dashboard/apartments/${row.apartment.id}`}
+            className="hover:underline text-sm"
+          >
+            {row.apartment.blockName} - Daire {row.apartment.number}
+          </Link>
+        ) : (
+          <span className="text-muted-foreground">-</span>
+        ),
+    },
+    {
+      id: "status",
+      header: "Durum",
+      accessorKey: "isActive",
+      sortable: true,
+      sortType: "text",
+      searchable: false,
+      cell: (value) => (
+        <Badge variant={value ? "default" : "secondary"}>
+          {value ? "Aktif" : "Pasif"}
+        </Badge>
+      ),
+    },
+    {
+      id: "unpaidDues",
+      header: "Ödenmemiş Aidat",
+      accessorKey: "unpaidDuesCount",
+      sortable: true,
+      sortType: "number",
+      searchable: false,
+      cell: (value, row) => (
+        <div className="flex flex-col">
+          <span className="font-medium">{value} adet</span>
+          {row.totalUnpaidAmount > 0 && (
+            <span className="text-xs text-muted-foreground">
+              {formatCurrency(row.totalUnpaidAmount)}
+            </span>
+          )}
         </div>
-        <Button onClick={() => setAddingUser(true)}>
-          <Icons.plus className="mr-2 h-4 w-4" />
-          Yeni Kullanıcı
+      ),
+    },
+  ];
+
+  // Render actions for each row
+  const renderActions = (user: User) => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0" onClick={(e) => e.stopPropagation()}>
+          <span className="sr-only">Menüyü aç</span>
+          <Icons.moreHorizontal className="h-4 w-4" />
         </Button>
-      </div>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem asChild>
+          <Link href={`/dashboard/users/${user.id}`} onClick={(e) => e.stopPropagation()}>
+            <Icons.eye className="mr-2 h-4 w-4" />
+            Detay
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setEditingUser(user); }}>
+          <Icons.edit className="mr-2 h-4 w-4" />
+          Düzenle
+        </DropdownMenuItem>
+        <DropdownMenuItem 
+          onClick={(e) => { e.stopPropagation(); setDeletingUser(user); }}
+          className="text-destructive focus:text-destructive"
+        >
+          <Icons.trash className="mr-2 h-4 w-4" />
+          Sil
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Ad Soyad</TableHead>
-              <TableHead>E-posta</TableHead>
-              <TableHead>Telefon</TableHead>
-              <TableHead>Rol</TableHead>
-              <TableHead>Daire</TableHead>
-              <TableHead>Durum</TableHead>
-              <TableHead>Ödenmemiş Aidat</TableHead>
-              <TableHead className="text-right">İşlemler</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              <TableRow>
-                <TableCell colSpan={8} className="h-24 text-center">
-                  Yükleniyor...
-                </TableCell>
-              </TableRow>
-            ) : filteredUsers.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={8} className="h-24 text-center">
-                  {users.length === 0 ? "Henüz kullanıcı eklenmemiş." : "Sonuç bulunamadı."}
-                </TableCell>
-              </TableRow>
-            ) :
-              filteredUsers.map((user) => (
-                <TableRow 
-                  key={user.id}
-                  className={
-                    user.detail_url && user.detail_url.trim() !== ''
-                      ? "cursor-pointer hover:bg-muted/50 transition-colors"
-                      : "cursor-default"
-                  }
-                  onClick={(event) => handleRowClick(user, event)}
-                >
-                  <TableCell className="font-medium">
-                    <Link 
-                      href={`/dashboard/users/${user.id}`}
-                      className="hover:underline"
-                    >
-                      {user.fullName}
-                    </Link>
-                  </TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>
-                    {user.phone ? (
-                      user.phone
-                    ) : (
-                      <span className="text-muted-foreground">-</span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={getRoleBadgeVariant(user.role)}>
-                      {getRoleLabel(user.role)}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {user.apartment ? (
-                      <Link 
-                        href={`/dashboard/apartments/${user.apartment.id}`}
-                        className="hover:underline text-sm"
-                      >
-                        {user.apartment.blockName} - Daire {user.apartment.number}
-                      </Link>
-                    ) : (
-                      <span className="text-muted-foreground">-</span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={user.isActive ? "default" : "secondary"}>
-                      {user.isActive ? "Aktif" : "Pasif"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {user.unpaidDuesCount > 0 ? (
-                      <div className="text-sm">
-                        <div className="font-medium text-red-600">
-                          {user.unpaidDuesCount} adet
-                        </div>
-                        <div className="text-muted-foreground">
-                          {formatCurrency(user.totalUnpaidAmount)}
-                        </div>
-                      </div>
-                    ) : (
-                      <Badge variant="outline" className="text-green-600">
-                        Temiz
-                      </Badge>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          className="h-8 w-8 p-0"
-                          onClick={(event) => event.stopPropagation()}
-                        >
-                          <span className="sr-only">Menüyü aç</span>
-                          <Icons.moreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem asChild>
-                          <Link href={`/dashboard/users/${user.id}`}>
-                            <Icons.eye className="mr-2 h-4 w-4" />
-                            Detay
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={(event) => {
-                          event.stopPropagation();
-                          setEditingUser(user);
-                        }}>
-                          <Icons.edit className="mr-2 h-4 w-4" />
-                          Düzenle
-                        </DropdownMenuItem>
-                        <DropdownMenuItem 
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            setDeletingUser(user);
-                          }}
-                          className="text-red-600"
-                          disabled={user.role === 'ADMIN'}
-                        >
-                          <Icons.trash className="mr-2 h-4 w-4" />
-                          Sil
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </div>
+  // Top actions (filters and add button)
+  const topActions = (
+    <>
+      <Select value={selectedRole} onValueChange={setSelectedRole}>
+        <SelectTrigger className="w-40">
+          <SelectValue placeholder="Tüm Roller" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">Tüm Roller</SelectItem>
+          <SelectItem value="RESIDENT">Sakin</SelectItem>
+          <SelectItem value="LANDLORD">Daire Sahibi</SelectItem>
+          <SelectItem value="MANAGER">Yönetici</SelectItem>
+          <SelectItem value="ADMIN">Admin</SelectItem>
+        </SelectContent>
+      </Select>
+      <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+        <SelectTrigger className="w-40">
+          <SelectValue placeholder="Tüm Durumlar" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">Tüm Durumlar</SelectItem>
+          <SelectItem value="active">Aktif</SelectItem>
+          <SelectItem value="inactive">Pasif</SelectItem>
+        </SelectContent>
+      </Select>
+      <Button onClick={() => setAddingUser(true)}>
+        <Icons.plus className="mr-2 h-4 w-4" />
+        Yeni Kullanıcı
+      </Button>
+    </>
+  );
 
-      <AddUserDialog
-        open={addingUser}
-        onOpenChange={setAddingUser}
-        onUserAdded={fetchUsers}
+     return (
+     <div className="space-y-4">
+       <DataTable<User>
+        data={filteredUsers}
+        columns={columns}
+        isLoading={isLoading}
+        searchPlaceholder="Kullanıcı ara (ad, e-posta, telefon, daire)..."
+        emptyMessage="Henüz kullanıcı eklenmemiş."
+        onRowClick={handleRowClick}
+        rowClickCondition={isRowClickable}
+        actions={renderActions}
+        topActions={topActions}
       />
+
+      {/* Dialogs */}
+      {addingUser && (
+        <AddUserDialog
+          open={addingUser}
+          onOpenChange={setAddingUser}
+          onUserAdded={handleUserAdded}
+        />
+      )}
 
       {editingUser && (
         <EditUserDialog
-          user={editingUser}
+          user={{
+            id: editingUser.id,
+            fullName: editingUser.fullName,
+            email: editingUser.email,
+            phone: editingUser.phone,
+            role: editingUser.role,
+            isActive: editingUser.isActive,
+            apartment: editingUser.apartment ? {
+              id: editingUser.apartment.id,
+              number: editingUser.apartment.number,
+              floor: editingUser.apartment.floor,
+              blockName: editingUser.apartment.blockName,
+            } : null,
+          }}
           open={!!editingUser}
-          onOpenChange={(open) => !open && setEditingUser(null)}
-          onUserUpdated={fetchUsers}
+          onOpenChange={() => setEditingUser(null)}
+          onUserUpdated={handleUserUpdated}
         />
       )}
 
@@ -350,8 +365,8 @@ export function UserList() {
         <DeleteUserDialog
           user={deletingUser}
           open={!!deletingUser}
-          onOpenChange={(open) => !open && setDeletingUser(null)}
-          onUserDeleted={fetchUsers}
+          onOpenChange={() => setDeletingUser(null)}
+          onUserDeleted={handleUserDeleted}
         />
       )}
     </div>

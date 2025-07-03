@@ -1,116 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
-// import { db } from "@/lib/db";
-
-// Mock data (same as in the main route)
-const mockAnnouncements = [
-  {
-    id: "1",
-    title: "Site Yönetim Toplantısı",
-    content: `Sayın site sakinleri,
-
-Aylık site yönetim toplantımız 15 Ocak 2024 Pazartesi günü saat 19:00'da site toplantı salonunda yapılacaktır.
-
-Gündem maddeleri:
-• Aylık gider raporu
-• Asansör bakım durumu
-• Güvenlik kamerası sistemi güncellemesi
-• Bahçe düzenleme çalışmaları
-• Diğer konular
-
-Tüm site sakinlerinin katılımı önemlidir. Katılamayacak olanların vekil göndermesi rica olunur.
-
-Saygılarımızla,
-Site Yönetimi`,
-    isPublished: true,
-    createdAt: new Date('2024-01-10T10:00:00Z').toISOString(),
-    updatedAt: new Date('2024-01-10T10:00:00Z').toISOString(),
-    authorId: "1be6f3b1-97e7-4910-8b6b-cd03f633b11a",
-    attachments: [] as any[],
-    author: {
-      id: "1be6f3b1-97e7-4910-8b6b-cd03f633b11a",
-      fullName: "Ali Kaya",
-      role: "MANAGER",
-    },
-  },
-  {
-    id: "2",
-    title: "Su Kesintisi Duyurusu",
-    content: `Sayın site sakinleri,
-
-İSKİ tarafından yapılacak altyapı çalışmaları nedeniyle 20 Ocak 2024 Cumartesi günü saat 09:00-17:00 arası sitemizde su kesintisi yaşanacaktır.
-
-Bu süre zarfında:
-• Su deposu temizliği yapılacaktır
-• Ana su hattı yenilenecektir
-• Pompa sistemi kontrol edilecektir
-
-Kesinti süresince su ihtiyacınızı karşılamak için önceden tedbir almanızı rica ederiz.
-
-Yaşanacak mağduriyet için şimdiden özür dileriz.
-
-Site Yönetimi`,
-    isPublished: true,
-    createdAt: new Date('2024-01-08T14:30:00Z').toISOString(),
-    updatedAt: new Date('2024-01-08T14:30:00Z').toISOString(),
-    authorId: "2cf7e4c2-a8f8-5a21-9c7c-de04f744c22b",
-    attachments: [] as any[],
-    author: {
-      id: "2cf7e4c2-a8f8-5a21-9c7c-de04f744c22b",
-      fullName: "Ayşe Demir",
-      role: "ADMIN",
-    },
-  },
-  {
-    id: "3",
-    title: "Yeni Güvenlik Sistemi",
-    content: `Sayın site sakinleri,
-
-Site güvenliğini artırmak amacıyla yeni güvenlik sistemi kurulumu tamamlanmıştır.
-
-Yeni sistem özellikleri:
-• 24 saat kayıt yapan HD kameralar
-• Gece görüş özelliği
-• Hareket algılama sistemi
-• Mobil uygulama ile uzaktan izleme
-
-Sistem 1 Şubat 2024 tarihinden itibaren aktif olacaktır. Detaylı bilgi için yönetim ile iletişime geçebilirsiniz.
-
-Site Yönetimi`,
-    isPublished: false,
-    createdAt: new Date('2024-01-05T09:15:00Z').toISOString(),
-    updatedAt: new Date('2024-01-05T09:15:00Z').toISOString(),
-    authorId: "1be6f3b1-97e7-4910-8b6b-cd03f633b11a",
-    attachments: [] as any[],
-    author: {
-      id: "1be6f3b1-97e7-4910-8b6b-cd03f633b11a",
-      fullName: "Ali Kaya",
-      role: "MANAGER",
-    },
-  },
-];
-
-const mockUsers = [
-  {
-    id: "1be6f3b1-97e7-4910-8b6b-cd03f633b11a",
-    fullName: "Ali Kaya",
-    role: "MANAGER",
-  },
-  {
-    id: "2cf7e4c2-a8f8-5a21-9c7c-de04f744c22b",
-    fullName: "Ayşe Demir",
-    role: "ADMIN",
-  },
-];
+import { db } from "@/lib/db";
+import { formatDate } from "@/lib/utils";
 
 // GET /api/announcements/[id] - Tekil duyuru getir
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
-    const announcement = mockAnnouncements.find(a => a.id === id);
+    const announcement = await db.announcement.findUnique({
+      where: { id },
+      include: {
+        author: {
+          select: {
+            id: true,
+            fullName: true,
+            role: true,
+          },
+        },
+        attachments: true,
+      },
+    });
 
     if (!announcement) {
       return NextResponse.json(
@@ -119,7 +31,14 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(announcement);
+    // Format dates for frontend
+    const formattedAnnouncement = {
+      ...announcement,
+      createdAt: formatDate(new Date(announcement.createdAt)),
+      updatedAt: formatDate(new Date(announcement.updatedAt)),
+    };
+
+    return NextResponse.json(formattedAnnouncement);
   } catch (error) {
     console.error("Error fetching announcement:", error);
     return NextResponse.json(
@@ -132,23 +51,33 @@ export async function GET(
 // PUT /api/announcements/[id] - Duyuru güncelle
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
-    const { title, content, isPublished, currentUserId, currentUserRole, attachments, existingAttachments } = body;
+    const { title, content, isPublished, currentUserId, currentUserRole } = body;
 
     // Duyuru kontrolü
-    const announcementIndex = mockAnnouncements.findIndex(a => a.id === id);
-    if (announcementIndex === -1) {
+    const announcement = await db.announcement.findUnique({
+      where: { id },
+      include: {
+        author: {
+          select: {
+            id: true,
+            fullName: true,
+            role: true,
+          },
+        },
+      },
+    });
+
+    if (!announcement) {
       return NextResponse.json(
         { error: "Duyuru bulunamadı" },
         { status: 404 }
       );
     }
-
-    const announcement = mockAnnouncements[announcementIndex];
 
     // Yetki kontrolü - sadece yazar veya ADMIN düzenleyebilir
     if (announcement.authorId !== currentUserId && currentUserRole !== 'ADMIN') {
@@ -181,22 +110,34 @@ export async function PUT(
     }
 
     // Duyuru güncelle
-    const updatedAnnouncement = {
-      ...announcement,
-      title: title.trim(),
-      content: content.trim(),
-      isPublished: isPublished ?? announcement.isPublished,
-      updatedAt: new Date().toISOString(),
-      // Mevcut ekleri koru ve yeni ekleri ekle
-      attachments: [
-        ...(existingAttachments || []),
-        ...(attachments || [])
-      ],
+    const updatedAnnouncement = await db.announcement.update({
+      where: { id },
+      data: {
+        title: title.trim(),
+        content: content.trim(),
+        isPublished: isPublished ?? announcement.isPublished,
+        updatedAt: new Date(),
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            fullName: true,
+            role: true,
+          },
+        },
+        attachments: true,
+      },
+    });
+
+    // Format dates for frontend
+    const formattedAnnouncement = {
+      ...updatedAnnouncement,
+      createdAt: formatDate(new Date(updatedAnnouncement.createdAt)),
+      updatedAt: formatDate(new Date(updatedAnnouncement.updatedAt)),
     };
 
-    mockAnnouncements[announcementIndex] = updatedAnnouncement;
-
-    return NextResponse.json(updatedAnnouncement);
+    return NextResponse.json(formattedAnnouncement);
   } catch (error) {
     console.error("Error updating announcement:", error);
     return NextResponse.json(
@@ -209,24 +150,34 @@ export async function PUT(
 // DELETE /api/announcements/[id] - Duyuru sil
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const { searchParams } = new URL(request.url);
     const currentUserId = searchParams.get('currentUserId');
     const currentUserRole = searchParams.get('currentUserRole');
 
     // Duyuru kontrolü
-    const announcementIndex = mockAnnouncements.findIndex(a => a.id === id);
-    if (announcementIndex === -1) {
+    const announcement = await db.announcement.findUnique({
+      where: { id },
+      include: {
+        author: {
+          select: {
+            id: true,
+            fullName: true,
+            role: true,
+          },
+        },
+      },
+    });
+
+    if (!announcement) {
       return NextResponse.json(
         { error: "Duyuru bulunamadı" },
         { status: 404 }
       );
     }
-
-    const announcement = mockAnnouncements[announcementIndex];
 
     // Yetki kontrolü - sadece yazar veya ADMIN silebilir
     if (announcement.authorId !== currentUserId && currentUserRole !== 'ADMIN') {
@@ -236,8 +187,10 @@ export async function DELETE(
       );
     }
 
-    // Duyuru sil
-    mockAnnouncements.splice(announcementIndex, 1);
+    // Duyuru sil (attachments da cascade olarak silinecek)
+    await db.announcement.delete({
+      where: { id },
+    });
 
     return NextResponse.json({ message: "Duyuru başarıyla silindi" });
   } catch (error) {
