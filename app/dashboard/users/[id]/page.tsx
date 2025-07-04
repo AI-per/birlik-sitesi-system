@@ -114,7 +114,7 @@ export default function UserDetailPage() {
   const getRoleLabel = (role: string) => {
     switch (role) {
       case 'RESIDENT':
-        return 'Sakin';
+        return 'Konut Sakini';
       case 'LANDLORD':
         return 'Daire Sahibi';
       case 'MANAGER':

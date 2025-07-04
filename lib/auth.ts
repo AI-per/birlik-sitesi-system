@@ -9,6 +9,7 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db) as Adapter,
   session: {
     strategy: 'jwt',
+    maxAge: 20 * 60, // 20 minutes session timeout
   },
   pages: {
     signIn: '/login',
@@ -17,16 +18,22 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        email: { label: 'Email', type: 'email' },
+        emailOrPhone: { label: 'Email or Phone', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
+        if (!credentials?.emailOrPhone || !credentials?.password) {
           return null
         }
 
-        const user = await db.user.findUnique({
-          where: { email: credentials.email },
+        // Check if input is email or phone number
+        const isEmail = credentials.emailOrPhone.includes('@')
+        
+        // Find user by email or phone number
+        const user = await db.user.findFirst({
+          where: isEmail 
+            ? { email: credentials.emailOrPhone }
+            : { phone: credentials.emailOrPhone },
         })
 
         if (!user || !user.password) {
@@ -80,6 +87,12 @@ export const authOptions: NextAuthOptions = {
         role: dbUser.role,
         picture: null,
       }
+    },
+  },
+  events: {
+    async signOut() {
+      // Additional cleanup on signout if needed
+      console.log('User signed out - session expired or manual logout')
     },
   },
 } 

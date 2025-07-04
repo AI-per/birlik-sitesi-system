@@ -3,15 +3,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,10 +12,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Icons } from "@/components/icons";
+import { DataTable, DataTableColumn } from "@/components/ui/data-table";
+import { AddBlockDialog } from "@/components/blocks/add-block-dialog";
 import { EditBlockDialog } from "@/components/blocks/edit-block-dialog";
 import { DeleteBlockDialog } from "@/components/blocks/delete-block-dialog";
-import { AddBlockDialog } from "@/components/blocks/add-block-dialog";
 import { toast } from "sonner";
+import Link from "next/link";
 
 interface Block {
   id: string;
@@ -35,41 +28,27 @@ interface Block {
 }
 
 export function BlockList() {
-  const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [editingBlock, setEditingBlock] = useState<Block | null>(null);
-  const [deletingBlock, setDeletingBlock] = useState<Block | null>(null);
-  const [addingBlock, setAddingBlock] = useState(false);
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [editingBlock, setEditingBlock] = useState<Block | null>(null);
+  const [deletingBlock, setDeletingBlock] = useState<Block | null>(null);
+  const router = useRouter();
 
-  // Handle row click for navigation
-  const handleRowClick = (block: Block, event: React.MouseEvent) => {
-    // Don't navigate if detail_url is not available or empty
-    if (!block.detail_url || block.detail_url.trim() === '') {
-      return;
-    }
+  useEffect(() => {
+    fetchBlocks();
+  }, []);
 
-    // Don't navigate if clicking on dropdown menu trigger
-    const target = event.target as HTMLElement;
-    if (target.closest('[role="button"]') || target.closest('button')) {
-      return;
-    }
-
-    // Navigate to detail page
-    router.push(block.detail_url);
-  };
-
-  // Blokları yükle
   const fetchBlocks = async () => {
     try {
       setIsLoading(true);
       const response = await fetch("/api/blocks");
-      if (!response.ok) {
-        throw new Error("Bloklar yüklenirken hata oluştu");
+      if (response.ok) {
+        const data = await response.json();
+        setBlocks(data);
+      } else {
+        throw new Error("Failed to fetch blocks");
       }
-      const data = await response.json();
-      setBlocks(data);
     } catch (error) {
       console.error("Error fetching blocks:", error);
       toast.error("Bloklar yüklenirken hata oluştu");
@@ -78,169 +57,152 @@ export function BlockList() {
     }
   };
 
-  // Component mount olduğunda blokları yükle
-  useEffect(() => {
-    fetchBlocks();
-  }, []);
+  const handleRowClick = (block: Block) => {
+    if (block.detail_url && block.detail_url.trim() !== '') {
+      router.push(block.detail_url);
+    }
+  };
 
-  const filteredBlocks = blocks.filter((block) =>
-    block.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  const handleBlockAdded = () => {
+    fetchBlocks();
+    setIsAddDialogOpen(false);
+  };
+
+  const handleBlockUpdated = () => {
+    fetchBlocks();
+    setEditingBlock(null);
+  };
+
+  const handleBlockDeleted = () => {
+    fetchBlocks();
+    setDeletingBlock(null);
+  };
+
+  // Define table columns
+  const columns: DataTableColumn<Block>[] = [
+    {
+      id: "name",
+      header: "Blok Adı",
+      accessorKey: "name",
+      sortable: true,
+      sortType: "text",
+      cell: (value, row) => (
+        <Link 
+          href={`/dashboard/blocks/${row.id}`}
+          className="font-medium hover:underline"
+        >
+          {value}
+        </Link>
+      ),
+    },
+    {
+      id: "createdAt",
+      header: "Oluşturulma Tarihi",
+      accessorKey: "createdAt",
+      sortable: true,
+      sortType: "date",
+      searchable: false,
+      cell: (value) => {
+        try {
+          return new Date(value).toLocaleDateString('tr-TR');
+        } catch {
+          return value;
+        }
+      },
+    },
+    {
+      id: "apartmentCount",
+      header: "Daire Sayısı",
+      accessorKey: "apartmentCount",
+      sortable: true,
+      sortType: "number",
+      searchable: false,
+      cell: (value) => `${value} daire`,
+    },
+  ];
+
+  // Render actions for each row
+  const renderActions = (block: Block) => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">Menüyü aç</span>
+          <Icons.moreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>İşlemler</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href={`/dashboard/blocks/${block.id}`}>
+            <Icons.eye className="mr-2 h-4 w-4" />
+            Detay
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setEditingBlock(block)}>
+          <Icons.edit className="mr-2 h-4 w-4" />
+          Düzenle
+        </DropdownMenuItem>
+        <DropdownMenuItem 
+          onClick={() => setDeletingBlock(block)}
+          className="text-destructive focus:text-destructive"
+        >
+          <Icons.trash className="mr-2 h-4 w-4" />
+          Sil
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
+  // Top actions for the table
+  const topActions = (
+    <Button onClick={() => setIsAddDialogOpen(true)}>
+      <Icons.plus className="mr-2 h-4 w-4" />
+      Blok Ekle
+    </Button>
   );
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <Input
-          placeholder="Blok ara..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="max-w-sm"
+      <DataTable
+        data={blocks}
+        columns={columns}
+        isLoading={isLoading}
+        searchPlaceholder="Blok ara..."
+        emptyMessage="Henüz blok eklenmemiş."
+        loadingMessage="Bloklar yükleniyor..."
+        onRowClick={handleRowClick}
+        rowClickCondition={(row) => Boolean(row.detail_url && row.detail_url.trim() !== '')}
+        actions={renderActions}
+        topActions={topActions}
+      />
+
+      {/* Dialogs */}
+      {isAddDialogOpen && (
+        <AddBlockDialog
+          open={isAddDialogOpen}
+          onOpenChange={setIsAddDialogOpen}
+          onBlockAdded={handleBlockAdded}
         />
-        <Button onClick={() => setAddingBlock(true)}>
-          <Icons.plus className="mr-2 h-4 w-4" />
-          Yeni Blok
-        </Button>
-      </div>
-      <div className="rounded-md border" data-oid="2x:8v2x">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Blok Adı</TableHead>
-              <TableHead>Oluşturulma Tarihi</TableHead>
-              <TableHead>Daire Sayısı</TableHead>
-              <TableHead className="text-right">
-                İşlemler
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              <TableRow>
-                <TableCell colSpan={4} className="h-24 text-center">
-                  Yükleniyor...
-                </TableCell>
-              </TableRow>
-            ) : filteredBlocks.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={4} className="h-24 text-center">
-                  {blocks.length === 0 ? "Henüz blok eklenmemiş." : "Sonuç bulunamadı."}
-                </TableCell>
-              </TableRow>
-            ) : (
-              filteredBlocks.map((block) => (
-                <TableRow 
-                  key={block.id} 
-                  data-oid="9hn99:b"
-                  className={
-                    block.detail_url && block.detail_url.trim() !== ''
-                      ? "cursor-pointer hover:bg-muted/50 transition-colors"
-                      : "cursor-default"
-                  }
-                  onClick={(event) => handleRowClick(block, event)}
-                >
-                  <TableCell className="font-medium" data-oid="bje.4kv">
-                    {block.name}
-                  </TableCell>
-                  <TableCell data-oid="b5.jd3n">{block.createdAt}</TableCell>
-                  <TableCell data-oid="ijnqhjr">
-                    {block.apartmentCount}
-                  </TableCell>
-                  <TableCell className="text-right" data-oid="un481q8">
-                    <DropdownMenu data-oid="z0jrmj9">
-                      <DropdownMenuTrigger asChild data-oid="h1hj42r">
-                        <Button
-                          variant="ghost"
-                          className="h-8 w-8 p-0"
-                          data-oid="5qik7vy"
-                          onClick={(event) => event.stopPropagation()}
-                        >
-                          <span className="sr-only" data-oid=".xdfx3a">
-                            Menüyü aç
-                          </span>
-                          <Icons.ellipsis
-                            className="h-4 w-4"
-                            data-oid="2uh-1xz"
-                          />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" data-oid="zbu2x:f">
-                        <DropdownMenuLabel data-oid="bn7itt-">
-                          İşlemler
-                        </DropdownMenuLabel>
-                        <DropdownMenuItem
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            router.push(`/dashboard/blocks/${block.id}`);
-                          }}
-                          data-oid="f5.9:pb"
-                        >
-                          <Icons.fileText
-                            className="mr-2 h-4 w-4"
-                            data-oid="y4g56he"
-                          />
+      )}
 
-                          <span data-oid="n9qh2pv">Detaylar</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            setEditingBlock(block);
-                          }}
-                          data-oid="spt6r93"
-                        >
-                          <Icons.settings
-                            className="mr-2 h-4 w-4"
-                            data-oid="qta1vjs"
-                          />
-
-                          <span data-oid="ihgmwtk">Düzenle</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator data-oid="ciq091-" />
-                        <DropdownMenuItem
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            setDeletingBlock(block);
-                          }}
-                          className="text-red-600"
-                          data-oid="7h4gi2m"
-                        >
-                          <Icons.trash
-                            className="mr-2 h-4 w-4"
-                            data-oid="7-.nk3i"
-                          />
-
-                          <span data-oid="obd0riq">Sil</span>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
       {editingBlock && (
         <EditBlockDialog
           block={editingBlock}
-          open={!!editingBlock}
-          onOpenChange={() => setEditingBlock(null)}
-          onBlockUpdated={fetchBlocks}
+          open={Boolean(editingBlock)}
+          onOpenChange={(open) => !open && setEditingBlock(null)}
+          onBlockUpdated={handleBlockUpdated}
         />
       )}
+
       {deletingBlock && (
         <DeleteBlockDialog
           block={deletingBlock}
-          open={!!deletingBlock}
-          onOpenChange={() => setDeletingBlock(null)}
-          onBlockDeleted={fetchBlocks}
+          open={Boolean(deletingBlock)}
+          onOpenChange={(open) => !open && setDeletingBlock(null)}
+          onBlockDeleted={handleBlockDeleted}
         />
       )}
-      <AddBlockDialog
-        open={addingBlock}
-        onOpenChange={setAddingBlock}
-        onBlockAdded={fetchBlocks}
-      />
     </div>
   );
 }

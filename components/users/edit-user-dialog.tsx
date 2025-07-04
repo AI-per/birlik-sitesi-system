@@ -151,7 +151,7 @@ export function EditUserDialog({
   const getRoleLabel = (roleValue: string) => {
     switch (roleValue) {
       case 'RESIDENT':
-        return 'Sakin';
+        return 'Konut Sakini';
       case 'LANDLORD':
         return 'Daire Sahibi';
       case 'MANAGER':
@@ -219,7 +219,7 @@ export function EditUserDialog({
                 <SelectValue placeholder="Rol seçin" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="RESIDENT">Sakin</SelectItem>
+                <SelectItem value="RESIDENT">Konut Sakini</SelectItem>
                 <SelectItem value="LANDLORD">Daire Sahibi</SelectItem>
                 <SelectItem value="MANAGER">Yönetici</SelectItem>
                 <SelectItem value="ADMIN">Admin</SelectItem>

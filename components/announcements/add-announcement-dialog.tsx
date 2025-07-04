@@ -65,8 +65,28 @@ export function AddAnnouncementDialog({
 
     setIsLoading(true);
     try {
-      // TODO: File upload logic will be implemented here
-      // For now, we'll just create the announcement without files
+      let uploadedFiles = [];
+      
+      // Dosya yükleme işlemi (varsa)
+      if (attachments.length > 0) {
+        const formData = new FormData();
+        attachments.forEach(file => {
+          formData.append('files', file);
+        });
+
+        const uploadResponse = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!uploadResponse.ok) {
+          const uploadError = await uploadResponse.json();
+          throw new Error(uploadError.error || 'Dosya yükleme başarısız');
+        }
+
+        const uploadResult = await uploadResponse.json();
+        uploadedFiles = uploadResult.files;
+      }
       
       const response = await fetch('/api/announcements', {
         method: 'POST',
@@ -78,7 +98,7 @@ export function AddAnnouncementDialog({
           content: content.trim(),
           isPublished,
           authorId: currentUserId,
-          // attachments: attachments.map(file => file.name), // TODO: Implement file upload
+          attachments: uploadedFiles, // Yüklenen dosyalar
         }),
       });
 
@@ -112,44 +132,48 @@ export function AddAnnouncementDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Yeni Duyuru Ekle</DialogTitle>
+          <DialogTitle>Yeni Duyuru Oluştur</DialogTitle>
           <DialogDescription>
-            Yeni bir duyuru oluşturun. Duyuru tüm site sakinlerine görünür olacaktır.
+            Site sakinlerine yeni bir duyuru oluşturun. Gerekirse dosya ekleyebilirsiniz.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid gap-2">
-            <Label htmlFor="title">
-              Başlık *
-            </Label>
+            <Label htmlFor="title">Başlık</Label>
             <Input
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Duyuru başlığını girin"
+              placeholder="Duyuru başlığı..."
               maxLength={200}
             />
-            <div className="text-xs text-muted-foreground text-right">
+            <div className="text-xs text-muted-foreground">
               {title.length}/200 karakter
             </div>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="content">
-              İçerik *
-            </Label>
+            <Label htmlFor="content">İçerik</Label>
             <Textarea
               id="content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="Duyuru içeriğini girin..."
-              className="min-h-[200px] resize-none"
+              placeholder="Duyuru içeriği..."
+              className="min-h-[100px]"
               maxLength={5000}
             />
-            <div className="text-xs text-muted-foreground text-right">
+            <div className="text-xs text-muted-foreground">
               {content.length}/5000 karakter
             </div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="isPublished"
+              checked={isPublished}
+              onCheckedChange={setIsPublished}
+            />
+            <Label htmlFor="isPublished">Duyuruyu hemen yayınla</Label>
           </div>
           <div className="grid gap-2">
             <Label htmlFor="attachments">Dosya Ekleri</Label>
@@ -192,19 +216,6 @@ export function AddAnnouncementDialog({
               </div>
             )}
           </div>
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="isPublished"
-              checked={isPublished}
-              onCheckedChange={setIsPublished}
-            />
-            <Label htmlFor="isPublished" className="text-sm">
-              {isPublished ? "Hemen yayınla" : "Taslak olarak kaydet"}
-            </Label>
-          </div>
-          <div className="text-sm text-muted-foreground">
-            * Gerekli alanlar
-          </div>
         </div>
         <DialogFooter>
           <Button
@@ -218,7 +229,7 @@ export function AddAnnouncementDialog({
             onClick={handleSave} 
             disabled={isLoading || !title.trim() || !content.trim()}
           >
-            {isLoading ? "Oluşturuluyor..." : "Kaydet"}
+            {isLoading ? "Oluşturuluyor..." : "Oluştur"}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -37,11 +37,16 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // Format dates for frontend
+    // Format dates and attachment URLs for frontend
     const formattedAnnouncements = announcements.map(announcement => ({
       ...announcement,
       createdAt: formatDate(new Date(announcement.createdAt)),
       updatedAt: formatDate(new Date(announcement.updatedAt)),
+      attachments: announcement.attachments.map(attachment => ({
+        ...attachment,
+        url: attachment.filePath, // Transform filePath to url for frontend
+        mimeType: attachment.fileType, // Transform fileType to mimeType for frontend
+      })),
     }));
 
     return NextResponse.json(formattedAnnouncements);
@@ -58,7 +63,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { title, content, isPublished, authorId } = body;
+    const { title, content, isPublished, authorId, attachments } = body;
 
     // Validasyon
     if (!title || !content || !authorId) {
@@ -109,16 +114,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Yeni duyuru oluştur
+    // Yeni duyuru oluştur (attachments dahil)
     const newAnnouncement = await db.announcement.create({
       data: {
-      title: title.trim(),
-      content: content.trim(),
-      isPublished: isPublished ?? true,
-      authorId,
+        title: title.trim(),
+        content: content.trim(),
+        isPublished: isPublished ?? true,
+        authorId,
+        // Eğer attachments varsa, aynı transaction içinde oluştur
+        attachments: attachments && attachments.length > 0 ? {
+          createMany: {
+            data: attachments.map((file: any) => ({
+              originalName: file.originalName,
+              fileName: file.fileName,
+              filePath: file.filePath,
+              fileSize: file.fileSize,
+              fileType: file.fileType,
+            })),
+          },
+        } : undefined,
       },
       include: {
-      author: {
+        author: {
           select: {
             id: true,
             fullName: true,
@@ -129,14 +146,22 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Format dates for frontend
+    // Format dates and attachment URLs for frontend
     const formattedAnnouncement = {
       ...newAnnouncement,
       createdAt: formatDate(new Date(newAnnouncement.createdAt)),
       updatedAt: formatDate(new Date(newAnnouncement.updatedAt)),
+      attachments: newAnnouncement.attachments.map(attachment => ({
+        ...attachment,
+        url: attachment.filePath, // Transform filePath to url for frontend
+        mimeType: attachment.fileType, // Transform fileType to mimeType for frontend
+      })),
     };
 
-    return NextResponse.json(formattedAnnouncement, { status: 201 });
+    return NextResponse.json({
+      message: "Duyuru başarıyla oluşturuldu",
+      announcement: formattedAnnouncement,
+    });
   } catch (error) {
     console.error("Error creating announcement:", error);
     return NextResponse.json(

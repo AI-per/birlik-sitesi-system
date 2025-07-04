@@ -9,50 +9,37 @@ import {
   Tooltip,
 } from "recharts";
 
-const data = [
-  {
-    name: "Oca",
-    total: 18000,
-    collected: 16500,
-  },
-  {
-    name: "Şub",
-    total: 18000,
-    collected: 17200,
-  },
-  {
-    name: "Mar",
-    total: 18000,
-    collected: 17800,
-  },
-  {
-    name: "Nis",
-    total: 20000,
-    collected: 19000,
-  },
-  {
-    name: "May",
-    total: 20000,
-    collected: 18500,
-  },
-  {
-    name: "Haz",
-    total: 20000,
-    collected: 17000,
-  },
-];
+interface OverviewProps {
+  data: Array<{
+    name: string;
+    total: number;
+    collected: number;
+    year: number;
+    month: number;
+  }>;
+}
 
-export function Overview() {
+export function Overview({ data }: OverviewProps) {
+  // Use provided data or fallback to empty array
+  const chartData = data.length > 0 ? data : [
+    {
+      name: "Veri Yok",
+      total: 0,
+      collected: 0,
+      year: new Date().getFullYear(),
+      month: new Date().getMonth() + 1,
+    },
+  ];
+
   return (
-    <ResponsiveContainer width="100%" height={350} data-oid="4nh2spe">
-      <BarChart data={data} data-oid="p6otxq6">
+    <ResponsiveContainer width="100%" height={350}>
+      <BarChart data={chartData}>
         <XAxis
           dataKey="name"
           stroke="#888888"
           fontSize={12}
           tickLine={false}
           axisLine={false}
-          data-oid="165ji37"
         />
 
         <YAxis
@@ -60,14 +47,12 @@ export function Overview() {
           fontSize={12}
           tickLine={false}
           axisLine={false}
-          tickFormatter={(value) => `₺${value}`}
-          data-oid="iuf:gj."
+          tickFormatter={(value) => `₺${value.toLocaleString()}`}
         />
 
         <Tooltip
-          formatter={(value) => [`₺${value}`, ""]}
-          labelFormatter={(label) => `${label} 2023`}
-          data-oid="1e.mg6:"
+          formatter={(value: number) => [`₺${value.toLocaleString()}`, ""]}
+          labelFormatter={(label) => `${label} 2024`}
         />
 
         <Bar
@@ -75,7 +60,6 @@ export function Overview() {
           fill="#adfa1d"
           radius={[4, 4, 0, 0]}
           name="Toplam Aidat"
-          data-oid=".ef9ra5"
         />
 
         <Bar
@@ -83,7 +67,6 @@ export function Overview() {
           fill="#0ea5e9"
           radius={[4, 4, 0, 0]}
           name="Tahsil Edilen"
-          data-oid=":.gnsmo"
         />
       </BarChart>
     </ResponsiveContainer>

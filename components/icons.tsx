@@ -14,6 +14,7 @@ import {
   HelpCircle,
   Image,
   Laptop,
+  Layers,
   Loader2,
   Moon,
   MoreVertical,
@@ -44,6 +45,7 @@ import {
   Download,
   Upload,
   Search,
+  Send,
   type LucideIcon,
 } from "lucide-react";
 
@@ -65,6 +67,7 @@ export const Icons = {
   sun: SunMedium,
   moon: Moon,
   laptop: Laptop,
+  layers: Layers,
   billing: CreditCard,
   ellipsis: MoreVertical,
   moreHorizontal: MoreHorizontal,
@@ -96,4 +99,5 @@ export const Icons = {
   chevronUp: ChevronUp,
   chevronDown: ChevronDown,
   search: Search,
+  send: Send,
 };

@@ -1,5 +1,7 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { signOut, useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,32 +15,55 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Icons } from "@/components/icons";
 import Link from "next/link";
+import { toast } from "@/components/ui/use-toast";
 
 export function UserNav() {
-  // Örnek kullanıcı bilgileri
-  const user = {
-    name: "Ahmet Yılmaz",
-    email: "ahmet@example.com",
-    image: "/placeholder.svg?height=32&width=32",
+  const { data: session } = useSession();
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    if (session?.user) {
+      setUser(session.user);
+    }
+  }, [session]);
+
+  const handleLogout = async () => {
+    try {
+      toast({
+        title: "Çıkış yapılıyor...",
+        description: "Oturumunuz sonlandırılıyor.",
+      });
+      
+      await signOut({ 
+        redirect: true,
+        callbackUrl: "/" 
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Hata",
+        description: "Çıkış yapılırken bir hata oluştu.",
+      });
+    }
   };
 
-  return (
-    <DropdownMenu data-oid=".hwx52m">
-      <DropdownMenuTrigger asChild data-oid="16l0w8b">
-        <Button
-          variant="ghost"
-          className="relative h-8 w-8 rounded-full"
-          data-oid="auw3xdn"
-        >
-          <Avatar className="h-8 w-8" data-oid="wh29ndf">
-            <AvatarImage
-              src={user.image || "/placeholder.svg"}
-              alt={user.name}
-              data-oid="1i5:qmr"
-            />
+  if (!user) {
+    return (
+      <div className="h-8 w-8 rounded-full bg-muted animate-pulse" />
+    );
+  }
 
-            <AvatarFallback data-oid="ttnsdqp">
-              {user.name.charAt(0)}
+  return (
+    <DropdownMenu data-oid="0_m-v3j">
+      <DropdownMenuTrigger asChild data-oid="o6mjh8p">
+        <Button variant="ghost" className="relative h-8 w-8 rounded-full" data-oid="jdtb28s">
+          <Avatar className="h-8 w-8" data-oid="5tpmcdq">
+            <AvatarImage src={user.image} alt={user.name} data-oid="7.8rpno" />
+            <AvatarFallback data-oid="kjcpjkk">
+              {user.name
+                ?.split(" ")
+                .map((n: string) => n[0])
+                .join("")}
             </AvatarFallback>
           </Avatar>
         </Button>
@@ -78,11 +103,9 @@ export function UserNav() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator data-oid="8i1e8jk" />
-        <DropdownMenuItem asChild data-oid="aolcaez">
-          <Link href="/" data-oid="1k6lnja">
-            <Icons.logout className="mr-2 h-4 w-4" data-oid="i_34rcy" />
-            <span data-oid="p6v.x2f">Çıkış Yap</span>
-          </Link>
+        <DropdownMenuItem onClick={handleLogout} data-oid="aolcaez">
+          <Icons.logout className="mr-2 h-4 w-4" data-oid="i_34rcy" />
+          <span data-oid="p6v.x2f">Çıkış Yap</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

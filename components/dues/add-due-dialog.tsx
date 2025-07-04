@@ -40,6 +40,15 @@ export function AddDueDialog({
   const [isLoading, setIsLoading] = useState(false);
   const [apartments, setApartments] = useState<any[]>([]);
 
+  // Auto-set due date to last day of month when month or year changes
+  useEffect(() => {
+    if (month && year) {
+      const lastDayOfMonth = new Date(parseInt(year), parseInt(month), 0);
+      const formattedDate = lastDayOfMonth.toISOString().split('T')[0];
+      setDueDate(formattedDate);
+    }
+  }, [month, year]);
+
   // Form verilerini sıfırla
   useEffect(() => {
     if (open) {
@@ -200,23 +209,21 @@ export function AddDueDialog({
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
             />
+            {month && year && (
+              <p className="text-xs text-muted-foreground">
+                Otomatik: {new Date(parseInt(year), parseInt(month), 0).toLocaleDateString('tr-TR')} (Ayın son günü)
+              </p>
+            )}
           </div>
           <div className="text-sm text-muted-foreground">
             * Gerekli alanlar
           </div>
         </div>
         <DialogFooter>
-          <Button
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-            disabled={isLoading}
-          >
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             İptal
           </Button>
-          <Button 
-            onClick={handleSave} 
-            disabled={isLoading || !apartmentId || !amount || !month || !year || !dueDate}
-          >
+          <Button onClick={handleSave} disabled={isLoading}>
             {isLoading ? "Oluşturuluyor..." : "Oluştur"}
           </Button>
         </DialogFooter>

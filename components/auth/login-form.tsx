@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -19,8 +20,19 @@ import { toast } from "@/components/ui/use-toast";
 import { Icons } from "@/components/icons";
 
 const formSchema = z.object({
-  email: z.string().email({
-    message: "Geçerli bir e-posta adresi giriniz.",
+  emailOrPhone: z.string().min(1, {
+    message: "E-posta veya telefon numarası giriniz.",
+  }).refine((value) => {
+    // Check if it's a valid email or phone number
+    const isEmail = value.includes('@');
+    if (isEmail) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    } else {
+      // Phone number validation (Turkish format)
+      return /^(\+90|0)?[5][0-9]{9}$/.test(value.replace(/\s/g, ''));
+    }
+  }, {
+    message: "Geçerli bir e-posta adresi veya telefon numarası giriniz.",
   }),
   password: z.string().min(6, {
     message: "Şifre en az 6 karakter olmalıdır.",
@@ -34,7 +46,7 @@ export function LoginForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      emailOrPhone: "",
       password: "",
     },
   });
@@ -43,44 +55,73 @@ export function LoginForm() {
     setIsLoading(true);
 
     try {
-      // Burada gerçek API çağrısı yapılacak
-      console.log(values);
+      const result = await signIn("credentials", {
+        emailOrPhone: values.emailOrPhone,
+        password: values.password,
+        redirect: false,
+      });
 
-      // Başarılı giriş simülasyonu
-      setTimeout(() => {
+      if (result?.error) {
+        toast({
+          variant: "destructive",
+          title: "Giriş başarısız!",
+          description: "E-posta/telefon veya şifre hatalı.",
+        });
+      } else {
         toast({
           title: "Giriş başarılı!",
           description: "Yönlendiriliyorsunuz...",
         });
         router.push("/dashboard");
-      }, 1000);
+        router.refresh(); // Refresh to update session
+      }
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Giriş başarısız!",
-        description: "E-posta veya şifre hatalı.",
+        description: "Bir hata oluştu. Lütfen tekrar deneyin.",
       });
     } finally {
       setIsLoading(false);
     }
   }
 
+  // SECURITY: Prevent any potential GET form submission
+  const handleFormSubmission = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Ensure we never submit via GET method by checking form method
+    const formElement = e.currentTarget;
+    if (formElement.method && formElement.method.toUpperCase() !== 'POST') {
+      console.error('SECURITY: Prevented non-POST form submission');
+      return false;
+    }
+    
+    // Use our controlled submit handler
+    form.handleSubmit(onSubmit)(e);
+    return false;
+  };
+
   return (
     <Form {...form} data-oid="otfzwiy">
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={handleFormSubmission}
+        method="POST"
         className="space-y-4"
         data-oid="w9pgk0n"
+        noValidate
       >
         <FormField
           control={form.control}
-          name="email"
+          name="emailOrPhone"
           render={({ field }) => (
             <FormItem data-oid="5bycslp">
-              <FormLabel data-oid="l2u6zls">E-posta</FormLabel>
+              <FormLabel data-oid="l2u6zls">E-posta veya Telefon</FormLabel>
               <FormControl data-oid="rlgs9qg">
                 <Input
-                  placeholder="ornek@email.com"
+                  placeholder="ornek@email.com veya 05XX XXX XX XX"
+                  autoComplete="username"
                   {...field}
                   data-oid="4p6z43p"
                 />
@@ -101,6 +142,7 @@ export function LoginForm() {
                 <Input
                   type="password"
                   placeholder="******"
+                  autoComplete="current-password"
                   {...field}
                   data-oid="m1pyynf"
                 />

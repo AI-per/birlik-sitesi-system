@@ -94,7 +94,7 @@ export function UserList() {
   const getRoleLabel = (role: string) => {
     switch (role) {
       case 'RESIDENT':
-        return 'Sakin';
+        return 'Konut Sakini';
       case 'LANDLORD':
         return 'Daire Sahibi';
       case 'MANAGER':
@@ -293,7 +293,7 @@ export function UserList() {
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">Tüm Roller</SelectItem>
-          <SelectItem value="RESIDENT">Sakin</SelectItem>
+          <SelectItem value="RESIDENT">Konut Sakini</SelectItem>
           <SelectItem value="LANDLORD">Daire Sahibi</SelectItem>
           <SelectItem value="MANAGER">Yönetici</SelectItem>
           <SelectItem value="ADMIN">Admin</SelectItem>

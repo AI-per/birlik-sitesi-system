@@ -9,6 +9,7 @@ const bulkCreateDueSchema = z.object({
   month: z.number().min(1).max(12),
   year: z.number().min(new Date().getFullYear()),
   dueDate: z.string().transform((str: string) => new Date(str)),
+  blockId: z.string().optional(),
 })
 
 export async function POST(req: Request) {
@@ -22,7 +23,13 @@ export async function POST(req: Request) {
     const json = await req.json()
     const body = bulkCreateDueSchema.parse(json)
 
+    const whereClause: any = {}
+    if (body.blockId) {
+      whereClause.blockId = body.blockId
+    }
+
     const apartments = await db.apartment.findMany({
+      where: whereClause,
       select: { id: true },
     })
 
@@ -44,7 +51,11 @@ export async function POST(req: Request) {
 
     await db.$transaction(dueCreationPromises)
 
-    return new NextResponse('Dues created successfully', { status: 201 })
+    const blockName = body.blockId 
+      ? (await db.block.findUnique({ where: { id: body.blockId } }))?.name || 'Seçilen blok'
+      : 'Tüm bloklar'
+
+    return new NextResponse(`${apartments.length} daire için ${blockName} aidatları başarıyla oluşturuldu`, { status: 201 })
   } catch (error: any) {
     if (error instanceof z.ZodError) {
       return new NextResponse(JSON.stringify(error.issues), { status: 422 })

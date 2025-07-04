@@ -9,12 +9,39 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Icons } from "@/components/icons";
 import { useSidebar } from "@/components/sidebar-provider";
+import { signOut, useSession } from "next-auth/react";
+import { toast } from "@/components/ui/use-toast";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function Sidebar({ className }: SidebarProps) {
   const pathname = usePathname();
   const { isOpen } = useSidebar();
+  const { data: session } = useSession();
+
+  const handleLogout = async () => {
+    try {
+      toast({
+        title: "Çıkış yapılıyor...",
+        description: "Oturumunuz sonlandırılıyor.",
+      });
+      
+      await signOut({ 
+        redirect: true,
+        callbackUrl: "/" 
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Hata",
+        description: "Çıkış yapılırken bir hata oluştu.",
+      });
+    }
+  };
+
+  // Get user role from session
+  const userRole = session?.user?.role;
+  const isRestricted = userRole === 'RESIDENT' || userRole === 'LANDLORD';
 
   const routes = [
     {
@@ -22,68 +49,82 @@ export function Sidebar({ className }: SidebarProps) {
       icon: Icons.home,
       href: "/dashboard",
       color: "text-sky-500",
+      visible: true, // Always visible
     },
     {
       label: "Bloklar",
       icon: Icons.building,
       href: "/dashboard/blocks",
       color: "text-violet-500",
+      visible: !isRestricted, // Hidden for RESIDENT and LANDLORD
     },
     {
       label: "Daireler",
       icon: Icons.home,
       href: "/dashboard/apartments",
       color: "text-pink-500",
+      visible: !isRestricted, // Hidden for RESIDENT and LANDLORD
     },
     {
       label: "Kullanıcılar",
       icon: Icons.users,
       href: "/dashboard/users",
       color: "text-orange-500",
+      visible: !isRestricted, // Hidden for RESIDENT and LANDLORD
     },
     {
       label: "Duyurular",
       icon: Icons.bell,
       href: "/dashboard/announcements",
       color: "text-emerald-500",
+      visible: true, // Always visible (but with restricted actions)
     },
     {
       label: "Aidatlar",
       icon: Icons.dollar,
       href: "/dashboard/dues",
       color: "text-blue-500",
+      visible: !isRestricted, // Hidden for RESIDENT and LANDLORD
     },
     {
       label: "Toplu İçe Aktarım",
       icon: Icons.upload,
       href: "/dashboard/bulk-import",
       color: "text-purple-500",
+      visible: !isRestricted, // Hidden for RESIDENT and LANDLORD
     },
     {
       label: "Ödemeler",
       icon: Icons.billing,
       href: "/dashboard/payments",
       color: "text-green-500",
+      visible: true, // Always visible
     },
     {
       label: "İletişim",
       icon: Icons.message,
       href: "/dashboard/contact",
       color: "text-yellow-500",
+      visible: true, // Always visible
     },
     {
       label: "Raporlar",
       icon: Icons.chart,
       href: "/dashboard/reports",
       color: "text-red-500",
+      visible: !isRestricted, // Hidden for RESIDENT and LANDLORD
     },
     {
       label: "Ayarlar",
       icon: Icons.settings,
       href: "/dashboard/settings",
       color: "text-gray-500",
+      visible: true, // Always visible (but with restricted functionality)
     },
   ];
+
+  // Filter routes based on visibility
+  const visibleRoutes = routes.filter(route => route.visible);
 
   return (
     <div
@@ -106,7 +147,7 @@ export function Sidebar({ className }: SidebarProps) {
       </div>
       <ScrollArea className="flex-1" data-oid="2pb0-hi">
         <div className="flex flex-col gap-1 p-2" data-oid="ybr:n9g">
-          {routes.map((route) => (
+          {visibleRoutes.map((route) => (
             <Button
               key={route.href}
               variant={pathname === route.href ? "secondary" : "ghost"}
@@ -133,16 +174,14 @@ export function Sidebar({ className }: SidebarProps) {
         <Button
           variant="ghost"
           className="w-full justify-start"
-          asChild
+          onClick={handleLogout}
           data-oid="mr9g9-o"
         >
-          <Link href="/" data-oid=".lgm7io">
-            <Icons.logout
-              className="mr-2 h-5 w-5 text-red-500"
-              data-oid="9jdirc5"
-            />
-            Çıkış Yap
-          </Link>
+          <Icons.logout
+            className="mr-2 h-5 w-5 text-red-500"
+            data-oid="9jdirc5"
+          />
+          Çıkış Yap
         </Button>
       </div>
     </div>

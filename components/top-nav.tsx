@@ -101,12 +101,12 @@ export function TopNav() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator data-oid="xhvmfez" />
               <DropdownMenuItem asChild data-oid="6ghfij1">
-                <Link href="/settings" data-oid="xr1mgrr">
+                <Link href="/dashboard/settings" data-oid="xr1mgrr">
                   Profile
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild data-oid="jax56:i">
-                <Link href="/settings" data-oid="utrmyd8">
+                <Link href="/dashboard/settings" data-oid="utrmyd8">
                   Settings
                 </Link>
               </DropdownMenuItem>

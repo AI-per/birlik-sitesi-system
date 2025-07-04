@@ -42,7 +42,10 @@ export async function GET(request: NextRequest) {
       blockName: apartment.block.name,
       createdAt: formatDate(new Date(apartment.createdAt)),
       residentCount: apartment.residents.length,
+      residents: apartment.residents || [], // Fix: Return full residents array
       resident: apartment.residents.length > 0 ? apartment.residents[0] : null,
+      unpaidDuesCount: 0, // TODO: Calculate actual unpaid dues
+      totalUnpaidAmount: 0, // TODO: Calculate actual total amount
       block: {
         id: apartment.block.id,
         name: apartment.block.name,
@@ -141,7 +144,10 @@ export async function POST(request: NextRequest) {
       blockName: apartment.block.name,
       createdAt: formatDate(new Date(apartment.createdAt)),
       residentCount: apartment.residents.length,
+      residents: apartment.residents || [], // Fix: Return full residents array
       resident: apartment.residents.length > 0 ? apartment.residents[0] : null,
+      unpaidDuesCount: 0, // TODO: Calculate actual unpaid dues
+      totalUnpaidAmount: 0, // TODO: Calculate actual total amount
       block: {
         id: apartment.block.id,
         name: apartment.block.name,

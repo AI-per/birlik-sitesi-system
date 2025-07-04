@@ -29,10 +29,12 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Icons } from "@/components/icons";
+import { DataTable, DataTableColumn } from "@/components/ui/data-table";
 import { AddApartmentDialog } from "@/components/apartments/add-apartment-dialog";
 import { EditApartmentDialog } from "@/components/apartments/edit-apartment-dialog";
 import { DeleteApartmentDialog } from "@/components/apartments/delete-apartment-dialog";
 import { toast } from "sonner";
+import Link from "next/link";
 
 interface Apartment {
   id: string;
@@ -59,6 +61,13 @@ interface Block {
   id: string;
   name: string;
 }
+
+const formatCurrency = (amount: number): string => {
+  return new Intl.NumberFormat('tr-TR', {
+    style: 'currency',
+    currency: 'TRY',
+  }).format(amount);
+};
 
 export function ApartmentList() {
   const router = useRouter();
@@ -143,210 +152,223 @@ export function ApartmentList() {
     const matchesSearch = 
       apartment.number.toLowerCase().includes(searchQuery.toLowerCase()) ||
       apartment.blockName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      apartment.residents.some(resident => 
+      (apartment.residents && apartment.residents.some(resident => 
         resident.fullName.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+      ));
     
     return matchesSearch;
   });
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('tr-TR', {
-      style: 'currency',
-      currency: 'TRY',
-    }).format(amount);
+  const handleApartmentAdded = () => {
+    fetchApartments();
+    setAddingApartment(false);
   };
+
+  const handleApartmentUpdated = () => {
+    fetchApartments();
+    setEditingApartment(null);
+  };
+
+  const handleApartmentDeleted = () => {
+    fetchApartments();
+    setDeletingApartment(null);
+  };
+
+  // Define table columns
+  const columns: DataTableColumn<Apartment>[] = [
+    {
+      id: "block",
+      header: "Blok",
+      accessorKey: "blockName",
+      sortable: true,
+      sortType: "text",
+      cell: (value, row) => (
+        <Link 
+          href={`/dashboard/apartments/${row.id}`}
+          className="font-medium hover:underline"
+        >
+          {value}
+        </Link>
+      ),
+    },
+    {
+      id: "number",
+      header: "Daire No",
+      accessorKey: "number",
+      sortable: true,
+      sortType: "text",
+      cell: (value, row) => (
+        <Link 
+          href={`/dashboard/apartments/${row.id}`}
+          className="font-medium hover:underline"
+        >
+          {value}
+        </Link>
+      ),
+    },
+    {
+      id: "floor",
+      header: "Kat",
+      accessorKey: "floor",
+      sortable: true,
+      sortType: "number",
+      cell: (value) => `${value}. Kat`,
+    },
+    {
+      id: "type",
+      header: "Tip",
+      accessorKey: "type",
+      sortable: true,
+      sortType: "text",
+      cell: (value) => value || <span className="text-muted-foreground">-</span>,
+    },
+    {
+      id: "squareMeters",
+      header: "m²",
+      accessorKey: "squareMeters",
+      sortable: true,
+      sortType: "number",
+      searchable: false,
+      cell: (value) => value ? `${value} m²` : <span className="text-muted-foreground">-</span>,
+    },
+    {
+      id: "residents",
+      header: "Konut Sakinleri",
+      accessorKey: "residentCount",
+      sortable: true,
+      sortType: "number",
+      searchable: false,
+      cell: (value, row) => (
+        <div className="flex flex-col">
+          <span className="font-medium">{value} kişi</span>
+          {row.residents && row.residents[0]?.fullName && (
+            <span className="text-sm text-muted-foreground">
+              {row.residents[0].fullName}
+              {row.residentCount > 1 && ` +${row.residentCount - 1}`}
+            </span>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: "unpaidDues",
+      header: "Ödenmemiş Aidat",
+      accessorKey: "unpaidDuesCount",
+      sortable: true,
+      sortType: "number",
+      searchable: false,
+      cell: (value, row) => (
+        <div className="flex flex-col">
+          <Badge variant={value > 0 ? "destructive" : "default"}>
+            {value} adet
+          </Badge>
+          {row.totalUnpaidAmount > 0 && (
+            <span className="text-xs text-muted-foreground mt-1">
+              {formatCurrency(row.totalUnpaidAmount)}
+            </span>
+          )}
+        </div>
+      ),
+    },
+  ];
+
+  // Render actions for each row
+  const renderActions = (apartment: Apartment) => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">Menüyü aç</span>
+          <Icons.moreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>İşlemler</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href={`/dashboard/apartments/${apartment.id}`}>
+            <Icons.eye className="mr-2 h-4 w-4" />
+            Detay
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setEditingApartment(apartment)}>
+          <Icons.edit className="mr-2 h-4 w-4" />
+          Düzenle
+        </DropdownMenuItem>
+        <DropdownMenuItem 
+          onClick={() => setDeletingApartment(apartment)}
+          className="text-destructive focus:text-destructive"
+        >
+          <Icons.trash className="mr-2 h-4 w-4" />
+          Sil
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
+  // Top actions for the table
+  const topActions = (
+    <>
+      <Select value={selectedBlock} onValueChange={setSelectedBlock} disabled={isLoadingBlocks}>
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder={isLoadingBlocks ? "Yükleniyor..." : "Tüm Bloklar"} />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">Tüm Bloklar</SelectItem>
+          {blocks.map((block) => (
+            <SelectItem key={block.id} value={block.id}>
+              {block.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <Button onClick={() => setAddingApartment(true)}>
+        <Icons.plus className="mr-2 h-4 w-4" />
+        Daire Ekle
+      </Button>
+    </>
+  );
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-2 flex-1">
-          <Input
-            placeholder="Daire ara (numara, blok, sakin adı)..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="max-w-sm"
-          />
-          <Select value={selectedBlock} onValueChange={setSelectedBlock} disabled={isLoadingBlocks}>
-            <SelectTrigger className="w-48">
-              <SelectValue placeholder={isLoadingBlocks ? "Yükleniyor..." : "Tüm Bloklar"} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Tüm Bloklar</SelectItem>
-              {blocks.map((block) => (
-                <SelectItem key={block.id} value={block.id}>
-                  {block.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <Button onClick={() => setAddingApartment(true)}>
-          <Icons.plus className="mr-2 h-4 w-4" />
-          Yeni Daire
-        </Button>
-      </div>
+      <DataTable
+        data={filteredApartments}
+        columns={columns}
+        isLoading={isLoading}
+        searchPlaceholder="Daire ara..."
+        emptyMessage="Henüz daire eklenmemiş."
+        loadingMessage="Daireler yükleniyor..."
+        onRowClick={handleRowClick}
+        rowClickCondition={(row) => Boolean(row.detail_url && row.detail_url.trim() !== '')}
+        actions={renderActions}
+        topActions={topActions}
+      />
 
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Blok</TableHead>
-              <TableHead>Daire No</TableHead>
-              <TableHead>Kat</TableHead>
-              <TableHead>Tip</TableHead>
-              <TableHead>m²</TableHead>
-              <TableHead>Sakinler</TableHead>
-              <TableHead>Ödenmemiş Aidat</TableHead>
-              <TableHead className="text-right">İşlemler</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              <TableRow>
-                <TableCell colSpan={8} className="h-24 text-center">
-                  Yükleniyor...
-                </TableCell>
-              </TableRow>
-            ) : filteredApartments.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={8} className="h-24 text-center">
-                  {apartments.length === 0 ? "Henüz daire eklenmemiş." : "Sonuç bulunamadı."}
-                </TableCell>
-              </TableRow>
-            ) : (
-              filteredApartments.map((apartment) => (
-                <TableRow 
-                  key={apartment.id}
-                  className={
-                    apartment.detail_url && apartment.detail_url.trim() !== ''
-                      ? "cursor-pointer hover:bg-muted/50 transition-colors"
-                      : "cursor-default"
-                  }
-                  onClick={(event) => handleRowClick(apartment, event)}
-                >
-                  <TableCell className="font-medium">
-                    {apartment.blockName}
-                  </TableCell>
-                  <TableCell>{apartment.number}</TableCell>
-                  <TableCell>{apartment.floor}. Kat</TableCell>
-                  <TableCell>
-                    {apartment.type ? (
-                      <Badge variant="secondary">{apartment.type}</Badge>
-                    ) : (
-                      <span className="text-muted-foreground">-</span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {apartment.squareMeters ? (
-                      `${apartment.squareMeters} m²`
-                    ) : (
-                      <span className="text-muted-foreground">-</span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {apartment.residentCount > 0 ? (
-                      <div className="flex items-center gap-2">
-                        <Badge variant="default">{apartment.residentCount}</Badge>
-                        <span className="text-sm text-muted-foreground">
-                          {apartment.residents[0]?.fullName}
-                          {apartment.residentCount > 1 && ` +${apartment.residentCount - 1}`}
-                        </span>
-                      </div>
-                    ) : (
-                      <Badge variant="outline">Boş</Badge>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {apartment.unpaidDuesCount > 0 ? (
-                      <div className="flex flex-col">
-                        <Badge variant="destructive" className="w-fit">
-                          {apartment.unpaidDuesCount} aidat
-                        </Badge>
-                        <span className="text-sm text-muted-foreground mt-1">
-                          {formatCurrency(apartment.totalUnpaidAmount)}
-                        </span>
-                      </div>
-                    ) : (
-                      <Badge variant="default" className="bg-green-100 text-green-800">
-                        Güncel
-                      </Badge>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          className="h-8 w-8 p-0"
-                          onClick={(event) => event.stopPropagation()}
-                        >
-                          <span className="sr-only">Menüyü aç</span>
-                          <Icons.ellipsis className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>İşlemler</DropdownMenuLabel>
-                        <DropdownMenuItem
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            router.push(`/dashboard/apartments/${apartment.id}`);
-                          }}
-                        >
-                          <Icons.fileText className="mr-2 h-4 w-4" />
-                          Detaylar
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={(event) => {
-                          event.stopPropagation();
-                          setEditingApartment(apartment);
-                        }}>
-                          <Icons.settings className="mr-2 h-4 w-4" />
-                          Düzenle
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            setDeletingApartment(apartment);
-                          }}
-                          className="text-red-600"
-                        >
-                          <Icons.trash className="mr-2 h-4 w-4" />
-                          Sil
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
+      {/* Dialogs */}
+      {addingApartment && (
+        <AddApartmentDialog
+          open={addingApartment}
+          onOpenChange={setAddingApartment}
+          onApartmentAdded={handleApartmentAdded}
+        />
+      )}
 
       {editingApartment && (
         <EditApartmentDialog
           apartment={editingApartment}
-          open={!!editingApartment}
-          onOpenChange={() => setEditingApartment(null)}
-          onApartmentUpdated={fetchApartments}
+          open={Boolean(editingApartment)}
+          onOpenChange={(open) => !open && setEditingApartment(null)}
+          onApartmentUpdated={handleApartmentUpdated}
         />
       )}
 
       {deletingApartment && (
         <DeleteApartmentDialog
           apartment={deletingApartment}
-          open={!!deletingApartment}
-          onOpenChange={() => setDeletingApartment(null)}
-          onApartmentDeleted={fetchApartments}
+          open={Boolean(deletingApartment)}
+          onOpenChange={(open) => !open && setDeletingApartment(null)}
+          onApartmentDeleted={handleApartmentDeleted}
         />
       )}
-
-      <AddApartmentDialog
-        open={addingApartment}
-        onOpenChange={setAddingApartment}
-        onApartmentAdded={fetchApartments}
-      />
     </div>
   );
 } 

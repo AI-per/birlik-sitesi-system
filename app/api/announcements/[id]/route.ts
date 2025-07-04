@@ -31,11 +31,16 @@ export async function GET(
       );
     }
 
-    // Format dates for frontend
+    // Format dates and attachment URLs for frontend
     const formattedAnnouncement = {
       ...announcement,
       createdAt: formatDate(new Date(announcement.createdAt)),
       updatedAt: formatDate(new Date(announcement.updatedAt)),
+      attachments: announcement.attachments.map(attachment => ({
+        ...attachment,
+        url: attachment.filePath, // Transform filePath to url for frontend
+        mimeType: attachment.fileType, // Transform fileType to mimeType for frontend
+      })),
     };
 
     return NextResponse.json(formattedAnnouncement);
@@ -56,7 +61,15 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { title, content, isPublished, currentUserId, currentUserRole } = body;
+    const { 
+      title, 
+      content, 
+      isPublished, 
+      currentUserId, 
+      currentUserRole,
+      attachments, // Yeni yüklenen dosyalar
+      existingAttachments // Korunacak mevcut dosyalar
+    } = body;
 
     // Duyuru kontrolü
     const announcement = await db.announcement.findUnique({
@@ -69,6 +82,7 @@ export async function PUT(
             role: true,
           },
         },
+        attachments: true,
       },
     });
 
@@ -79,10 +93,10 @@ export async function PUT(
       );
     }
 
-    // Yetki kontrolü - sadece yazar veya ADMIN düzenleyebilir
+    // Yetki kontrolü - sadece yazar veya ADMIN güncelleyebilir
     if (announcement.authorId !== currentUserId && currentUserRole !== 'ADMIN') {
       return NextResponse.json(
-        { error: "Bu duyuruyu düzenleme yetkiniz bulunmamaktadır" },
+        { error: "Bu duyuruyu güncelleme yetkiniz bulunmamaktadır" },
         { status: 403 }
       );
     }
@@ -109,35 +123,100 @@ export async function PUT(
       );
     }
 
-    // Duyuru güncelle
-    const updatedAnnouncement = await db.announcement.update({
-      where: { id },
-      data: {
-      title: title.trim(),
-      content: content.trim(),
-      isPublished: isPublished ?? announcement.isPublished,
-        updatedAt: new Date(),
-      },
-      include: {
-        author: {
-          select: {
-            id: true,
-            fullName: true,
-            role: true,
-          },
+    // Mevcut ekleri silme ve yeni ekleri ekleme işlemi
+    const updatedAnnouncement = await db.$transaction(async (prisma) => {
+      // Önce mevcut tüm ekleri sil
+      await prisma.announcementAttachment.deleteMany({
+        where: { announcementId: id },
+      });
+
+      // Duyuruyu güncelle
+      const updated = await prisma.announcement.update({
+        where: { id },
+        data: {
+          title: title.trim(),
+          content: content.trim(),
+          isPublished: isPublished ?? true,
         },
-        attachments: true,
-      },
+        include: {
+          author: {
+            select: {
+              id: true,
+              fullName: true,
+              role: true,
+            },
+          },
+          attachments: true,
+        },
+      });
+
+      // Korunacak mevcut ekleri geri ekle
+      if (existingAttachments && existingAttachments.length > 0) {
+        await prisma.announcementAttachment.createMany({
+          data: existingAttachments.map((attachment: any) => ({
+            announcementId: id,
+            originalName: attachment.originalName,
+            fileName: attachment.fileName,
+            filePath: attachment.filePath || attachment.url, // url alanı filePath olarak kullanılabilir
+            fileSize: attachment.fileSize,
+            fileType: attachment.fileType || attachment.mimeType,
+          })),
+        });
+      }
+
+      // Yeni yüklenen dosyaları ekle
+      if (attachments && attachments.length > 0) {
+        await prisma.announcementAttachment.createMany({
+          data: attachments.map((file: any) => ({
+            announcementId: id,
+            originalName: file.originalName,
+            fileName: file.fileName,
+            filePath: file.filePath,
+            fileSize: file.fileSize,
+            fileType: file.fileType,
+          })),
+        });
+      }
+
+      // Güncellenmiş duyuruyu ekleriyle birlikte getir
+      return await prisma.announcement.findUnique({
+        where: { id },
+        include: {
+          author: {
+            select: {
+              id: true,
+              fullName: true,
+              role: true,
+            },
+          },
+          attachments: true,
+        },
+      });
     });
 
-    // Format dates for frontend
+    if (!updatedAnnouncement) {
+      return NextResponse.json(
+        { error: "Duyuru güncellenirken hata oluştu" },
+        { status: 500 }
+      );
+    }
+
+    // Format dates and attachment URLs for frontend
     const formattedAnnouncement = {
       ...updatedAnnouncement,
       createdAt: formatDate(new Date(updatedAnnouncement.createdAt)),
       updatedAt: formatDate(new Date(updatedAnnouncement.updatedAt)),
+      attachments: updatedAnnouncement.attachments.map(attachment => ({
+        ...attachment,
+        url: attachment.filePath, // Transform filePath to url for frontend
+        mimeType: attachment.fileType, // Transform fileType to mimeType for frontend
+      })),
     };
 
-    return NextResponse.json(formattedAnnouncement);
+    return NextResponse.json({
+      message: "Duyuru başarıyla güncellendi",
+      announcement: formattedAnnouncement,
+    });
   } catch (error) {
     console.error("Error updating announcement:", error);
     return NextResponse.json(

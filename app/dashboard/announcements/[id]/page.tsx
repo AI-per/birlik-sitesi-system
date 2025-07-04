@@ -93,7 +93,7 @@ export default function AnnouncementPage() {
   const getRoleLabel = (role: string) => {
     switch (role) {
       case 'RESIDENT':
-        return 'Sakin';
+        return 'Konut Sakini';
       case 'MANAGER':
         return 'Yönetici';
       case 'ADMIN':
