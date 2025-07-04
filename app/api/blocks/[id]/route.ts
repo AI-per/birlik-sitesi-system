@@ -75,7 +75,7 @@ export async function PUT(
 
     // Aynı isimde başka blok var mı kontrol et
     const existingBlock = await db.block.findFirst({
-      where: { 
+      where: {
         name: name.trim(),
         NOT: {
           id: params.id

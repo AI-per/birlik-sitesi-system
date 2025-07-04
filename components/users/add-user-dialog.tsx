@@ -228,8 +228,8 @@ export function AddUserDialog({
                   role="combobox"
                   aria-expanded={openApartmentSelector}
                   className="col-span-3 justify-between"
-                  disabled={isLoadingApartments}
-                >
+              disabled={isLoadingApartments}
+            >
                   {apartmentId
                     ? apartments.find((apartment) => apartment.id === apartmentId)
                         ? `${apartments.find((apartment) => apartment.id === apartmentId)?.blockName} - Daire ${apartments.find((apartment) => apartment.id === apartmentId)?.number}`
@@ -258,7 +258,7 @@ export function AddUserDialog({
                       />
                       Daire seçilmedi
                     </CommandItem>
-                    {apartments.map((apartment) => (
+                {apartments.map((apartment) => (
                       <CommandItem
                         key={apartment.id}
                         value={`${apartment.blockName}-${apartment.number}-${apartment.floor}`}
@@ -273,9 +273,9 @@ export function AddUserDialog({
                             apartmentId === apartment.id ? "opacity-100" : "opacity-0"
                           )}
                         />
-                        {apartment.blockName} - Daire {apartment.number} ({apartment.floor}. Kat)
+                    {apartment.blockName} - Daire {apartment.number} ({apartment.floor}. Kat)
                       </CommandItem>
-                    ))}
+                ))}
                   </CommandGroup>
                 </Command>
               </PopoverContent>

@@ -116,7 +116,7 @@ export async function POST(request: NextRequest) {
         floor: floorNum,
         type: type?.trim() || null,
         squareMeters: squareMeters ? parseInt(squareMeters) : null,
-        blockId,
+      blockId,
       },
       include: {
         block: true,

@@ -278,35 +278,35 @@ export function AnnouncementList({ currentUserId, currentUserRole }: Announcemen
   // Top actions (filters and add button)
   const topActions = (
     <>
-      <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-        <SelectTrigger className="w-40">
-          <SelectValue placeholder="Tüm Durumlar" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">Tüm Durumlar</SelectItem>
-          <SelectItem value="published">Yayında</SelectItem>
-          <SelectItem value="draft">Taslak</SelectItem>
-        </SelectContent>
-      </Select>
-      <Select value={selectedAuthor} onValueChange={setSelectedAuthor}>
-        <SelectTrigger className="w-40">
-          <SelectValue placeholder="Tüm Yazarlar" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">Tüm Yazarlar</SelectItem>
-          {uniqueAuthors.map((author) => (
-            <SelectItem key={author.id} value={author.id}>
-              {author.fullName}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      {canCreateAnnouncement && (
-        <Button onClick={() => setAddingAnnouncement(true)}>
-          <Icons.plus className="mr-2 h-4 w-4" />
-          Yeni Duyuru
-        </Button>
-      )}
+          <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+            <SelectTrigger className="w-40">
+              <SelectValue placeholder="Tüm Durumlar" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Tüm Durumlar</SelectItem>
+              <SelectItem value="published">Yayında</SelectItem>
+              <SelectItem value="draft">Taslak</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select value={selectedAuthor} onValueChange={setSelectedAuthor}>
+            <SelectTrigger className="w-40">
+              <SelectValue placeholder="Tüm Yazarlar" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Tüm Yazarlar</SelectItem>
+              {uniqueAuthors.map((author) => (
+                <SelectItem key={author.id} value={author.id}>
+                  {author.fullName}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        {canCreateAnnouncement && (
+          <Button onClick={() => setAddingAnnouncement(true)}>
+            <Icons.plus className="mr-2 h-4 w-4" />
+            Yeni Duyuru
+          </Button>
+        )}
     </>
   );
 
@@ -320,7 +320,7 @@ export function AnnouncementList({ currentUserId, currentUserRole }: Announcemen
             onChange={(e) => setSearchQuery(e.target.value)}
             className="max-w-sm"
           />
-        </div>
+                    </div>
       </div>
 
       <DataTable<Announcement>

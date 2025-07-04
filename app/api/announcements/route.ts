@@ -112,13 +112,13 @@ export async function POST(request: NextRequest) {
     // Yeni duyuru oluştur
     const newAnnouncement = await db.announcement.create({
       data: {
-        title: title.trim(),
-        content: content.trim(),
-        isPublished: isPublished ?? true,
-        authorId,
+      title: title.trim(),
+      content: content.trim(),
+      isPublished: isPublished ?? true,
+      authorId,
       },
       include: {
-        author: {
+      author: {
           select: {
             id: true,
             fullName: true,

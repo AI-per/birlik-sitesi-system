@@ -65,25 +65,25 @@ export async function POST(request: NextRequest) {
 
     // Email varsa formatını kontrol et
     if (email && email.trim()) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email.trim())) {
-        return NextResponse.json(
+      return NextResponse.json(
           { error: "Geçerli bir email adresi girin" },
-          { status: 400 }
-        );
-      }
+        { status: 400 }
+      );
+    }
 
       // Mevcut email kontrolü (sadece email verilmişse)
-      const existingUser = await db.user.findUnique({
+    const existingUser = await db.user.findUnique({
         where: { email: email.trim() },
-      });
+    });
 
-      if (existingUser) {
-        return NextResponse.json(
+    if (existingUser) {
+      return NextResponse.json(
           { error: "Bu email adresi zaten kullanılıyor" },
-          { status: 400 }
-        );
-      }
+        { status: 400 }
+      );
+    }
     }
 
     // Şifreyi hashle

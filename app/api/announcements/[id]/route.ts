@@ -113,9 +113,9 @@ export async function PUT(
     const updatedAnnouncement = await db.announcement.update({
       where: { id },
       data: {
-        title: title.trim(),
-        content: content.trim(),
-        isPublished: isPublished ?? announcement.isPublished,
+      title: title.trim(),
+      content: content.trim(),
+      isPublished: isPublished ?? announcement.isPublished,
         updatedAt: new Date(),
       },
       include: {

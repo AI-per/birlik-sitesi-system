@@ -20,10 +20,10 @@ export async function GET(
           },
         },
         payments: {
-          include: {
+              include: {
             due: true,
-          },
-          orderBy: {
+              },
+              orderBy: {
             paymentDate: 'desc',
           },
         },
@@ -125,13 +125,13 @@ export async function PUT(
 
     // Email varsa formatını ve benzersizliğini kontrol et
     if (email && email.trim()) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email.trim())) {
-        return NextResponse.json(
+      return NextResponse.json(
           { error: "Geçerli bir email adresi girin" },
-          { status: 400 }
-        );
-      }
+        { status: 400 }
+      );
+    }
 
       // Başka kullanıcı aynı email'i kullanıyor mu kontrol et
       const emailUser = await db.user.findUnique({
