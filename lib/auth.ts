@@ -13,6 +13,7 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: '/login',
+    signOut: '/', // Redirect to homepage after logout
   },
   providers: [
     CredentialsProvider({
@@ -54,6 +55,13 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url
+      return baseUrl
+    },
     async session({ token, session }) {
       if (token && session.user) {
         session.user.id = token.id

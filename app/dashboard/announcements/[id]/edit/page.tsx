@@ -11,12 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Icons } from "@/components/icons";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
-
-// Mock user data
-const MOCK_CURRENT_USER = {
-  id: "1be6f3b1-97e7-4910-8b6b-cd03f633b11a",
-  role: "MANAGER"
-};
+import { useSession } from "next-auth/react";
 
 interface Attachment {
   id: string;
@@ -44,9 +39,11 @@ interface Announcement {
 }
 
 export default function EditAnnouncementPage() {
+  const { data: session, status } = useSession();
   const router = useRouter();
   const params = useParams();
   const [announcement, setAnnouncement] = useState<Announcement | null>(null);
+  const [currentUser, setCurrentUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   
@@ -58,8 +55,34 @@ export default function EditAnnouncementPage() {
   const [existingAttachments, setExistingAttachments] = useState<Attachment[]>([]);
 
   useEffect(() => {
-    fetchAnnouncement();
-  }, [params.id]);
+    if (status === "loading") return; // Still loading
+
+    if (!session) {
+      router.push("/login");
+      return;
+    }
+
+    // Fetch current user data
+    const fetchUser = async () => {
+      try {
+        const response = await fetch("/api/users/profile");
+        if (response.ok) {
+          const userData = await response.json();
+          setCurrentUser(userData);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUser();
+  }, [session, status, router]);
+
+  useEffect(() => {
+    if (currentUser) {
+      fetchAnnouncement();
+    }
+  }, [params.id, currentUser]);
 
   const fetchAnnouncement = async () => {
     try {
@@ -106,7 +129,7 @@ export default function EditAnnouncementPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!announcement) return;
+    if (!announcement || !currentUser) return;
 
     // Validation
     if (!title.trim()) {
@@ -163,8 +186,8 @@ export default function EditAnnouncementPage() {
           title: title.trim(),
           content: content.trim(),
           isPublished,
-          currentUserId: MOCK_CURRENT_USER.id,
-          currentUserRole: MOCK_CURRENT_USER.role,
+          currentUserId: currentUser.id,
+          currentUserRole: currentUser.role,
           attachments: uploadedFiles,
           existingAttachments: existingAttachments,
         }),
@@ -185,7 +208,7 @@ export default function EditAnnouncementPage() {
     }
   };
 
-  if (loading) {
+  if (status === "loading" || loading || !currentUser) {
     return (
       <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
         <div className="flex items-center justify-center h-64">
@@ -214,7 +237,7 @@ export default function EditAnnouncementPage() {
   }
 
   // Yetki kontrolü
-  const canEdit = announcement.author.id === MOCK_CURRENT_USER.id || MOCK_CURRENT_USER.role === 'ADMIN';
+  const canEdit = announcement.author.id === currentUser.id || currentUser.role === 'ADMIN';
   
   if (!canEdit) {
     return (

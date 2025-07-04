@@ -8,12 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Icons } from "@/components/icons";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
-
-// Mock user data
-const MOCK_CURRENT_USER = {
-  id: "d6468359-5825-4d7a-8f59-768e2382608e", // Real user ID from database (alper - ADMIN)
-  role: "ADMIN"
-};
+import { useSession } from "next-auth/react";
 
 interface Announcement {
   id: string;
@@ -23,6 +18,14 @@ interface Announcement {
   createdAt: string;
   updatedAt: string;
   authorId: string;
+  attachments?: {
+    id: string;
+    originalName: string;
+    fileName: string;
+    fileSize: number;
+    url: string;
+    mimeType: string;
+  }[];
   author: {
     id: string;
     fullName: string;
@@ -31,15 +34,43 @@ interface Announcement {
 }
 
 export default function AnnouncementPage() {
+  const { data: session, status } = useSession();
   const router = useRouter();
   const params = useParams();
   const [announcement, setAnnouncement] = useState<Announcement | null>(null);
+  const [currentUser, setCurrentUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
-    fetchAnnouncement();
-  }, [params.id]);
+    if (status === "loading") return; // Still loading
+
+    if (!session) {
+      router.push("/login");
+      return;
+    }
+
+    // Fetch current user data
+    const fetchUser = async () => {
+      try {
+        const response = await fetch("/api/users/profile");
+        if (response.ok) {
+          const userData = await response.json();
+          setCurrentUser(userData);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUser();
+  }, [session, status, router]);
+
+  useEffect(() => {
+    if (currentUser) {
+      fetchAnnouncement();
+    }
+  }, [params.id, currentUser]);
 
   const fetchAnnouncement = async () => {
     try {
@@ -63,7 +94,7 @@ export default function AnnouncementPage() {
   };
 
   const handleDelete = async () => {
-    if (!announcement) return;
+    if (!announcement || !currentUser) return;
     
     if (!confirm('Bu duyuruyu silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.')) {
       return;
@@ -71,7 +102,7 @@ export default function AnnouncementPage() {
 
     setDeleting(true);
     try {
-      const response = await fetch(`/api/announcements/${announcement.id}?currentUserId=${MOCK_CURRENT_USER.id}&currentUserRole=${MOCK_CURRENT_USER.role}`, {
+      const response = await fetch(`/api/announcements/${announcement.id}?currentUserId=${currentUser.id}&currentUserRole=${currentUser.role}`, {
         method: 'DELETE',
       });
 
@@ -126,7 +157,7 @@ export default function AnnouncementPage() {
     });
   };
 
-  if (loading) {
+  if (status === "loading" || loading || !currentUser) {
     return (
       <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
         <div className="flex items-center justify-center h-64">
@@ -154,7 +185,7 @@ export default function AnnouncementPage() {
     );
   }
 
-  const canEdit = announcement.author.id === MOCK_CURRENT_USER.id || MOCK_CURRENT_USER.role === 'ADMIN';
+  const canEdit = announcement.author.id === currentUser.id || currentUser.role === 'ADMIN';
 
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
@@ -234,6 +265,107 @@ export default function AnnouncementPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Dosya Ekleri Kartı */}
+        {announcement.attachments && announcement.attachments.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Ekler</CardTitle>
+              <CardDescription>
+                Bu duyuruya eklenmiş dosyalar ve görseller
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                {/* Görsel Dosyalar - Inline Gösterim */}
+                {announcement.attachments.filter(attachment => attachment.mimeType.startsWith('image/')).length > 0 && (
+                  <div className="space-y-3">
+                    <h4 className="text-sm font-medium text-foreground">Görseller</h4>
+                    <div className="grid gap-4">
+                      {announcement.attachments
+                        .filter(attachment => attachment.mimeType.startsWith('image/'))
+                        .map((attachment) => (
+                        <div key={attachment.id} className="space-y-2">
+                          <div className="relative">
+                            <img
+                              src={attachment.url}
+                              alt={attachment.originalName}
+                              className="max-w-full h-auto rounded-lg border border-border shadow-sm"
+                              style={{ maxHeight: '500px' }}
+                              loading="lazy"
+                            />
+                          </div>
+                          <div className="flex items-center justify-between text-xs text-muted-foreground">
+                            <span>{attachment.originalName}</span>
+                            <div className="flex items-center gap-2">
+                              <span>{(attachment.fileSize / 1024 / 1024).toFixed(2)} MB</span>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => window.open(attachment.url, '_blank')}
+                                className="h-6 px-2 text-xs"
+                              >
+                                <Icons.download className="h-3 w-3 mr-1" />
+                                İndir
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Diğer Dosyalar - Liste Gösterim */}
+                {announcement.attachments.filter(attachment => !attachment.mimeType.startsWith('image/')).length > 0 && (
+                  <div className="space-y-3">
+                    <h4 className="text-sm font-medium text-foreground">Dosyalar</h4>
+                    <div className="grid gap-3">
+                      {announcement.attachments
+                        .filter(attachment => !attachment.mimeType.startsWith('image/'))
+                        .map((attachment) => (
+                        <div key={attachment.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors">
+                          <div className="flex items-center gap-3">
+                            <div className="flex-shrink-0">
+                              {attachment.mimeType.startsWith('video/') ? (
+                                <Icons.file className="h-5 w-5 text-purple-500" />
+                              ) : attachment.mimeType === 'application/pdf' ? (
+                                <Icons.file className="h-5 w-5 text-red-500" />
+                              ) : attachment.mimeType.includes('word') ? (
+                                <Icons.file className="h-5 w-5 text-blue-500" />
+                              ) : attachment.mimeType.includes('excel') || attachment.mimeType.includes('spreadsheet') ? (
+                                <Icons.file className="h-5 w-5 text-green-500" />
+                              ) : (
+                                <Icons.file className="h-5 w-5 text-gray-500" />
+                              )}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium text-foreground truncate">
+                                {attachment.originalName}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {(attachment.fileSize / 1024 / 1024).toFixed(2)} MB
+                              </p>
+                            </div>
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => window.open(attachment.url, '_blank')}
+                            className="h-8 px-3"
+                          >
+                            <Icons.download className="h-4 w-4 mr-1" />
+                            İndir
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Metadata Kartı */}
         <Card>

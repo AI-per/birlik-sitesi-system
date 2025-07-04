@@ -5,7 +5,6 @@ import { Icons } from "@/components/icons";
 import { useSidebar } from "@/components/sidebar-provider";
 import { ModeToggle } from "@/components/mode-toggle";
 import { UserNav } from "@/components/dashboard/user-nav";
-import { NotificationPopover } from "@/components/dashboard/notification-popover";
 
 export function Header() {
   const { toggle } = useSidebar();
@@ -29,7 +28,6 @@ export function Header() {
       </Button>
       <div className="flex-1" data-oid="3ra.co8" />
       <div className="flex items-center gap-2" data-oid="ua1o63e">
-        <NotificationPopover data-oid="v9mip_d" />
         <ModeToggle data-oid="t:h7f-4" />
         <UserNav data-oid="0-irhjm" />
       </div>

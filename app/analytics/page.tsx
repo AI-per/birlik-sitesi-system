@@ -5,7 +5,6 @@ import { DateRangePicker } from "@/components/date-range-picker";
 import { OverviewTab } from "@/components/analytics/overview-tab";
 import { AnalyticsTab } from "@/components/analytics/analytics-tab";
 import { ReportsTab } from "@/components/analytics/reports-tab";
-import { NotificationsTab } from "@/components/analytics/notifications-tab";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 
@@ -37,7 +36,7 @@ export default function AnalyticsPage() {
         </div>
       </div>
       <Tabs defaultValue="overview" className="space-y-4" data-oid="x51xbx.">
-        <TabsList className="grid w-full grid-cols-4" data-oid="f.:fujx">
+        <TabsList className="grid w-full grid-cols-3" data-oid="f.:fujx">
           <TabsTrigger value="overview" data-oid="3jyz9qr">
             Overview
           </TabsTrigger>
@@ -46,9 +45,6 @@ export default function AnalyticsPage() {
           </TabsTrigger>
           <TabsTrigger value="reports" data-oid="crv9d09">
             Reports
-          </TabsTrigger>
-          <TabsTrigger value="notifications" data-oid="9d0z76s">
-            Notifications
           </TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-4" data-oid="9nuyskz">
@@ -59,13 +55,6 @@ export default function AnalyticsPage() {
         </TabsContent>
         <TabsContent value="reports" className="space-y-4" data-oid="-mdisz:">
           <ReportsTab data-oid="o1fhf6t" />
-        </TabsContent>
-        <TabsContent
-          value="notifications"
-          className="space-y-4"
-          data-oid="--6y3m8"
-        >
-          <NotificationsTab data-oid="9mva9b8" />
         </TabsContent>
       </Tabs>
     </div>

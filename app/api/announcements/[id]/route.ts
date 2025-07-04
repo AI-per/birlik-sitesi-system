@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { formatDate } from "@/lib/utils";
 
 // GET /api/announcements/[id] - Tekil duyuru getir
 export async function GET(
@@ -31,11 +30,11 @@ export async function GET(
       );
     }
 
-    // Format dates and attachment URLs for frontend
-    const formattedAnnouncement = {
+    // Transform attachment data for frontend (keep raw dates)
+    const transformedAnnouncement = {
       ...announcement,
-      createdAt: formatDate(new Date(announcement.createdAt)),
-      updatedAt: formatDate(new Date(announcement.updatedAt)),
+      createdAt: announcement.createdAt.toISOString(),
+      updatedAt: announcement.updatedAt.toISOString(),
       attachments: announcement.attachments.map(attachment => ({
         ...attachment,
         url: attachment.filePath, // Transform filePath to url for frontend
@@ -43,7 +42,7 @@ export async function GET(
       })),
     };
 
-    return NextResponse.json(formattedAnnouncement);
+    return NextResponse.json(transformedAnnouncement);
   } catch (error) {
     console.error("Error fetching announcement:", error);
     return NextResponse.json(
@@ -201,11 +200,11 @@ export async function PUT(
       );
     }
 
-    // Format dates and attachment URLs for frontend
-    const formattedAnnouncement = {
+    // Transform dates and attachment URLs for frontend (keep raw dates)
+    const transformedAnnouncement = {
       ...updatedAnnouncement,
-      createdAt: formatDate(new Date(updatedAnnouncement.createdAt)),
-      updatedAt: formatDate(new Date(updatedAnnouncement.updatedAt)),
+      createdAt: updatedAnnouncement.createdAt.toISOString(),
+      updatedAt: updatedAnnouncement.updatedAt.toISOString(),
       attachments: updatedAnnouncement.attachments.map(attachment => ({
         ...attachment,
         url: attachment.filePath, // Transform filePath to url for frontend
@@ -215,7 +214,7 @@ export async function PUT(
 
     return NextResponse.json({
       message: "Duyuru başarıyla güncellendi",
-      announcement: formattedAnnouncement,
+      announcement: transformedAnnouncement,
     });
   } catch (error) {
     console.error("Error updating announcement:", error);

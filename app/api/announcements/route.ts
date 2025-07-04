@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { formatDate } from "@/lib/utils";
 
 // GET /api/announcements - Tüm duyuruları listele
 export async function GET(request: NextRequest) {
@@ -37,11 +36,11 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // Format dates and attachment URLs for frontend
-    const formattedAnnouncements = announcements.map(announcement => ({
+    // Transform attachment data for frontend (keep raw dates)
+    const transformedAnnouncements = announcements.map(announcement => ({
       ...announcement,
-      createdAt: formatDate(new Date(announcement.createdAt)),
-      updatedAt: formatDate(new Date(announcement.updatedAt)),
+      createdAt: announcement.createdAt.toISOString(),
+      updatedAt: announcement.updatedAt.toISOString(),
       attachments: announcement.attachments.map(attachment => ({
         ...attachment,
         url: attachment.filePath, // Transform filePath to url for frontend
@@ -49,7 +48,7 @@ export async function GET(request: NextRequest) {
       })),
     }));
 
-    return NextResponse.json(formattedAnnouncements);
+    return NextResponse.json(transformedAnnouncements);
   } catch (error) {
     console.error("Error fetching announcements:", error);
     return NextResponse.json(
@@ -114,25 +113,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Yeni duyuru oluştur (attachments dahil)
-    const newAnnouncement = await db.announcement.create({
+    // Yeni duyuru oluştur (önce duyuru, sonra attachments)
+    const announcement = await db.announcement.create({
       data: {
         title: title.trim(),
         content: content.trim(),
         isPublished: isPublished ?? true,
         authorId,
-        // Eğer attachments varsa, aynı transaction içinde oluştur
-        attachments: attachments && attachments.length > 0 ? {
-          createMany: {
-            data: attachments.map((file: any) => ({
-              originalName: file.originalName,
-              fileName: file.fileName,
-              filePath: file.filePath,
-              fileSize: file.fileSize,
-              fileType: file.fileType,
-            })),
-          },
-        } : undefined,
       },
       include: {
         author: {
@@ -146,12 +133,47 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Format dates and attachment URLs for frontend
-    const formattedAnnouncement = {
-      ...newAnnouncement,
-      createdAt: formatDate(new Date(newAnnouncement.createdAt)),
-      updatedAt: formatDate(new Date(newAnnouncement.updatedAt)),
-      attachments: newAnnouncement.attachments.map(attachment => ({
+    // Handle file attachments separately after announcement creation
+    if (attachments && attachments.length > 0) {
+      const attachmentData = attachments.map((attachment: any) => ({
+        announcementId: announcement.id,
+        originalName: attachment.originalName,
+        fileName: attachment.fileName,
+        filePath: attachment.filePath,
+        fileSize: attachment.fileSize,
+        fileType: attachment.fileType,
+      }));
+
+      await db.announcementAttachment.createMany({
+        data: attachmentData,
+      });
+
+      // Refetch announcement with attachments to get complete data
+      const announcementWithAttachments = await db.announcement.findUnique({
+        where: { id: announcement.id },
+        include: {
+          author: {
+            select: {
+              id: true,
+              fullName: true,
+              role: true,
+            },
+          },
+          attachments: true,
+        },
+      });
+
+      if (announcementWithAttachments) {
+        announcement.attachments = announcementWithAttachments.attachments;
+      }
+    }
+
+    // Transform dates and attachment URLs for frontend (keep raw dates)
+    const transformedAnnouncement = {
+      ...announcement,
+      createdAt: announcement.createdAt.toISOString(),
+      updatedAt: announcement.updatedAt.toISOString(),
+      attachments: announcement.attachments.map(attachment => ({
         ...attachment,
         url: attachment.filePath, // Transform filePath to url for frontend
         mimeType: attachment.fileType, // Transform fileType to mimeType for frontend
@@ -160,7 +182,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       message: "Duyuru başarıyla oluşturuldu",
-      announcement: formattedAnnouncement,
+      announcement: transformedAnnouncement,
     });
   } catch (error) {
     console.error("Error creating announcement:", error);

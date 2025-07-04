@@ -205,7 +205,7 @@ export function UserList() {
     {
       id: "apartment",
       header: "Daire",
-      accessorFn: (row) => row.apartment ? `${row.apartment.blockName} - Daire ${row.apartment.number}` : null,
+      accessorFn: (row) => row.apartment ? `${row.apartment.blockName} - ${row.apartment.number}` : null,
       sortable: true,
       sortType: "text",
       cell: (value, row) => 
@@ -214,7 +214,7 @@ export function UserList() {
             href={`/dashboard/apartments/${row.apartment.id}`}
             className="hover:underline text-sm"
           >
-            {row.apartment.blockName} - Daire {row.apartment.number}
+            {row.apartment.blockName} - {row.apartment.number}
           </Link>
         ) : (
           <span className="text-muted-foreground">-</span>

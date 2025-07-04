@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { formatDate } from "@/lib/utils";
 import bcrypt from "bcryptjs";
 
 // GET /api/users - Tüm kullanıcıları listele
@@ -8,9 +7,24 @@ export async function GET() {
   try {
     const users = await db.user.findMany({
       include: {
-        apartment: {
+        residingApartment: {
           include: {
             block: true,
+            dues: {
+              include: {
+                payment: true,
+              },
+            },
+          },
+        },
+        ownedApartment: {
+          include: {
+            block: true,
+            dues: {
+              include: {
+                payment: true,
+              },
+            },
           },
         },
       },
@@ -19,25 +33,37 @@ export async function GET() {
       },
     });
 
-    const usersWithDetails = users.map((user: any) => ({
-      id: user.id,
-      email: user.email,
-      fullName: user.fullName,
-      phone: user.phone,
-      role: user.role,
-      isActive: user.isActive,
-      createdAt: formatDate(new Date(user.createdAt)),
-      detail_url: `/dashboard/users/${user.id}`,
-      apartment: user.apartment ? {
-        id: user.apartment.id,
-        number: user.apartment.number,
-        floor: user.apartment.floor,
-        block: {
-          id: user.apartment.block.id,
-          name: user.apartment.block.name,
-        },
-      } : null,
-    }));
+    const usersWithDetails = users.map((user: any) => {
+      // Calculate unpaid dues for the user's apartment (prioritize residing apartment, fallback to owned)
+      let unpaidDuesCount = 0;
+      let totalUnpaidAmount = 0;
+      const apartment = user.residingApartment || user.ownedApartment;
+      
+      if (apartment && apartment.dues) {
+        const unpaidDues = apartment.dues.filter((due: any) => !due.payment);
+        unpaidDuesCount = unpaidDues.length;
+        totalUnpaidAmount = unpaidDues.reduce((sum: number, due: any) => sum + Number(due.amount), 0);
+      }
+
+      return {
+        id: user.id,
+        email: user.email,
+        fullName: user.fullName,
+        phone: user.phone,
+        role: user.role,
+        isActive: user.isActive,
+        createdAt: user.createdAt.toISOString(),
+        detail_url: `/dashboard/users/${user.id}`,
+        apartment: apartment ? {
+          id: apartment.id,
+          number: apartment.number,
+          floor: apartment.floor,
+          blockName: apartment.block.name,
+        } : null,
+        unpaidDuesCount,
+        totalUnpaidAmount,
+      };
+    });
 
     return NextResponse.json(usersWithDetails);
   } catch (error) {
@@ -89,10 +115,23 @@ export async function POST(request: NextRequest) {
     // Şifreyi hashle
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // Apartment ID varsa kontrol et
+    // Kullanıcıyı oluştur
+    const user = await db.user.create({
+      data: {
+        email: email?.trim() || null,
+        password: hashedPassword,
+        fullName,
+        phone: phone.trim(),
+        role: role || 'RESIDENT',
+      },
+    });
+
+    // Apartment ID varsa ilişkiyi kur
+    let apartment = null;
     if (apartmentId) {
-      const apartment = await db.apartment.findUnique({
+      apartment = await db.apartment.findUnique({
         where: { id: apartmentId },
+        include: { block: true },
       });
 
       if (!apartment) {
@@ -102,55 +141,48 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // Bu daireye başka resident atanmış mı kontrol et
-      const existingResident = await db.user.findFirst({
-        where: { 
-          apartmentId: apartmentId,
-          role: 'RESIDENT'
-        },
-      });
-
-      if (existingResident) {
-        return NextResponse.json(
-          { error: "Bu dairede zaten bir sakin kayıtlı" },
-          { status: 400 }
-        );
+      // Role göre uygun ilişkiyi kur
+      if (role === 'RESIDENT') {
+        // Dairede zaten sakin var mı kontrol et
+        if (apartment.residentId) {
+          return NextResponse.json(
+            { error: "Bu dairede zaten bir sakin kayıtlı" },
+            { status: 400 }
+          );
+        }
+        
+        await db.apartment.update({
+          where: { id: apartmentId },
+          data: { residentId: user.id },
+        });
+      } else if (role === 'LANDLORD') {
+        // Dairede zaten malik var mı kontrol et
+        if (apartment.ownerId) {
+          return NextResponse.json(
+            { error: "Bu dairede zaten bir malik kayıtlı" },
+            { status: 400 }
+          );
+        }
+        
+        await db.apartment.update({
+          where: { id: apartmentId },
+          data: { ownerId: user.id },
+        });
       }
     }
-
-    const user = await db.user.create({
-      data: {
-        email: email?.trim() || null,
-        password: hashedPassword,
-        fullName,
-        phone: phone.trim(),
-        role: role || 'RESIDENT',
-        apartmentId: apartmentId || null,
-      },
-      include: {
-        apartment: {
-          include: {
-            block: true,
-          },
-        },
-      },
-    });
 
     // Şifreyi response'tan çıkar
     const { password: _, ...userWithoutPassword } = user;
 
     return NextResponse.json({
       ...userWithoutPassword,
-      createdAt: formatDate(new Date(user.createdAt)),
+      createdAt: user.createdAt.toISOString(),
       detail_url: `/dashboard/users/${user.id}`,
-      apartment: user.apartment ? {
-        id: user.apartment.id,
-        number: user.apartment.number,
-        floor: user.apartment.floor,
-        block: {
-          id: user.apartment.block.id,
-          name: user.apartment.block.name,
-        },
+      apartment: apartment ? {
+        id: apartment.id,
+        number: apartment.number,
+        floor: apartment.floor,
+        blockName: apartment.block.name,
       } : null,
     }, { status: 201 });
   } catch (error) {

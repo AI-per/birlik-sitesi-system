@@ -23,21 +23,57 @@ export async function POST(req: Request) {
     const json = await req.json()
     const body = bulkCreateDueSchema.parse(json)
 
+    // Build where clause for apartment filtering
     const whereClause: any = {}
-    if (body.blockId) {
+    if (body.blockId && body.blockId !== "all") {
       whereClause.blockId = body.blockId
     }
 
+    console.log('Bulk dues creation - whereClause:', whereClause)
+
+    // Fetch apartments with all necessary relations
     const apartments = await db.apartment.findMany({
       where: whereClause,
-      select: { id: true },
+      select: { 
+        id: true,
+        number: true,
+        block: {
+          select: {
+            id: true,
+            name: true
+          }
+        }
+      },
     })
+
+    console.log(`Found ${apartments.length} apartments for bulk dues creation`)
 
     if (!apartments || apartments.length === 0) {
       return new NextResponse('No apartments found', { status: 404 })
     }
 
-    const dueCreationPromises = apartments.map((apartment: { id: string }) => {
+    // Check for existing dues to prevent duplicates
+    const existingDues = await db.due.findMany({
+      where: {
+        apartmentId: { in: apartments.map(apt => apt.id) },
+        month: body.month,
+        year: body.year,
+        isAutomaticDue: true
+      },
+      select: { apartmentId: true }
+    })
+
+    const existingApartmentIds = new Set(existingDues.map(due => due.apartmentId))
+    const apartmentsToProcess = apartments.filter(apt => !existingApartmentIds.has(apt.id))
+
+    console.log(`${apartmentsToProcess.length} apartments need new dues (${existingDues.length} already have dues for this period)`)
+
+    if (apartmentsToProcess.length === 0) {
+      return new NextResponse('All apartments already have dues for this period', { status: 400 })
+    }
+
+    // Create dues
+    const dueCreationPromises = apartmentsToProcess.map((apartment: any) => {
       return db.due.create({
         data: {
           apartmentId: apartment.id,
@@ -49,15 +85,19 @@ export async function POST(req: Request) {
       })
     })
 
-    await db.$transaction(dueCreationPromises)
+    const createdDues = await db.$transaction(dueCreationPromises)
 
-    const blockName = body.blockId 
-      ? (await db.block.findUnique({ where: { id: body.blockId } }))?.name || 'Seçilen blok'
+    // Determine block name for response
+    const blockName = body.blockId && body.blockId !== "all" 
+      ? apartments[0]?.block?.name || 'Seçilen blok'
       : 'Tüm bloklar'
 
-    return new NextResponse(`${apartments.length} daire için ${blockName} aidatları başarıyla oluşturuldu`, { status: 201 })
+    console.log(`Successfully created ${createdDues.length} dues for ${blockName}`)
+
+    return new NextResponse(`${apartmentsToProcess.length} daire için ${blockName} aidatları başarıyla oluşturuldu`, { status: 201 })
   } catch (error: any) {
     if (error instanceof z.ZodError) {
+      console.error('Validation error:', error.issues)
       return new NextResponse(JSON.stringify(error.issues), { status: 422 })
     }
 

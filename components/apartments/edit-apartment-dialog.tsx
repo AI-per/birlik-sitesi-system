@@ -30,8 +30,6 @@ interface Apartment {
   id: string;
   number: string;
   floor: number;
-  type: string | null;
-  squareMeters: number | null;
   blockId: string;
   blockName: string;
 }
@@ -51,8 +49,6 @@ export function EditApartmentDialog({
 }: EditApartmentDialogProps) {
   const [number, setNumber] = useState(apartment.number);
   const [floor, setFloor] = useState(apartment.floor.toString());
-  const [type, setType] = useState(apartment.type || "");
-  const [squareMeters, setSquareMeters] = useState(apartment.squareMeters?.toString() || "");
   const [blockId, setBlockId] = useState(apartment.blockId);
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -62,8 +58,6 @@ export function EditApartmentDialog({
   useEffect(() => {
     setNumber(apartment.number);
     setFloor(apartment.floor.toString());
-    setType(apartment.type || "");
-    setSquareMeters(apartment.squareMeters?.toString() || "");
     setBlockId(apartment.blockId);
   }, [apartment]);
 
@@ -117,8 +111,6 @@ export function EditApartmentDialog({
     const hasChanges = 
       number.trim() !== apartment.number ||
       floorNum !== apartment.floor ||
-      (type.trim() || null) !== apartment.type ||
-      (squareMeters.trim() ? parseInt(squareMeters.trim()) : null) !== apartment.squareMeters ||
       blockId !== apartment.blockId;
 
     if (!hasChanges) {
@@ -137,8 +129,6 @@ export function EditApartmentDialog({
         body: JSON.stringify({
           number: number.trim(),
           floor: floorNum,
-          type: type.trim() || null,
-          squareMeters: squareMeters.trim() ? parseInt(squareMeters.trim()) : null,
           blockId,
         }),
       });
@@ -211,41 +201,6 @@ export function EditApartmentDialog({
               onChange={(e) => setFloor(e.target.value)}
               className="col-span-3"
               placeholder="Örn: 0, 1, 2"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="type" className="text-right">
-              Daire Tipi
-            </Label>
-            <Select value={type || "none"} onValueChange={(value) => setType(value === "none" ? "" : value)}>
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Daire tipi seçin (opsiyonel)" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">Seçim kaldır</SelectItem>
-                <SelectItem value="1+0">1+0</SelectItem>
-                <SelectItem value="1+1">1+1</SelectItem>
-                <SelectItem value="2+1">2+1</SelectItem>
-                <SelectItem value="3+1">3+1</SelectItem>
-                <SelectItem value="4+1">4+1</SelectItem>
-                <SelectItem value="5+1">5+1</SelectItem>
-                <SelectItem value="Dubleks">Dubleks</SelectItem>
-                <SelectItem value="Penthouse">Penthouse</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="squareMeters" className="text-right">
-              Metrekare
-            </Label>
-            <Input
-              id="squareMeters"
-              type="number"
-              min="1"
-              value={squareMeters}
-              onChange={(e) => setSquareMeters(e.target.value)}
-              className="col-span-3"
-              placeholder="Örn: 85, 120"
             />
           </div>
         </div>

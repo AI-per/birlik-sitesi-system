@@ -13,6 +13,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 interface Due {
   id: string;
@@ -57,6 +65,9 @@ export function PayDueDialog({
   const [paidAmount, setPaidAmount] = useState("");
   const [paidDate, setPaidDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [receiptNumber, setReceiptNumber] = useState("");
+  const [notes, setNotes] = useState("");
 
   // Form verilerini doldur
   useEffect(() => {
@@ -103,15 +114,19 @@ export function PayDueDialog({
 
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/dues/${due.id}`, {
-        method: 'PUT',
+      // Create payment using the new payment API
+      const response = await fetch('/api/payments', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          isPaid: true,
-          paidAmount: parseFloat(paidAmount),
-          paidDate: new Date(paidDate).toISOString(),
+          dueId: due.id,
+          amount: parseFloat(paidAmount),
+          paymentDate: new Date(paidDate).toISOString(),
+          paymentMethod: paymentMethod || null,
+          receiptNumber: receiptNumber || null,
+          notes: notes || null,
         }),
       });
 
@@ -169,41 +184,107 @@ export function PayDueDialog({
           </div>
 
           {/* Ödeme Bilgileri */}
-          <div className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="paidAmount">
-                Ödenen Tutar (₺) *
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="paid-amount" className="text-right">
+                Ödenen Tutar
               </Label>
               <Input
-                id="paidAmount"
+                id="paid-amount"
                 type="number"
+                step="0.01"
+                min="0"
                 value={paidAmount}
                 onChange={(e) => setPaidAmount(e.target.value)}
-                placeholder="1500"
-                min="0"
-                step="0.01"
+                className="col-span-3"
+                placeholder="0.00"
               />
-              {difference !== 0 && paidAmount && (
-                <div className={`text-xs ${difference > 0 ? 'text-green-600' : 'text-orange-600'}`}>
-                  {difference > 0 
-                    ? `${formatCurrency(difference)} fazla ödeme` 
-                    : `${formatCurrency(Math.abs(difference))} eksik ödeme`
-                  }
-                </div>
-              )}
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="paidDate">
-                Ödeme Tarihi *
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="paid-date" className="text-right">
+                Ödeme Tarihi
               </Label>
               <Input
-                id="paidDate"
+                id="paid-date"
                 type="date"
                 value={paidDate}
                 onChange={(e) => setPaidDate(e.target.value)}
-                max={new Date().toISOString().split('T')[0]}
+                className="col-span-3"
               />
             </div>
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="payment-method" className="text-right">
+                Ödeme Yöntemi
+              </Label>
+              <Select value={paymentMethod} onValueChange={setPaymentMethod}>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Ödeme yöntemi seçin" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Nakit">Nakit</SelectItem>
+                  <SelectItem value="Banka Havalesi">Banka Havalesi</SelectItem>
+                  <SelectItem value="EFT">EFT</SelectItem>
+                  <SelectItem value="Kredi Kartı">Kredi Kartı</SelectItem>
+                  <SelectItem value="Çek">Çek</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="receipt-number" className="text-right">
+                Fiş/Dekont No
+              </Label>
+              <Input
+                id="receipt-number"
+                type="text"
+                value={receiptNumber}
+                onChange={(e) => setReceiptNumber(e.target.value)}
+                className="col-span-3"
+                placeholder="Opsiyonel"
+              />
+            </div>
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="notes" className="text-right">
+                Notlar
+              </Label>
+              <Textarea
+                id="notes"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                className="col-span-3"
+                placeholder="Ek notlar (opsiyonel)"
+                rows={3}
+              />
+            </div>
+
+            {paidAmountNum > 0 && (
+              <div className="grid grid-cols-4 items-center gap-4 border-t pt-4">
+                <div className="col-span-4 space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Aidat Tutarı:</span>
+                    <span className="font-medium">{formatCurrency(due.amount)}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Ödenen Tutar:</span>
+                    <span className="font-medium">{formatCurrency(paidAmountNum)}</span>
+                  </div>
+                  <div className={`flex justify-between text-sm font-medium ${
+                    difference > 0 ? 'text-blue-600' : difference < 0 ? 'text-red-600' : 'text-green-600'
+                  }`}>
+                    <span>Fark:</span>
+                    <span>
+                      {difference > 0 ? '+' : ''}{formatCurrency(Math.abs(difference))}
+                      {difference > 0 && ' (Fazla ödeme)'}
+                      {difference < 0 && ' (Eksik ödeme)'}
+                      {difference === 0 && ' (Tam ödeme)'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Uyarı */}

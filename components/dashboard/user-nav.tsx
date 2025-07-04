@@ -34,16 +34,21 @@ export function UserNav() {
         description: "Oturumunuz sonlandırılıyor.",
       });
       
-      await signOut({ 
-        redirect: true,
+      const result = await signOut({ 
+        redirect: false,
         callbackUrl: "/" 
       });
+      
+      window.location.href = "/";
     } catch (error) {
+      console.error('Logout error:', error);
       toast({
         variant: "destructive",
         title: "Hata",
         description: "Çıkış yapılırken bir hata oluştu.",
       });
+      
+      window.location.href = "/";
     }
   };
 

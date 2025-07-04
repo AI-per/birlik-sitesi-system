@@ -26,16 +26,24 @@ export function Sidebar({ className }: SidebarProps) {
         description: "Oturumunuz sonlandırılıyor.",
       });
       
-      await signOut({ 
-        redirect: true,
+      // Use signOut with explicit redirect to homepage
+      const result = await signOut({ 
+        redirect: false, // Handle redirect manually for better control
         callbackUrl: "/" 
       });
+      
+      // Force redirect to homepage
+      window.location.href = "/";
     } catch (error) {
+      console.error('Logout error:', error);
       toast({
         variant: "destructive",
         title: "Hata",
         description: "Çıkış yapılırken bir hata oluştu.",
       });
+      
+      // Even if there's an error, try to redirect to homepage
+      window.location.href = "/";
     }
   };
 

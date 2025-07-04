@@ -96,35 +96,41 @@ export default async function BlockDetailPage({ params }: BlockDetailPageProps) 
             ) : (
                              <div className="space-y-2 max-h-96 overflow-y-auto">
                  {block.apartments.map((apartment: any) => (
-                  <div
+                  <Link
                     key={apartment.id}
-                    className="flex items-center justify-between p-2 border rounded-lg"
+                    href={`/dashboard/apartments/${apartment.id}`}
+                    className="block"
                   >
-                    <div>
-                      <span className="font-medium">
-                        Daire {apartment.number}
-                      </span>
-                      <span className="text-sm text-muted-foreground ml-2">
-                        {apartment.floor}. Kat
-                      </span>
-                      {apartment.type && (
+                    <div
+                      className="flex items-center justify-between p-2 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
+                    >
+                      <div>
+                        <span className="font-medium">
+                          Daire {apartment.number}
+                        </span>
                         <span className="text-sm text-muted-foreground ml-2">
-                          ({apartment.type})
+                          {apartment.floor}. Kat
                         </span>
-                      )}
+                        {apartment.type && (
+                          <span className="text-sm text-muted-foreground ml-2">
+                            ({apartment.type})
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {apartment.residents.length > 0 ? (
+                          <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                            Dolu
+                          </span>
+                        ) : (
+                          <span className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded">
+                            Boş
+                          </span>
+                        )}
+                        <Icons.chevronRight className="h-4 w-4 text-muted-foreground" />
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      {apartment.residents.length > 0 ? (
-                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
-                          Dolu
-                        </span>
-                      ) : (
-                        <span className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded">
-                          Boş
-                        </span>
-                      )}
-                    </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             )}

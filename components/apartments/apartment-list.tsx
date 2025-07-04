@@ -40,8 +40,6 @@ interface Apartment {
   id: string;
   number: string;
   floor: number;
-  type: string | null;
-  squareMeters: number | null;
   blockId: string;
   blockName: string;
   createdAt: string;
@@ -213,23 +211,6 @@ export function ApartmentList() {
       sortable: true,
       sortType: "number",
       cell: (value) => `${value}. Kat`,
-    },
-    {
-      id: "type",
-      header: "Tip",
-      accessorKey: "type",
-      sortable: true,
-      sortType: "text",
-      cell: (value) => value || <span className="text-muted-foreground">-</span>,
-    },
-    {
-      id: "squareMeters",
-      header: "m²",
-      accessorKey: "squareMeters",
-      sortable: true,
-      sortType: "number",
-      searchable: false,
-      cell: (value) => value ? `${value} m²` : <span className="text-muted-foreground">-</span>,
     },
     {
       id: "residents",

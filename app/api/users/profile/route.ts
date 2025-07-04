@@ -22,7 +22,12 @@ export async function GET() {
         isActive: true,
         createdAt: true,
         updatedAt: true,
-        apartment: {
+        residingApartment: {
+          include: {
+            block: true
+          }
+        },
+        ownedApartment: {
           include: {
             block: true
           }
@@ -37,7 +42,17 @@ export async function GET() {
       );
     }
 
-    return NextResponse.json(profile);
+    // Transform to match expected frontend format (use residing apartment, fallback to owned)
+    const apartment = profile.residingApartment || profile.ownedApartment;
+    const responseProfile = {
+      ...profile,
+      apartment: apartment,
+      // Remove the separate fields from response
+      residingApartment: undefined,
+      ownedApartment: undefined
+    };
+
+    return NextResponse.json(responseProfile);
   } catch (error) {
     console.error("Error fetching user profile:", error);
     return NextResponse.json(
@@ -150,7 +165,12 @@ export async function PUT(request: NextRequest) {
         role: true,
         isActive: true,
         updatedAt: true,
-        apartment: {
+        residingApartment: {
+          include: {
+            block: true
+          }
+        },
+        ownedApartment: {
           include: {
             block: true
           }
@@ -158,9 +178,19 @@ export async function PUT(request: NextRequest) {
       }
     });
 
+    // Transform to match expected frontend format (use residing apartment, fallback to owned)
+    const apartment = updatedUser.residingApartment || updatedUser.ownedApartment;
+    const responseProfile = {
+      ...updatedUser,
+      apartment: apartment,
+      // Remove the separate fields from response
+      residingApartment: undefined,
+      ownedApartment: undefined
+    };
+
     return NextResponse.json({
       message: "Profil başarıyla güncellendi",
-      user: updatedUser
+      user: responseProfile
     });
   } catch (error) {
     console.error("Error updating user profile:", error);

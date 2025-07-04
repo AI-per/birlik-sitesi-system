@@ -96,21 +96,6 @@ export function BlockList() {
       ),
     },
     {
-      id: "createdAt",
-      header: "Oluşturulma Tarihi",
-      accessorKey: "createdAt",
-      sortable: true,
-      sortType: "date",
-      searchable: false,
-      cell: (value) => {
-        try {
-          return new Date(value).toLocaleDateString('tr-TR');
-        } catch {
-          return value;
-        }
-      },
-    },
-    {
       id: "apartmentCount",
       header: "Daire Sayısı",
       accessorKey: "apartmentCount",

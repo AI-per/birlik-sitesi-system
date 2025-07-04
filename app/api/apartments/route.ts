@@ -17,12 +17,25 @@ export async function GET(request: NextRequest) {
       where: whereClause,
       include: {
         block: true,
-        residents: {
+        resident: {
           select: {
             id: true,
             fullName: true,
             email: true,
             phone: true,
+          },
+        },
+        owner: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+            phone: true,
+          },
+        },
+        dues: {
+          include: {
+            payment: true,
           },
         },
       },
@@ -32,26 +45,33 @@ export async function GET(request: NextRequest) {
       ],
     });
 
-    const apartmentsWithDetails = apartments.map((apartment: any) => ({
-      id: apartment.id,
-      number: apartment.number,
-      floor: apartment.floor,
-      type: apartment.type,
-      squareMeters: apartment.squareMeters,
-      blockId: apartment.blockId,
-      blockName: apartment.block.name,
-      createdAt: formatDate(new Date(apartment.createdAt)),
-      residentCount: apartment.residents.length,
-      residents: apartment.residents || [], // Fix: Return full residents array
-      resident: apartment.residents.length > 0 ? apartment.residents[0] : null,
-      unpaidDuesCount: 0, // TODO: Calculate actual unpaid dues
-      totalUnpaidAmount: 0, // TODO: Calculate actual total amount
-      block: {
-        id: apartment.block.id,
-        name: apartment.block.name,
-      },
-      detail_url: `/dashboard/apartments/${apartment.id}`,
-    }));
+    const apartmentsWithDetails = apartments.map((apartment: any) => {
+      // Calculate unpaid dues for this apartment
+      const unpaidDues = apartment.dues.filter((due: any) => !due.payment);
+      const unpaidDuesCount = unpaidDues.length;
+      const totalUnpaidAmount = unpaidDues.reduce((sum: number, due: any) => sum + Number(due.amount), 0);
+
+      return {
+        id: apartment.id,
+        number: apartment.number,
+        floor: apartment.floor,
+        blockId: apartment.blockId,
+        blockName: apartment.block.name,
+        createdAt: formatDate(new Date(apartment.createdAt)),
+        resident: apartment.resident,
+        owner: apartment.owner,
+        // For backward compatibility, provide residents array (legacy frontend support)
+        residents: apartment.resident ? [apartment.resident] : [],
+        residentCount: apartment.resident ? 1 : 0,
+        unpaidDuesCount: unpaidDuesCount,
+        totalUnpaidAmount: totalUnpaidAmount,
+        block: {
+          id: apartment.block.id,
+          name: apartment.block.name,
+        },
+        detail_url: `/dashboard/apartments/${apartment.id}`,
+      };
+    });
 
     return NextResponse.json(apartmentsWithDetails);
   } catch (error) {
@@ -67,7 +87,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { number, floor, type, squareMeters, blockId } = body;
+    const { number, floor, blockId } = body;
 
     // Gerekli alanları kontrol et
     if (!number || floor === undefined || floor === null || !blockId) {
@@ -117,13 +137,11 @@ export async function POST(request: NextRequest) {
       data: {
         number: number.trim(),
         floor: floorNum,
-        type: type?.trim() || null,
-        squareMeters: squareMeters ? parseInt(squareMeters) : null,
-      blockId,
+        blockId,
       },
       include: {
         block: true,
-        residents: {
+        resident: {
           select: {
             id: true,
             fullName: true,
@@ -131,23 +149,41 @@ export async function POST(request: NextRequest) {
             phone: true,
           },
         },
+        owner: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+            phone: true,
+          },
+        },
+        dues: {
+          include: {
+            payment: true,
+          },
+        },
       },
     });
+
+    // Calculate unpaid dues for the new apartment
+    const unpaidDues = apartment.dues.filter((due: any) => !due.payment);
+    const unpaidDuesCount = unpaidDues.length;
+    const totalUnpaidAmount = unpaidDues.reduce((sum: number, due: any) => sum + Number(due.amount), 0);
 
     return NextResponse.json({
       id: apartment.id,
       number: apartment.number,
       floor: apartment.floor,
-      type: apartment.type,
-      squareMeters: apartment.squareMeters,
       blockId: apartment.blockId,
       blockName: apartment.block.name,
       createdAt: formatDate(new Date(apartment.createdAt)),
-      residentCount: apartment.residents.length,
-      residents: apartment.residents || [], // Fix: Return full residents array
-      resident: apartment.residents.length > 0 ? apartment.residents[0] : null,
-      unpaidDuesCount: 0, // TODO: Calculate actual unpaid dues
-      totalUnpaidAmount: 0, // TODO: Calculate actual total amount
+      resident: apartment.resident,
+      owner: apartment.owner,
+      // For backward compatibility, provide residents array (legacy frontend support)
+      residents: apartment.resident ? [apartment.resident] : [],
+      residentCount: apartment.resident ? 1 : 0,
+      unpaidDuesCount: unpaidDuesCount,
+      totalUnpaidAmount: totalUnpaidAmount,
       block: {
         id: apartment.block.id,
         name: apartment.block.name,

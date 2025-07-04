@@ -36,15 +36,16 @@ model Apartment {
   id            String   @id @default(uuid())
   number        String
   floor         Int
-  type          String?  // Örn: 1+1, 2+1, 3+1
-  squareMeters  Int?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
   // İlişkiler
   blockId       String
   block         Block    @relation(fields: [blockId], references: [id], onDelete: Cascade)
-  residents     User[]   // Dairede yaşayan kullanıcılar (birden fazla olabilir)
+  residentId    String?  @unique // Her dairede maksimum bir sakin olabilir
+  resident      User?    @relation("ApartmentResident", fields: [residentId], references: [id])
+  ownerId       String?  @unique // Her dairede maksimum bir malik olabilir  
+  owner         User?    @relation("ApartmentOwner", fields: [ownerId], references: [id])
   dues          Due[]    // Daireye ait aidatlar
 
   @@unique([blockId, number]) // Aynı blokta aynı numaralı iki daire olamaz
@@ -64,11 +65,11 @@ model User {
   updatedAt     DateTime @updatedAt
 
   // İlişkiler
-  apartmentId   String?
-  apartment     Apartment? @relation(fields: [apartmentId], references: [id])
-  announcements Announcement[] // Yöneticiler tarafından yapılan duyurular
-  payments      Payment[]      // Kullanıcının yaptığı ödemeler
-  contactMessages ContactMessage[] // Kullanıcının gönderdiği iletişim mesajları
+  residingApartment Apartment? @relation("ApartmentResident") // Kullanıcının sakin olduğu daire
+  ownedApartment    Apartment? @relation("ApartmentOwner")    // Kullanıcının sahibi olduğu daire
+  announcements     Announcement[] // Yöneticiler tarafından yapılan duyurular
+  payments          Payment[]      // Kullanıcının yaptığı ödemeler
+  contactMessages   ContactMessage[] // Kullanıcının gönderdiği iletişim mesajları
 
   @@map("users")
 }

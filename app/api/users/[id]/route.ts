@@ -14,7 +14,12 @@ export async function GET(
         id: params.id,
       },
       include: {
-        apartment: {
+        residingApartment: {
+          include: {
+            block: true,
+          },
+        },
+        ownedApartment: {
           include: {
             block: true,
           },
@@ -37,10 +42,13 @@ export async function GET(
       );
     }
 
-    // Ödenmemiş aidatları getir
-    const unpaidDues = user.apartmentId ? await db.due.findMany({
+    // Get the apartment (prioritize residing, fallback to owned)
+    const apartment = user.residingApartment || user.ownedApartment;
+
+    // Ödenmemiş aidatları getir (apartment varsa)
+    const unpaidDues = apartment ? await db.due.findMany({
       where: {
-        apartmentId: user.apartmentId,
+        apartmentId: apartment.id,
         payment: null, // Ödenmemiş olanlar
       },
       include: {
@@ -63,14 +71,14 @@ export async function GET(
     return NextResponse.json({
       ...userWithoutPassword,
       createdAt: formatDate(new Date(user.createdAt)),
-      apartment: user.apartment ? {
-        id: user.apartment.id,
-        number: user.apartment.number,
-        floor: user.apartment.floor,
-        blockName: user.apartment.block.name,
+      apartment: apartment ? {
+        id: apartment.id,
+        number: apartment.number,
+        floor: apartment.floor,
+        blockName: apartment.block.name,
         block: {
-          id: user.apartment.block.id,
-          name: user.apartment.block.name,
+          id: apartment.block.id,
+          name: apartment.block.name,
         },
       } : null,
       dues: unpaidDues.map((due) => ({
@@ -84,6 +92,9 @@ export async function GET(
         isPaid: false,
       })),
       totalUnpaidAmount,
+      // Remove the separate apartment fields from response
+      residingApartment: undefined,
+      ownedApartment: undefined,
     });
   } catch (error) {
     console.error("Error fetching user:", error);
@@ -101,7 +112,7 @@ export async function PUT(
 ) {
   try {
     const body = await request.json();
-    const { email, password, fullName, phone, role, apartmentId, isActive } = body;
+    const { email, password, fullName, phone, role, isActive } = body;
 
     // Gerekli alanları kontrol et
     if (!fullName || !phone) {
@@ -146,43 +157,12 @@ export async function PUT(
       }
     }
 
-    // Apartment ID varsa kontrol et
-    if (apartmentId) {
-      const apartment = await db.apartment.findUnique({
-        where: { id: apartmentId },
-      });
-
-      if (!apartment) {
-        return NextResponse.json(
-          { error: "Seçilen daire bulunamadı" },
-          { status: 400 }
-        );
-      }
-
-      // Bu daireye başka resident atanmış mı kontrol et (kendisi hariç)
-      const existingResident = await db.user.findFirst({
-        where: { 
-          apartmentId: apartmentId,
-          role: 'RESIDENT',
-          id: { not: params.id }
-        },
-      });
-
-      if (existingResident) {
-        return NextResponse.json(
-          { error: "Bu dairede zaten bir sakin kayıtlı" },
-          { status: 400 }
-        );
-      }
-    }
-
     // Güncelleme verisini hazırla
     let updateData: any = {
       email: email?.trim() || null,
       fullName: fullName.trim(),
       phone: phone.trim(),
       role: role || 'RESIDENT',
-      apartmentId: apartmentId || null,
       isActive: isActive !== undefined ? isActive : true,
     };
 
@@ -196,7 +176,12 @@ export async function PUT(
       where: { id: params.id },
       data: updateData,
       include: {
-        apartment: {
+        residingApartment: {
+          include: {
+            block: true,
+          },
+        },
+        ownedApartment: {
           include: {
             block: true,
           },
@@ -207,19 +192,26 @@ export async function PUT(
     // Şifreyi response'tan çıkar
     const { password: _, ...userWithoutPassword } = user;
 
+    // Transform to match expected frontend format (use residing apartment, fallback to owned)
+    const apartment = user.residingApartment || user.ownedApartment;
+
     return NextResponse.json({
       ...userWithoutPassword,
       createdAt: formatDate(new Date(user.createdAt)),
       detail_url: `/dashboard/users/${user.id}`,
-      apartment: user.apartment ? {
-        id: user.apartment.id,
-        number: user.apartment.number,
-        floor: user.apartment.floor,
+      apartment: apartment ? {
+        id: apartment.id,
+        number: apartment.number,
+        floor: apartment.floor,
+        blockName: apartment.block.name,
         block: {
-          id: user.apartment.block.id,
-          name: user.apartment.block.name,
+          id: apartment.block.id,
+          name: apartment.block.name,
         },
       } : null,
+      // Remove the separate apartment fields from response
+      residingApartment: undefined,
+      ownedApartment: undefined,
     });
   } catch (error) {
     console.error("Error updating user:", error);
