@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -87,6 +88,11 @@ export function DuesList({ currentUserId, currentUserRole }: DuesListProps) {
   const [payingDue, setPayingDue] = useState<Due | null>(null);
   const [showBulkCreator, setShowBulkCreator] = useState(false);
   
+  // Bulk selection state
+  const [selectedDues, setSelectedDues] = useState<string[]>([]);
+  const [selectAll, setSelectAll] = useState(false);
+  const [isBulkLoading, setIsBulkLoading] = useState(false);
+  
   // Filters
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [monthFilter, setMonthFilter] = useState<string>("all");
@@ -99,16 +105,18 @@ export function DuesList({ currentUserId, currentUserRole }: DuesListProps) {
   const fetchDues = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("/api/dues");
-      if (response.ok) {
-        const data = await response.json();
-        setDues(data);
-      } else {
-        throw new Error("Failed to fetch dues");
+      
+      const response = await fetch('/api/dues');
+      if (!response.ok) {
+        throw new Error('Aidatlar alınamadı');
       }
+      
+      const data = await response.json();
+      setDues(data);
     } catch (error) {
-      console.error("Error fetching dues:", error);
-      toast.error("Aidatlar yüklenirken hata oluştu");
+      console.error('FetchDues error:', error);
+      toast.error('Aidatlar yüklenirken hata oluştu');
+      setDues([]);
     } finally {
       setIsLoading(false);
     }
@@ -139,6 +147,77 @@ export function DuesList({ currentUserId, currentUserRole }: DuesListProps) {
     setShowBulkCreator(false);
   };
 
+  // Bulk operation handlers
+  const handleSelectDue = (dueId: string, checked: boolean) => {
+    if (checked) {
+      setSelectedDues(prev => [...prev, dueId]);
+    } else {
+      setSelectedDues(prev => prev.filter(id => id !== dueId));
+    }
+  };
+
+  const handleSelectAll = (checked: boolean) => {
+    setSelectAll(checked);
+    if (checked) {
+      setSelectedDues(filteredDues.map(due => due.id));
+    } else {
+      setSelectedDues([]);
+    }
+  };
+
+  const handleBulkStatusUpdate = async (status: 'paid' | 'unpaid') => {
+    if (selectedDues.length === 0) {
+      toast.error("Lütfen en az bir aidat seçin");
+      return;
+    }
+
+    try {
+      setIsBulkLoading(true);
+      
+      // For paid status, use the current user as the payer
+      const response = await fetch('/api/dues/bulk-status', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          dueIds: selectedDues,
+          status,
+          payerId: currentUserId // Use current user as payer
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Güncelleme başarısız');
+      }
+
+      const result = await response.json();
+      
+      toast.success(result.message);
+      
+      // Show additional info if there were skipped items or errors
+      if (result.results.skipped > 0) {
+        toast.info(`${result.results.skipped} aidat zaten ${status === 'paid' ? 'ödendi' : 'ödenmedi'} durumunda olduğu için atlandı`);
+      }
+      
+      if (result.results.errors.length > 0) {
+        toast.error(`${result.results.errors.length} aidatta hata oluştu`);
+      }
+
+      // Refresh data and clear selections
+      fetchDues();
+      setSelectedDues([]);
+      setSelectAll(false);
+      
+    } catch (error) {
+      console.error('Bulk update error:', error);
+      toast.error(error instanceof Error ? error.message : 'Toplu güncelleme sırasında hata oluştu');
+    } finally {
+      setIsBulkLoading(false);
+    }
+  };
+
   // Filter dues based on selected criteria
   const filteredDues = dues.filter((due) => {
     if (statusFilter !== "all") {
@@ -152,12 +231,37 @@ export function DuesList({ currentUserId, currentUserRole }: DuesListProps) {
     return true;
   });
 
+  // Update selectAll state when filtered dues or selections change
+  useEffect(() => {
+    if (filteredDues.length === 0) {
+      setSelectAll(false);
+    } else {
+      const allSelected = filteredDues.every(due => selectedDues.includes(due.id));
+      setSelectAll(allSelected);
+    }
+  }, [filteredDues, selectedDues]);
+
   // Generate year options
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 5 }, (_, i) => currentYear - 2 + i);
 
   // Define table columns
   const columns: DataTableColumn<Due>[] = [
+    // Selection checkbox column
+    {
+      id: "select",
+      header: "",
+      accessorKey: "id",
+      sortable: false,
+      searchable: false,
+      cell: (value, row) => (
+        <Checkbox
+          checked={selectedDues.includes(row.id)}
+          onCheckedChange={(checked) => handleSelectDue(row.id, !!checked)}
+          aria-label={`Satır seç`}
+        />
+      ),
+    },
     {
       id: "apartment",
       header: "Daire",
@@ -287,6 +391,57 @@ export function DuesList({ currentUserId, currentUserRole }: DuesListProps) {
   // Top actions and filters for the table
   const topActions = (
     <>
+      {/* Bulk Selection Controls */}
+      {filteredDues.length > 0 && (
+        <>
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              checked={selectAll}
+              onCheckedChange={handleSelectAll}
+              aria-label="Tümünü seç"
+            />
+            <span className="text-sm text-muted-foreground">
+              Tümünü seç ({filteredDues.length})
+            </span>
+          </div>
+          
+          {/* Bulk Action Buttons */}
+          {selectedDues.length > 0 && (
+            <>
+              <div className="text-sm text-muted-foreground">
+                {selectedDues.length} aidat seçildi
+              </div>
+              <Button
+                onClick={() => handleBulkStatusUpdate('paid')}
+                disabled={isBulkLoading}
+                variant="default"
+                size="sm"
+              >
+                {isBulkLoading ? (
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Icons.check className="mr-2 h-4 w-4" />
+                )}
+                Ödendi İşaretle
+              </Button>
+              <Button
+                onClick={() => handleBulkStatusUpdate('unpaid')}
+                disabled={isBulkLoading}
+                variant="outline"
+                size="sm"
+              >
+                {isBulkLoading ? (
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Icons.close className="mr-2 h-4 w-4" />
+                )}
+                Ödenmedi İşaretle
+              </Button>
+            </>
+          )}
+        </>
+      )}
+
       {/* Filter Controls */}
       <Select value={statusFilter} onValueChange={setStatusFilter}>
         <SelectTrigger className="w-[120px]">

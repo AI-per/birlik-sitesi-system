@@ -1,149 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-// import { db } from "@/lib/db";
-
-// Mock data for testing
-const mockDues = [
-  {
-    id: "1",
-    apartmentId: "apt-1",
-    amount: 1500,
-    month: 1,
-    year: 2024,
-    dueDate: new Date('2024-01-31T23:59:59Z').toISOString(),
-    isPaid: true,
-    paidDate: new Date('2024-01-15T10:30:00Z').toISOString(),
-    paidAmount: 1500,
-    createdAt: new Date('2024-01-01T00:00:00Z').toISOString(),
-    updatedAt: new Date('2024-01-15T10:30:00Z').toISOString(),
-    apartment: {
-      id: "apt-1",
-      number: "A-101",
-      floor: 1,
-      block: {
-        id: "block-1",
-        name: "A Blok"
-      },
-      resident: {
-        id: "user-1",
-        fullName: "Ali Kaya",
-        email: "ali.kaya@email.com",
-        phone: "0532 123 45 67"
-      }
-    }
-  },
-  {
-    id: "2",
-    apartmentId: "apt-2",
-    amount: 1500,
-    month: 1,
-    year: 2024,
-    dueDate: new Date('2024-01-31T23:59:59Z').toISOString(),
-    isPaid: false,
-    paidDate: null,
-    paidAmount: null,
-    createdAt: new Date('2024-01-01T00:00:00Z').toISOString(),
-    updatedAt: new Date('2024-01-01T00:00:00Z').toISOString(),
-    apartment: {
-      id: "apt-2",
-      number: "A-102",
-      floor: 1,
-      block: {
-        id: "block-1",
-        name: "A Blok"
-      },
-      resident: {
-        id: "user-2",
-        fullName: "Ayşe Demir",
-        email: "ayse.demir@email.com",
-        phone: "0533 234 56 78"
-      }
-    }
-  },
-  {
-    id: "3",
-    apartmentId: "apt-3",
-    amount: 1500,
-    month: 2,
-    year: 2024,
-    dueDate: new Date('2024-02-29T23:59:59Z').toISOString(),
-    isPaid: true,
-    paidDate: new Date('2024-02-10T14:20:00Z').toISOString(),
-    paidAmount: 1500,
-    createdAt: new Date('2024-02-01T00:00:00Z').toISOString(),
-    updatedAt: new Date('2024-02-10T14:20:00Z').toISOString(),
-    apartment: {
-      id: "apt-3",
-      number: "B-201",
-      floor: 2,
-      block: {
-        id: "block-2",
-        name: "B Blok"
-      },
-      resident: {
-        id: "user-3",
-        fullName: "Mehmet Özkan",
-        email: "mehmet.ozkan@email.com",
-        phone: "0534 345 67 89"
-      }
-    }
-  },
-  {
-    id: "4",
-    apartmentId: "apt-1",
-    amount: 1600,
-    month: 2,
-    year: 2024,
-    dueDate: new Date('2024-02-29T23:59:59Z').toISOString(),
-    isPaid: false,
-    paidDate: null,
-    paidAmount: null,
-    createdAt: new Date('2024-02-01T00:00:00Z').toISOString(),
-    updatedAt: new Date('2024-02-01T00:00:00Z').toISOString(),
-    apartment: {
-      id: "apt-1",
-      number: "A-101",
-      floor: 1,
-      block: {
-        id: "block-1",
-        name: "A Blok"
-      },
-      resident: {
-        id: "user-1",
-        fullName: "Ali Kaya",
-        email: "ali.kaya@email.com",
-        phone: "0532 123 45 67"
-      }
-    }
-  },
-  {
-    id: "5",
-    apartmentId: "apt-2",
-    amount: 1600,
-    month: 2,
-    year: 2024,
-    dueDate: new Date('2024-02-29T23:59:59Z').toISOString(),
-    isPaid: false,
-    paidDate: null,
-    paidAmount: null,
-    createdAt: new Date('2024-02-01T00:00:00Z').toISOString(),
-    updatedAt: new Date('2024-02-01T00:00:00Z').toISOString(),
-    apartment: {
-      id: "apt-2",
-      number: "A-102",
-      floor: 1,
-      block: {
-        id: "block-1",
-        name: "A Blok"
-      },
-      resident: {
-        id: "user-2",
-        fullName: "Ayşe Demir",
-        email: "ayse.demir@email.com",
-        phone: "0533 234 56 78"
-      }
-    }
-  }
-];
+import { db } from "@/lib/db";
 
 // GET /api/dues - Tüm aidatları listele
 export async function GET(request: NextRequest) {
@@ -154,30 +10,114 @@ export async function GET(request: NextRequest) {
     const isPaid = searchParams.get('isPaid');
     const apartmentId = searchParams.get('apartmentId');
 
-    let filteredDues = [...mockDues];
+    // Build where clause
+    const whereClause: any = {};
     
     if (month) {
-      filteredDues = filteredDues.filter(due => due.month === parseInt(month));
+      whereClause.month = parseInt(month);
     }
     
     if (year) {
-      filteredDues = filteredDues.filter(due => due.year === parseInt(year));
-    }
-    
-    if (isPaid !== null) {
-      const paidFilter = isPaid === 'true';
-      filteredDues = filteredDues.filter(due => due.isPaid === paidFilter);
+      whereClause.year = parseInt(year);
     }
     
     if (apartmentId) {
-      filteredDues = filteredDues.filter(due => due.apartmentId === apartmentId);
+      whereClause.apartmentId = apartmentId;
     }
 
-    // Tarihe göre sırala (en yeni önce)
-    filteredDues.sort((a, b) => {
-      if (a.year !== b.year) return b.year - a.year;
-      return b.month - a.month;
+    // Fetch dues from database with all necessary relationships
+    const dues = await db.due.findMany({
+      where: whereClause,
+      include: {
+        apartment: {
+          include: {
+            block: true,
+            resident: {
+              select: {
+                id: true,
+                fullName: true,
+                email: true,
+                phone: true,
+              }
+            },
+            owner: {
+              select: {
+                id: true,
+                fullName: true,
+                email: true,
+                phone: true,
+              }
+            }
+          }
+        },
+        payment: {
+          include: {
+            payer: {
+              select: {
+                id: true,
+                fullName: true,
+                email: true,
+                phone: true,
+              }
+            }
+          }
+        }
+      },
+      orderBy: [
+        { year: 'desc' },
+        { month: 'desc' },
+        { apartment: { block: { name: 'asc' } } },
+        { apartment: { number: 'asc' } }
+      ]
     });
+
+    // Transform the data to match frontend expectations
+    const transformedDues = dues.map((due) => {
+      // Get the primary resident (prioritize resident, fallback to owner)
+      const primaryResident = due.apartment.resident || due.apartment.owner;
+      
+      return {
+        id: due.id,
+        apartmentId: due.apartmentId,
+        amount: parseFloat(due.amount.toString()),
+        month: due.month,
+        year: due.year,
+        dueDate: due.dueDate.toISOString(),
+        isPaid: !!due.payment, // Has payment = is paid
+        paidDate: due.payment?.paymentDate?.toISOString() || null,
+        paidAmount: due.payment ? parseFloat(due.payment.amount.toString()) : null,
+        createdAt: due.createdAt.toISOString(),
+        updatedAt: due.updatedAt.toISOString(),
+        description: due.description,
+        apartment: {
+          id: due.apartment.id,
+          number: due.apartment.number,
+          floor: due.apartment.floor,
+          block: {
+            id: due.apartment.block.id,
+            name: due.apartment.block.name
+          },
+          resident: primaryResident ? {
+            id: primaryResident.id,
+            fullName: primaryResident.fullName,
+            email: primaryResident.email || '',
+            phone: primaryResident.phone
+          } : {
+            id: '',
+            fullName: 'Boş Daire',
+            email: '',
+            phone: ''
+          }
+        }
+      };
+    });
+
+    // Apply isPaid filter after transformation if needed
+    let filteredDues = transformedDues;
+    if (isPaid !== null) {
+      const paidFilter = isPaid === 'true';
+      filteredDues = transformedDues.filter(due => due.isPaid === paidFilter);
+    }
 
     return NextResponse.json(filteredDues);
   } catch (error) {
@@ -193,7 +133,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { apartmentId, amount, month, year, dueDate } = body;
+    const { apartmentId, amount, month, year, dueDate, description, isAutomaticDue = true } = body;
 
     // Validasyon
     if (!apartmentId || !amount || !month || !year || !dueDate) {
@@ -224,54 +164,112 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Aynı ay/yıl için aidat var mı kontrol et
-    const existingDue = mockDues.find(due => 
-      due.apartmentId === apartmentId && 
-      due.month === month && 
-      due.year === year
-    );
+    // Daire var mı kontrol et
+    const apartment = await db.apartment.findUnique({
+      where: { id: apartmentId },
+    });
 
-    if (existingDue) {
+    if (!apartment) {
       return NextResponse.json(
-        { error: "Bu ay için aidat zaten mevcut" },
-        { status: 400 }
+        { error: "Seçilen daire bulunamadı" },
+        { status: 404 }
       );
     }
 
+    // Aynı ay/yıl için aidat var mı kontrol et (sadece otomatik aidatlar için)
+    if (isAutomaticDue) {
+      const existingDue = await db.due.findFirst({
+        where: {
+          apartmentId,
+          month,
+          year,
+          isAutomaticDue: true
+        }
+      });
+
+      if (existingDue) {
+        return NextResponse.json(
+          { error: "Bu ay için otomatik aidat zaten mevcut" },
+          { status: 400 }
+        );
+      }
+    }
+
     // Yeni aidat oluştur
-    const newDue = {
-      id: (mockDues.length + 1).toString(),
-      apartmentId,
-      amount,
-      month,
-      year,
-      dueDate: new Date(dueDate).toISOString(),
+    const newDue = await db.due.create({
+      data: {
+        apartmentId,
+        amount,
+        month,
+        year,
+        dueDate: new Date(dueDate),
+        description,
+        isAutomaticDue
+      },
+      include: {
+        apartment: {
+          include: {
+            block: true,
+            resident: {
+              select: {
+                id: true,
+                fullName: true,
+                email: true,
+                phone: true,
+              }
+            },
+            owner: {
+              select: {
+                id: true,
+                fullName: true,
+                email: true,
+                phone: true,
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Transform response to match frontend format
+    const primaryResident = newDue.apartment.resident || newDue.apartment.owner;
+    
+    const response = {
+      id: newDue.id,
+      apartmentId: newDue.apartmentId,
+      amount: parseFloat(newDue.amount.toString()),
+      month: newDue.month,
+      year: newDue.year,
+      dueDate: newDue.dueDate.toISOString(),
       isPaid: false,
       paidDate: null,
       paidAmount: null,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      createdAt: newDue.createdAt.toISOString(),
+      updatedAt: newDue.updatedAt.toISOString(),
+      description: newDue.description,
       apartment: {
-        id: apartmentId,
-        number: "A-101", // Mock data
-        floor: 1,
+        id: newDue.apartment.id,
+        number: newDue.apartment.number,
+        floor: newDue.apartment.floor,
         block: {
-          id: "block-1",
-          name: "A Blok"
+          id: newDue.apartment.block.id,
+          name: newDue.apartment.block.name
         },
-        resident: {
-          id: "user-1",
-          fullName: "Test User",
-          email: "test@email.com",
-          phone: "0532 123 45 67"
+        resident: primaryResident ? {
+          id: primaryResident.id,
+          fullName: primaryResident.fullName,
+          email: primaryResident.email || '',
+          phone: primaryResident.phone
+        } : {
+          id: '',
+          fullName: 'Boş Daire',
+          email: '',
+          phone: ''
         }
       }
     };
 
-    // Mock data'ya ekle
-    mockDues.unshift(newDue);
-
-    return NextResponse.json(newDue, { status: 201 });
+    return NextResponse.json(response, { status: 201 });
   } catch (error) {
     console.error("Error creating due:", error);
     return NextResponse.json(
