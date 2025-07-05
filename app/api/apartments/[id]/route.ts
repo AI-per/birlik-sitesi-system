@@ -5,14 +5,31 @@ import { formatDate } from "@/lib/utils";
 // GET /api/apartments/[id] - Daire detaylarını getir
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+    
     const apartment = await db.apartment.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         block: true,
-        residents: true,
+        resident: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+            phone: true,
+          },
+        },
+        owner: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+            phone: true,
+          },
+        },
         dues: {
           include: {
             payment: true,
@@ -35,12 +52,11 @@ export async function GET(
       id: apartment.id,
       number: apartment.number,
       floor: apartment.floor,
-      type: apartment.type,
-      squareMeters: apartment.squareMeters,
       blockId: apartment.blockId,
       blockName: apartment.block.name,
       createdAt: formatDate(new Date(apartment.createdAt)),
-      residents: apartment.residents,
+      resident: apartment.resident,
+      owner: apartment.owner,
       dues: apartment.dues.map((due: any) => ({
         id: due.id,
         amount: Number(due.amount),
@@ -66,11 +82,12 @@ export async function GET(
 // PUT /api/apartments/[id] - Daire güncelle
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
-    const { number, floor, type, squareMeters, blockId } = body;
+    const { number, floor, blockId } = body;
 
     // Gerekli alanları kontrol et
     if (!number || !floor || !blockId) {
@@ -106,7 +123,7 @@ export async function PUT(
         blockId,
         number: number.trim(),
         NOT: {
-          id: params.id
+          id
         }
       },
     });
@@ -119,17 +136,30 @@ export async function PUT(
     }
 
     const updatedApartment = await db.apartment.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         number: number.trim(),
         floor: floorNum,
-        type: type?.trim() || null,
-        squareMeters: squareMeters ? parseInt(squareMeters) : null,
         blockId,
       },
       include: {
         block: true,
-        residents: true,
+        resident: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+            phone: true,
+          },
+        },
+        owner: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+            phone: true,
+          },
+        },
       },
     });
 
@@ -149,11 +179,13 @@ export async function PUT(
 // DELETE /api/apartments/[id] - Daire sil
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+    
     await db.apartment.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({

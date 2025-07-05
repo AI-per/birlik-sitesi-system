@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -98,6 +99,8 @@ export function DuesList({ currentUserId, currentUserRole }: DuesListProps) {
   const [monthFilter, setMonthFilter] = useState<string>("all");
   const [yearFilter, setYearFilter] = useState<string>("all");
 
+  const router = useRouter();
+
   useEffect(() => {
     fetchDues();
   }, []);
@@ -145,6 +148,13 @@ export function DuesList({ currentUserId, currentUserRole }: DuesListProps) {
   const handleBulkCreated = () => {
     fetchDues();
     setShowBulkCreator(false);
+  };
+
+  // Handle row click to navigate to apartment detail
+  const handleRowClick = (due: Due, event: React.MouseEvent) => {
+    if (due.apartment?.id) {
+      router.push(`/dashboard/apartments/${due.apartment.id}`);
+    }
   };
 
   // Bulk operation handlers
@@ -506,6 +516,8 @@ export function DuesList({ currentUserId, currentUserRole }: DuesListProps) {
         loadingMessage="Aidatlar yükleniyor..."
         actions={renderActions}
         topActions={topActions}
+        onRowClick={handleRowClick}
+        className="[&_tbody_tr]:cursor-pointer [&_tbody_tr:hover]:bg-muted/50"
       />
 
       {/* Dialogs */}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -19,12 +20,11 @@ import { EditApartmentDialog } from "@/components/apartments/edit-apartment-dial
 import { DeleteApartmentDialog } from "@/components/apartments/delete-apartment-dialog";
 import { toast } from "sonner";
 
-interface Resident {
+interface User {
   id: string;
   fullName: string;
   email: string;
-  phone: string;
-  role: string;
+  phone: string | null;
 }
 
 interface Due {
@@ -42,18 +42,18 @@ interface ApartmentDetail {
   id: string;
   number: string;
   floor: number;
-  type: string | null;
-  squareMeters: number | null;
   blockId: string;
   blockName: string;
   createdAt: string;
-  residents: Resident[];
+  resident: User | null;
+  owner: User | null;
   dues: Due[];
 }
 
 export default function ApartmentDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const { toast } = useToast();
   const apartmentId = params.id as string;
 
   const [apartment, setApartment] = useState<ApartmentDetail | null>(null);
@@ -144,6 +144,13 @@ export default function ApartmentDetailPage() {
     );
   }
 
+  // Create residents array for display
+  const residents: User[] = [];
+  if (apartment.resident) residents.push(apartment.resident);
+  if (apartment.owner && apartment.owner.id !== apartment.resident?.id) {
+    residents.push(apartment.owner);
+  }
+
   const unpaidDues = apartment.dues.filter(due => !due.isPaid);
   const paidDues = apartment.dues.filter(due => due.isPaid);
   const totalUnpaidAmount = unpaidDues.reduce((sum, due) => sum + due.amount, 0);
@@ -166,8 +173,6 @@ export default function ApartmentDetailPage() {
             </h2>
             <p className="text-muted-foreground">
               {apartment.floor}. Kat
-              {apartment.type && ` • ${apartment.type}`}
-              {apartment.squareMeters && ` • ${apartment.squareMeters} m²`}
             </p>
           </div>
         </div>
@@ -208,9 +213,9 @@ export default function ApartmentDetailPage() {
             <Icons.users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{apartment.residents.length}</div>
+            <div className="text-2xl font-bold">{residents.length}</div>
             <p className="text-xs text-muted-foreground">
-              {apartment.residents.length === 0 ? "Boş daire" : "Aktif sakin"}
+              {residents.length === 0 ? "Boş daire" : "Aktif sakin"}
             </p>
           </CardContent>
         </Card>
@@ -249,13 +254,13 @@ export default function ApartmentDetailPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {apartment.residents.length === 0 ? (
+            {residents.length === 0 ? (
               <p className="text-muted-foreground text-center py-4">
                 Bu dairede henüz sakin bulunmuyor.
               </p>
             ) : (
               <div className="space-y-4">
-                {apartment.residents.map((resident) => (
+                {residents.map((resident) => (
                   <div key={resident.id} className="flex items-center justify-between p-3 border rounded-lg">
                     <div>
                       <p className="font-medium">{resident.fullName}</p>
@@ -264,7 +269,9 @@ export default function ApartmentDetailPage() {
                         <p className="text-sm text-muted-foreground">{resident.phone}</p>
                       )}
                     </div>
-                    <Badge variant="secondary">{resident.role}</Badge>
+                    <Badge variant="secondary">
+                      {resident.id === apartment.resident?.id ? "Sakin" : "Malik"}
+                    </Badge>
                   </div>
                 ))}
               </div>
@@ -292,18 +299,6 @@ export default function ApartmentDetailPage() {
               <div>
                 <p className="text-sm font-medium">Kat</p>
                 <p className="text-sm text-muted-foreground">{apartment.floor}. Kat</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium">Tip</p>
-                <p className="text-sm text-muted-foreground">
-                  {apartment.type || "Belirtilmemiş"}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm font-medium">Metrekare</p>
-                <p className="text-sm text-muted-foreground">
-                  {apartment.squareMeters ? `${apartment.squareMeters} m²` : "Belirtilmemiş"}
-                </p>
               </div>
               <div>
                 <p className="text-sm font-medium">Kayıt Tarihi</p>
